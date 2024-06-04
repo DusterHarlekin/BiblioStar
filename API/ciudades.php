@@ -32,7 +32,7 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
 
         exit();
 
-    }
+    }//
 
 
     //CONSULTAR TODAS LAS CIUDADES
