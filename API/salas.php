@@ -32,7 +32,7 @@
         //CONSULTAR TODAS LAS CIUDADES
         $sql_salas = mysqli_query($conexion_bd, "SELECT * FROM salas");
             
-        if(mysqli_num_rows($sql_salas)>0){
+    if(mysqli_num_rows($sql_salas)>0){
 
             $salas = mysqli_fetch_all($sql_salas, MYSQLI_ASSOC);
             echo json_encode($salas);

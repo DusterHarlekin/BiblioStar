@@ -32,7 +32,7 @@
         //CONSULTAR TODAS LAS CIUDADES
         $sql_cota = mysqli_query($conexion_bd, "SELECT * FROM cota");
             
-        if(mysqli_num_rows($sql_cota)>0){
+    if(mysqli_num_rows($sql_cota)>0){
 
             $cota = mysqli_fetch_all($sql_cota, MYSQLI_ASSOC);
             echo json_encode($cota);

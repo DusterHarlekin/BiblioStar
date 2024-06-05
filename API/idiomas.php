@@ -32,7 +32,7 @@
         //CONSULTAR TODAS LAS CIUDADES
         $sql_idiomas = mysqli_query($conexion_bd, "SELECT * FROM idiomas");
             
-        if(mysqli_num_rows($sql_idiomas)>0){
+    if(mysqli_num_rows($sql_idiomas)>0){
 
             $idiomas = mysqli_fetch_all($sql_idiomas, MYSQLI_ASSOC);
             echo json_encode($idiomas);
