@@ -1,7 +1,8 @@
 <?php
+
     include "conexion.php";
     
-    $conexion_bd=connect();
+    $conexion_bd = connect();
 
      //Prueba consulta de ciudad
     if(isset($_GET["consultar"])){
@@ -9,6 +10,7 @@
         //VALIDACIÓN DE USUARIO
 
         //Integrar filtros
+        
         $sql_ciudad = mysqli_query($conexion_bd, "SELECT * FROM ciudades WHERE codigo_ciudad=".$_GET["consultar"]);
         
         if(mysqli_num_rows($sql_ciudad)>0){
