@@ -53,6 +53,7 @@
             if(trim($data->codigo_ciudad) == ""){
         
                 echo json_encode(["error"=>"los campos no pueden estar vacíos"]);
+                
             }
             else{
                 
