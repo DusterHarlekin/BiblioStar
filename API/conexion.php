@@ -20,6 +20,7 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
         $conn = mysqli_connect($servername, $username, $password, $database);
         // Chequeo de conexión
         if (!$conn) {
+            
             die("Connection failed: " . mysqli_connect_error());
         }
         
