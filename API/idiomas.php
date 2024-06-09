@@ -6,6 +6,8 @@
 
      //Prueba consulta de ciudad
     if($_SERVER["REQUEST_METHOD"] == 'GET'){
+        
+        //Selección de id (ROGER)
         if(isset($_GET["id"])){
 
             //VALIDACIÓN DE USUARIO
