@@ -28,8 +28,7 @@
         exit();
 
     }
-}//
-
+}
 
     //CONSULTAR TODAS LAS CIUDADES
     $sql_ciudad = mysqli_query($conexion_bd, "SELECT * FROM ciudades");
@@ -53,7 +52,7 @@
             if(trim($data->codigo_ciudad) == ""){
         
                 echo json_encode(["error"=>"los campos no pueden estar vacíos"]);
-                
+
             }
             else{
                 
