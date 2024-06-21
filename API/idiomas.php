@@ -1,20 +1,21 @@
 <?php
 
     include "conexion.php";
-    
+    include "utils/filtering.php";
+
     $conexion_bd = connect();
 
      //Prueba consulta de ciudad
     if($_SERVER["REQUEST_METHOD"] == 'GET'){
         
         //Selección de id (ROGER)
-        if(isset($_GET["id"])){
+        if(isset($_GET["cod_idioma"])){
 
             //VALIDACIÓN DE USUARIO
     
             //Integrar filtros
             
-            $sql_idiomas = mysqli_query($conexion_bd, "SELECT * FROM idiomas WHERE cod_idioma =".$_GET["id"]);
+            $sql_idiomas = mysqli_query($conexion_bd, "SELECT * FROM idiomas WHERE cod_idioma =".$_GET["descripcion"]);
             
             if(mysqli_num_rows($sql_idiomas)>0){
                 
@@ -32,8 +33,11 @@
         }
 
          //CONSULTAR TODAS LAS CIUDADES
-         $sql_idiomas = mysqli_query($conexion_bd, "SELECT * FROM idiomas");
-            
+         $query = filtrarBusqueda($_GET, 'idiomas');
+
+         $sql_idiomas = mysqli_query($conexion_bd, $query);
+
+           
          if(mysqli_num_rows($sql_idiomas)>0){
      
                  $idiomas = mysqli_fetch_all($sql_idiomas, MYSQLI_ASSOC);

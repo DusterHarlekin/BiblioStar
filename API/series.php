@@ -1,6 +1,7 @@
 <?php
 
     include "conexion.php";
+    include "utils/filtering.php";
     
     $conexion_bd = connect();
 
@@ -8,7 +9,7 @@
     if($_SERVER["REQUEST_METHOD"] == 'GET'){
 
     //Selección de id (ROGER)   
-    if(isset($_GET["cod_serie"])){
+    if(isset($_GET["N"])){
 
         //VALIDACIÓN DE USUARIO
 
@@ -33,7 +34,9 @@
      }
 
         //CONSULTAR TODAS LAS CIUDADES
-        $sql_serie = mysqli_query($conexion_bd, "SELECT * FROM serie");
+        $query = filtrarBusqueda($_GET, 'serie');
+
+        $sql_serie = mysqli_query($conexion_bd, $query);
             
     if(mysqli_num_rows($sql_serie)>0){
 

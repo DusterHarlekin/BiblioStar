@@ -1,19 +1,20 @@
 <?php
 
     include "conexion.php";
-    
+    include "utils/filtering.php";
+
     $conexion_bd = connect();
 
      //Prueba consulta de ciudad
      if($_SERVER["REQUEST_METHOD"] == 'GET'){
 
     //Selección de id (ROGER)    
-    if(isset($_GET["titulo"])){
+    if(isset($_GET["N"])){
 
         //VALIDACIÓN DE USUARIO
 
         //Integrar filtros
-        $sql_libros = mysqli_query($conexion_bd, "SELECT * FROM libros WHERE /*cod_serie*/autor=".$_GET["titulo"]);
+        $sql_libros = mysqli_query($conexion_bd, "SELECT * FROM libros WHERE /*cod_serie*/N=".$_GET["titulo"]);
         
         if(mysqli_num_rows($sql_libros)>0){
             
@@ -33,7 +34,10 @@
 }
 
         //CONSULTAR TODAS LAS CIUDADES
-        $sql_libros  = mysqli_query($conexion_bd, "SELECT * FROM libros");
+        $query = filtrarBusqueda($_GET, 'libros');
+
+        $sql_libros = mysqli_query($conexion_bd, $query);
+
             
     if(mysqli_num_rows($sql_libros)>0){
 

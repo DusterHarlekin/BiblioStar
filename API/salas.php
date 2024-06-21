@@ -1,14 +1,15 @@
 <?php
 
     include "conexion.php";
-    
+    include "utils/filtering.php";
+     
     $conexion_bd = connect();
 
      //Prueba consulta de ciudad
      if($_SERVER["REQUEST_METHOD"] == 'GET'){
      
      //Selección de id (ROGER)  
-     if(isset($_GET["cod_sala"])){
+     if(isset($_GET["N"])){
 
         //VALIDACIÓN DE USUARIO
 
@@ -34,7 +35,10 @@
 
 
         //CONSULTAR TODAS LAS CIUDADES
-        $sql_salas = mysqli_query($conexion_bd, "SELECT * FROM salas");
+        $query = filtrarBusqueda($_GET, 'salas');
+
+        $sql_salas = mysqli_query($conexion_bd, $query);
+
             
     if(mysqli_num_rows($sql_salas)>0){
 
@@ -47,6 +51,7 @@
         }
 
         exit();
+
            //POST REGISTRAR
 
    if($_SERVER["REQUEST_METHOD"] == 'POST'){

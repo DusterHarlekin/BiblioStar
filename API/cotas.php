@@ -1,14 +1,15 @@
 <?php
 
     include "conexion.php";
-    
+    include "utils/filtering.php";
+
     $conexion_bd = connect();
 
      //Prueba consulta de ciudad
      if($_SERVER["REQUEST_METHOD"] == 'GET'){
 
       //Selección de id (ROGER)   
-     if(isset($_GET["cota_completa"])){
+     if(isset($_GET["N"])){
 
         //VALIDACIÓN DE USUARIO
 
@@ -34,7 +35,11 @@
 
 
         //CONSULTAR TODAS LAS CIUDADES
-        $sql_cota = mysqli_query($conexion_bd, "SELECT * FROM cota");
+        $query = filtrarBusqueda($_GET, 'cota');
+
+        $sql_cota = mysqli_query($conexion_bd, $query);
+
+        
             
     if(mysqli_num_rows($sql_cota)>0){
 
