@@ -2,6 +2,7 @@
 
     include "conexion.php";
     include "utils/filtering.php";
+    include "utils/pagination.php";
 
     $conexion_bd = connect();
 
@@ -12,9 +13,7 @@
     if(isset($_GET["N"])){
 
         //VALIDACIÓN DE USUARIO
-
-        //Integrar filtros
-        $sql_libros = mysqli_query($conexion_bd, "SELECT * FROM libros WHERE /*cod_serie*/N=".$_GET["titulo"]);
+        $sql_libros = mysqli_query($conexion_bd, "SELECT * FROM libros WHERE /*cod_serie*/N=".$_GET["N"]);
         
         if(mysqli_num_rows($sql_libros)>0){
             
@@ -33,15 +32,26 @@
     }
 }
 
-        //CONSULTAR TODAS LAS CIUDADES
-        $query = filtrarBusqueda($_GET, 'libros');
+    //CONSULTAR TODAS LAS CIUDADES
+    $query = filtrarBusqueda($_GET, 'libros');
 
-        $sql_libros = mysqli_query($conexion_bd, $query);
+    $sql_libros = mysqli_query($conexion_bd, $query);
 
-            
-    if(mysqli_num_rows($sql_libros)>0){
+    $resData = paginar($sql_libros, $_GET);
 
-            $libros = mysqli_fetch_all($sql_libros , MYSQLI_ASSOC);
+    
+
+    $sql_libros = mysqli_query($conexion_bd, $resData["query"]);
+
+    //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
+    $rows = mysqli_num_rows($sql_libros);
+
+    $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
+    if($rows>0){
+
+            $libros["data"] = mysqli_fetch_all($sql_libros , MYSQLI_ASSOC);
+            //AGREGAR INFORMACION UTIL PARA EL FRONTEND
+            $libros["pagination"] = $resData["pagination"];
             echo json_encode($libros);
 
         }else{
@@ -50,6 +60,8 @@
         }
 
         exit();
+
+
    //POST REGISTRAR
 
    if($_SERVER["REQUEST_METHOD"] == 'POST'){
