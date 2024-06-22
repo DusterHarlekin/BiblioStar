@@ -2,6 +2,7 @@
 
     include "conexion.php";
     include "utils/filtering.php";
+    include "utils/pagination.php";
 
     $conexion_bd = connect();
 
@@ -12,8 +13,6 @@
      if(isset($_GET["N"])){
 
         //VALIDACIÓN DE USUARIO
-
-        //Integrar filtros
         
         $sql_cota = mysqli_query($conexion_bd, "SELECT * FROM cota WHERE N=".$_GET["cota_completa"]);
         
@@ -34,24 +33,39 @@
 }
 
 
-        //CONSULTAR TODAS LAS CIUDADES
-        $query = filtrarBusqueda($_GET, 'cota');
+    //CONSULTAR TODAS LAS CIUDADES
+    $query = filtrarBusqueda($_GET, 'cota');
 
-        $sql_cota = mysqli_query($conexion_bd, $query);
+    $sql_cota = mysqli_query($conexion_bd, $query);
 
-        
+    $resData = paginar($sql_cota, $_GET, 'cota');
+
+    $sql_cota = mysqli_query($conexion_bd, $resData["query"]);
+
+    //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
+    $rows = mysqli_num_rows($sql_cota);
+
+    $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
             
-    if(mysqli_num_rows($sql_cota)>0){
+    if($rows > 0){
 
-            $cota = mysqli_fetch_all($sql_cota, MYSQLI_ASSOC);
-            echo json_encode($cota);
+        $cota["data"] = mysqli_fetch_all($sql_cota, MYSQLI_ASSOC);
+        
 
-        }else{
+        //AGREGAR INFORMACION UTIL PARA EL FRONTEND
 
-            echo json_encode(["success"=>0]);
-        }
+        $cota["pagination"] = $resData["pagination"];
 
-        exit();
+        echo json_encode($cota);
+
+     
+
+    }else{
+
+        echo json_encode(["success"=>0]);
+    }
+
+    exit();
 
     //POST REGISTRAR
 

@@ -12,13 +12,12 @@
      if(isset($_GET["codigo_ciudad"])){
 
         //VALIDACIÓN DE USUARIO
-
-        //Integrar filtros
-        
-        $sql_ciudad = mysqli_query($conexion_bd, "SELECT * FROM ciudades WHERE codigo_ciudad=".$_GET["ciudad"]);
+  
+        $sql_ciudad = mysqli_query($conexion_bd, "SELECT * FROM ciudades WHERE codigo_ciudad='".$_GET["codigo_ciudad"]."'");
         
         if(mysqli_num_rows($sql_ciudad)>0){
            $ciudad = mysqli_fetch_all($sql_ciudad, MYSQLI_ASSOC);
+          
             echo json_encode($ciudad);
          
 

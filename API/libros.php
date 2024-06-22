@@ -13,11 +13,11 @@
     if(isset($_GET["N"])){
 
         //VALIDACIÓN DE USUARIO
-        $sql_libros = mysqli_query($conexion_bd, "SELECT * FROM libros WHERE /*cod_serie*/N=".$_GET["N"]);
+        $sql_libros = mysqli_query($conexion_bd, "SELECT * FROM libros WHERE N=".$_GET["N"]);
         
         if(mysqli_num_rows($sql_libros)>0){
             
-           $cota = mysqli_fetch_all($sql_libros , MYSQLI_ASSOC);
+           $libros = mysqli_fetch_all($sql_libros , MYSQLI_ASSOC);
             echo json_encode($libros);
          
 
@@ -37,9 +37,7 @@
 
     $sql_libros = mysqli_query($conexion_bd, $query);
 
-    $resData = paginar($sql_libros, $_GET);
-
-    
+    $resData = paginar($sql_libros, $_GET, 'libros');
 
     $sql_libros = mysqli_query($conexion_bd, $resData["query"]);
 
@@ -47,19 +45,22 @@
     $rows = mysqli_num_rows($sql_libros);
 
     $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
-    if($rows>0){
 
-            $libros["data"] = mysqli_fetch_all($sql_libros , MYSQLI_ASSOC);
-            //AGREGAR INFORMACION UTIL PARA EL FRONTEND
-            $libros["pagination"] = $resData["pagination"];
-            echo json_encode($libros);
+    if($rows > 0){
 
-        }else{
+        $libros["data"] = mysqli_fetch_all($sql_libros , MYSQLI_ASSOC);
 
-            echo json_encode(["success"=>0]);
-        }
+        //AGREGAR INFORMACION UTIL PARA EL FRONTEND
 
-        exit();
+        $libros["pagination"] = $resData["pagination"];
+        echo json_encode($libros);
+
+    }else{
+
+        echo json_encode(["success"=>0]);
+    }
+
+    exit();
 
 
    //POST REGISTRAR

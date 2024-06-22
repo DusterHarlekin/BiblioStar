@@ -1,13 +1,13 @@
 <?php
     include "./filtering.php";
-    function paginar ($sqlReq, $getArray){
+    function paginar ($sqlReq, $getArray, $table){
         //OBTENER LA CANTIDAD TOTAL DE REGISTROS
 
         $numRegistros =  mysqli_num_rows($sqlReq);
 
         $registros = 10;
 
-        $page = $_GET["page"];
+        $page = $getArray["page"];
 
         if(is_numeric($page)){
             $start = (($page -1) * $registros);
@@ -18,7 +18,7 @@
 
         //VOLVER A ARMAR LA QUERY
 
-        $query = filtrarBusqueda($getArray, 'libros', "LIMIT $start,$registros");
+        $query = filtrarBusqueda($getArray, $table, "LIMIT $start,$registros");
 
 
         $data["pagination"] = [

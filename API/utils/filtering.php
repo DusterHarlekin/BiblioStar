@@ -1,7 +1,8 @@
 <?php
 
-error_reporting(0);
+//error_reporting(0);
 function filtrarBusqueda($getArray, $table, $pagQuery = null){
+    
     //CONSULTA CON FILTROS
     $query = "SELECT * FROM ".$table;
 
