@@ -2,6 +2,7 @@
 
     include "conexion.php";
     include "utils/filtering.php";
+    include "utils/pagination.php";
      
     $conexion_bd = connect();
 
@@ -13,13 +14,11 @@
 
         //VALIDACIÓN DE USUARIO
 
-        //Integrar filtros
-
-        $sql_salas = mysqli_query($conexion_bd, "SELECT * FROM salas WHERE N=".$_GET["cod_sala"]);
+        $sql_salas = mysqli_query($conexion_bd, "SELECT * FROM salas WHERE N=".$_GET["N"]);
         
         if(mysqli_num_rows($sql_salas)>0){
             
-           $cota = mysqli_fetch_all($sql_salas, MYSQLI_ASSOC);
+           $salas = mysqli_fetch_all($sql_salas, MYSQLI_ASSOC);
             echo json_encode($salas);
          
 
@@ -39,14 +38,30 @@
 
         $sql_salas = mysqli_query($conexion_bd, $query);
 
+        $resData = paginar($sql_salas, $_GET, 'salas');
+
+        $sql_salas = mysqli_query($conexion_bd, $resData["query"]);
+    
+        //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
+        $rows = mysqli_num_rows($sql_salas);
+    
+        $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
+                
+        if($rows > 0){
+    
+            $salas["data"] = mysqli_fetch_all($sql_salas, MYSQLI_ASSOC);
             
-    if(mysqli_num_rows($sql_salas)>0){
-
-            $salas = mysqli_fetch_all($sql_salas, MYSQLI_ASSOC);
+    
+            //AGREGAR INFORMACION UTIL PARA EL FRONTEND
+    
+            $salas["pagination"] = $resData["pagination"];
+    
             echo json_encode($salas);
-
+    
+         
+    
         }else{
-
+    
             echo json_encode(["success"=>0]);
         }
 

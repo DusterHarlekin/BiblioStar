@@ -2,6 +2,7 @@
 
     include "conexion.php";
     include "utils/filtering.php";
+    include "utils/pagination.php";
 
     $conexion_bd = connect();
 
@@ -12,10 +13,8 @@
         if(isset($_GET["cod_idioma"])){
 
             //VALIDACIÓN DE USUARIO
-    
-            //Integrar filtros
-            
-            $sql_idiomas = mysqli_query($conexion_bd, "SELECT * FROM idiomas WHERE cod_idioma =".$_GET["descripcion"]);
+
+            $sql_idiomas = mysqli_query($conexion_bd, "SELECT * FROM idiomas WHERE cod_idioma ='".$_GET["cod_idioma"]."'");
             
             if(mysqli_num_rows($sql_idiomas)>0){
                 
@@ -37,15 +36,30 @@
 
          $sql_idiomas = mysqli_query($conexion_bd, $query);
 
-           
-         if(mysqli_num_rows($sql_idiomas)>0){
+         $resData = paginar($sql_idiomas, $_GET, 'idiomas');
+
+         $sql_idiomas = mysqli_query($conexion_bd, $resData["query"]);
      
-                 $idiomas = mysqli_fetch_all($sql_idiomas, MYSQLI_ASSOC);
-                 echo json_encode($idiomas);
+         //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
+         $rows = mysqli_num_rows($sql_idiomas);
      
-             }else{
+         $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
+                 
+         if($rows > 0){
      
-                 echo json_encode(["success"=>0]);
+             $idiomas["data"] = mysqli_fetch_all($sql_idiomas, MYSQLI_ASSOC);
+             
+             //AGREGAR INFORMACION UTIL PARA EL FRONTEND
+     
+             $idiomas["pagination"] = $resData["pagination"];
+     
+             echo json_encode($idiomas);
+     
+          
+     
+         }else{
+     
+             echo json_encode(["success"=>0]);
              }
      
              exit();

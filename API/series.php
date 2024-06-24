@@ -2,6 +2,7 @@
 
     include "conexion.php";
     include "utils/filtering.php";
+    include "utils/pagination.php";
     
     $conexion_bd = connect();
 
@@ -14,11 +15,11 @@
         //VALIDACIÓN DE USUARIO
 
         //Integrar filtros
-        $sql_serie = mysqli_query($conexion_bd, "SELECT * FROM serie WHERE /*cod_serie*/N=".$_GET["cod_serie"]);
+        $sql_serie = mysqli_query($conexion_bd, "SELECT * FROM serie WHERE N=".$_GET["N"]);
         
         if(mysqli_num_rows($sql_serie)>0){
             
-           $cota = mysqli_fetch_all($sql_serie, MYSQLI_ASSOC);
+           $serie = mysqli_fetch_all($sql_serie, MYSQLI_ASSOC);
             echo json_encode($serie);
          
 
@@ -38,13 +39,30 @@
 
         $sql_serie = mysqli_query($conexion_bd, $query);
             
-    if(mysqli_num_rows($sql_serie)>0){
+        $resData = paginar($sql_serie, $_GET, 'serie');
 
-            $serie = mysqli_fetch_all($sql_serie, MYSQLI_ASSOC);
+        $sql_serie = mysqli_query($conexion_bd, $resData["query"]);
+    
+        //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
+        $rows = mysqli_num_rows($sql_serie);
+    
+        $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
+                
+        if($rows > 0){
+    
+            $serie["data"] = mysqli_fetch_all($sql_serie, MYSQLI_ASSOC);
+            
+    
+            //AGREGAR INFORMACION UTIL PARA EL FRONTEND
+    
+            $serie["pagination"] = $resData["pagination"];
+    
             echo json_encode($serie);
-
+    
+         
+    
         }else{
-
+    
             echo json_encode(["success"=>0]);
         }
 

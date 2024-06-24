@@ -14,7 +14,7 @@
 
         //VALIDACIÓN DE USUARIO
         
-        $sql_cota = mysqli_query($conexion_bd, "SELECT * FROM cota WHERE N=".$_GET["cota_completa"]);
+        $sql_cota = mysqli_query($conexion_bd, "SELECT * FROM cota WHERE N=".$_GET["N"]);
         
         if(mysqli_num_rows($sql_cota)>0){
             
