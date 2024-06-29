@@ -32,40 +32,33 @@
     }
 }
 
+     //PUT EDITAR
 
-    //CONSULTAR TODAS LAS CIUDADES
-    $query = filtrarBusqueda($_GET, 'cota');
-
-    $sql_cota = mysqli_query($conexion_bd, $query);
-
-    $resData = paginar($sql_cota, $_GET, 'cota');
-
-    $sql_cota = mysqli_query($conexion_bd, $resData["query"]);
-
-    //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
-    $rows = mysqli_num_rows($sql_cota);
-
-    $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
-            
-    if($rows > 0){
-
-        $cota["data"] = mysqli_fetch_all($sql_cota, MYSQLI_ASSOC);
+ if($_SERVER["REQUEST_METHOD"] == 'PUT'){
         
-
-        //AGREGAR INFORMACION UTIL PARA EL FRONTEND
-
-        $cota["pagination"] = $resData["pagination"];
-
-        echo json_encode($cota);
-
-     
-
-    }else{
-
-        echo json_encode(["success"=>0]);
+    $data = json_decode(file_get_contents("php://input"));
+  
+    if(trim($data->N) == ""){
+        echo json_encode(["error"=>"El campo clave no puede esta vacío"]);
     }
-
+    else{
+        mysqli_query($conexion_bd, "UPDATE cota SET cod_isbn ='".$data->cod_isbn."', cota ='".$data->cota."', cutter ='".$data->cutter."', volumen ='".$data->volumen."', ejemplar ='".$data->ejemplar."', fecha_ing ='".$data->fecha_ing."', cota_completa ='".$data->cota_completa."' WHERE N ='".$data->N."'");
+        echo json_encode([
+            "success"=>"datos actualizados",
+            "N"=>$data->N,
+            "cod_isbn"=>$data->cod_isbn,
+            "cota"=>$data->cota,
+            "cutter"=>$data->cutter,
+            "volumen"=>$data->volumen,
+            "ejemplar"=>$data->ejemplar,
+            "fecha_ing"=>$data->fecha_ing,
+            "cota_completa"=>$data->cota_completa
+        ]);
+    }
     exit();
+
+}
+
 
     //POST REGISTRAR
 
@@ -87,3 +80,37 @@
     
     }
     
+        //CONSULTAR TODAS LAS COTAS
+        $query = filtrarBusqueda($_GET, 'cota');
+
+        $sql_cota = mysqli_query($conexion_bd, $query);
+    
+        $resData = paginar($sql_cota, $_GET, 'cota');
+    
+        $sql_cota = mysqli_query($conexion_bd, $resData["query"]);
+    
+    
+        //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
+        $rows = mysqli_num_rows($sql_cota);
+    
+        $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
+                
+        if($rows > 0){
+    
+            $cota["data"] = mysqli_fetch_all($sql_cota, MYSQLI_ASSOC);
+            
+    
+            //AGREGAR INFORMACION UTIL PARA EL FRONTEND
+    
+            $cota["pagination"] = $resData["pagination"];
+    
+            echo json_encode($cota);
+    
+         
+    
+        }else{
+    
+            echo json_encode(["success"=>0]);
+        }
+    
+        exit();

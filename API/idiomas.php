@@ -31,7 +31,53 @@
     
         }
 
-         //CONSULTAR TODAS LAS CIUDADES
+    //PUT EDITAR
+
+    if($_SERVER["REQUEST_METHOD"] == 'PUT'){
+        
+        $data = json_decode(file_get_contents("php://input"));
+      
+        if(trim($data->cod_idioma) == ""){
+            echo json_encode(["error"=>"los campos no pueden estar vacíos"]);
+        }
+        else{
+            mysqli_query($conexion_bd, "UPDATE idiomas SET descripcion ='".$data->descripcion."' WHERE cod_idioma ='".$data->cod_idioma."'");
+            echo json_encode([
+                "success"=>"datos actualizados",
+                "cod_idioma"=>$data->cod_idioma,
+                "descripcion"=>$data->descripcion
+            ]);
+        }
+        exit();
+
+    }
+
+
+   
+    //POST REGISTRAR
+
+    if($_SERVER["REQUEST_METHOD"] == 'POST'){
+        
+        $data = json_decode(file_get_contents("php://input"));
+
+        if(trim($data->cod_idioma) == ""){
+            echo json_encode(["error"=>"los campos no pueden estar vacíos"]);
+        }
+        else{
+            mysqli_query($conexion_bd, "INSERT INTO `idiomas`(`cod_idioma`, `descripcion`) VALUES ('$data->cod_idioma','$data->descripcion')");
+            echo json_encode([
+                "success"=>"datos registrados",
+                "cod_idioma"=>$data->cod_idioma,
+                "descripcion"=>$data->descripcion
+            ]);
+        }
+        exit();
+
+    }
+
+
+
+         //CONSULTAR TODOS LOS IDIOMAS
          $query = filtrarBusqueda($_GET, 'idiomas');
 
          $sql_idiomas = mysqli_query($conexion_bd, $query);
@@ -64,49 +110,4 @@
      
              exit();
 
-    }
-   
-    //POST REGISTRAR
-
-    if($_SERVER["REQUEST_METHOD"] == 'POST'){
-        
-        $data = json_decode(file_get_contents("php://input"));
-
-        if(trim($data->cod_idioma) == ""){
-            echo json_encode(["error"=>"los campos no pueden estar vacíos"]);
-        }
-        else{
-            mysqli_query($conexion_bd, "INSERT INTO `idiomas`(`cod_idioma`, `descripcion`) VALUES ('$data->cod_idioma','$data->descripcion')");
-            echo json_encode([
-                "success"=>"datos registrados",
-                "cod_idioma"=>$data->cod_idioma,
-                "descripcion"=>$data->descripcion
-            ]);
-        }
-        exit();
-
-    }
-
-    //PUT EDITAR
-
-    if($_SERVER["REQUEST_METHOD"] == 'PUT'){
-        
-        $data = json_decode(file_get_contents("php://input"));
-      
-        if(trim($data->cod_idioma) == ""){
-            echo json_encode(["error"=>"los campos no pueden estar vacíos"]);
-        }
-        else{
-            mysqli_query($conexion_bd, "UPDATE idiomas SET descripcion ='".$data->descripcion."' WHERE cod_idioma ='".$data->cod_idioma."'");
-            echo json_encode([
-                "success"=>"datos actualizados",
-                "cod_idioma"=>$data->cod_idioma,
-                "descripcion"=>$data->descripcion
-            ]);
-        }
-        exit();
-
-    }
-
-
-       
+    }       

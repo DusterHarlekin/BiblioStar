@@ -2,7 +2,8 @@
 
     include "conexion.php";
     include "utils/filtering.php";
-    
+    include "utils/pagination.php";
+        
     $conexion_bd = connect();
 
      //Prueba consulta de ciudad
@@ -29,23 +30,28 @@
 
     }
 }
+    //PUT EDITAR
 
-    //CONSULTAR TODAS LAS CIUDADES
-
-    
-    $query = filtrarBusqueda($_GET, 'ciudades');
-
-    $sql_ciudad = mysqli_query($conexion_bd, $query);
+ if($_SERVER["REQUEST_METHOD"] == 'PUT'){
         
-    if(mysqli_num_rows($sql_ciudad)>0){
-        $ciudad = mysqli_fetch_all($sql_ciudad, MYSQLI_ASSOC);
-        echo json_encode($ciudad);
-
-    }else{
-        echo json_encode(["success"=>0]);
+    $data = json_decode(file_get_contents("php://input"));
+  
+    if(trim($data->codigo_ciudad) == ""){
+        echo json_encode(["error"=>"El campo clave no puede esta vacío"]);
     }
-
+    else{
+        mysqli_query($conexion_bd, "UPDATE ciudades SET codigo_pais ='".$data->codigo_pais."', ciudad ='".$data->ciudad."' WHERE codigo_ciudad ='".$data->codigo_ciudad."'");
+        echo json_encode([
+            "success"=>"datos actualizados",
+            "codigo_ciudad"=>$data->codigo_ciudad,
+            "codigo_pais"=>$data->codigo_pais,
+            "ciudad"=>$data->ciudad
+        ]);
+    }
     exit();
+
+}
+
 
         //POST REGISTRAR
 
@@ -67,4 +73,41 @@
             exit();
         
         }
+
+    //CONSULTAR TODAS LAS CIUDADES
+
+    
+    $query = filtrarBusqueda($_GET, 'ciudades');
+
+    $sql_ciudad = mysqli_query($conexion_bd, $query);
+
+    $resData = paginar($sql_ciudad, $_GET, 'ciudades');
+
+    $sql_ciudad = mysqli_query($conexion_bd, $resData["query"]);
+
+
+    //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
+    $rows = mysqli_num_rows($sql_ciudad);
+
+    $resData["pagination"]["end"] = $resData["pagination"]["start"]-1 + $rows;
+            
+    if($rows > 0){
+
+        $ciudad["data"] = mysqli_fetch_all($sql_ciudad, MYSQLI_ASSOC);
+        
+
+        //AGREGAR INFORMACION UTIL PARA EL FRONTEND
+
+        $ciudad["pagination"] = $resData["pagination"];
+
+        echo json_encode($ciudad);
+
+     
+
+    }else{
+
+        echo json_encode(["success"=>0]);
+    }
+
+    exit();
         

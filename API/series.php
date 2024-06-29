@@ -32,7 +32,51 @@
         exit();
 
     }
-     }
+}
+
+ //PUT EDITAR
+
+ if($_SERVER["REQUEST_METHOD"] == 'PUT'){
+        
+    $data = json_decode(file_get_contents("php://input"));
+  
+    if(trim($data->N) == ""){
+        echo json_encode(["error"=>"El campo clave no puede esta vacío"]);
+    }
+    else{
+
+        mysqli_query($conexion_bd, "UPDATE serie SET cod_serie ='".$data->cod_serie."', DESCRIPCION ='".$data->DESCRIPCION."' WHERE N ='".$data->N."'");
+        echo json_encode([
+            "success"=>"datos actualizados",
+            "N"=>$data->N,
+            "cod_serie"=>$data->cod_serie,
+            "DESCRIPCION"=>$data->DESCRIPCION
+        ]);
+    }
+    exit();
+
+}
+
+
+    //POST REGISTRAR
+
+   if($_SERVER["REQUEST_METHOD"] == 'POST'){
+        
+    $data = json_decode(file_get_contents("php://input"));
+
+    if(trim($data->N) == ""){
+
+        echo json_encode(["error"=>"los campos no pueden estar vacíos"]);
+    }
+    else{
+        
+        mysqli_query($conexion_bd, "INSERT INTO `serie`(`N`, `cod_serie`, `DESCRIPCION`) VALUES ('$data->N','$data->cod_serie','$data->DESCRIPCION')"); 
+        
+        echo json_encode(["success"=>"datos registrados"]);
+    }
+    exit();
+
+}
 
         //CONSULTAR TODAS LAS CIUDADES
         $query = filtrarBusqueda($_GET, 'serie');
@@ -67,23 +111,3 @@
         }
 
         exit();
-
-    //POST REGISTRAR
-
-   if($_SERVER["REQUEST_METHOD"] == 'POST'){
-        
-    $data = json_decode(file_get_contents("php://input"));
-
-    if(trim($data->N) == ""){
-
-        echo json_encode(["error"=>"los campos no pueden estar vacíos"]);
-    }
-    else{
-        
-        mysqli_query($conexion_bd, "INSERT INTO `serie`(`N`, `cod_serie`, `DESCRIPCION`) VALUES ('$data->N','$data->cod_serie','$data->DESCRIPCION')"); 
-        
-        echo json_encode(["success"=>"datos registrados"]);
-    }
-    exit();
-
-}
