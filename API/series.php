@@ -51,6 +51,23 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     exit();
 }
 
+//DELETE ELIMINAR
+
+if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
+
+    $data = json_decode(file_get_contents("php://input"));
+
+    if (trim($data->N) == "") {
+
+        echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+    } else {
+
+        mysqli_query($conexion_bd, "DELETE FROM serie WHERE N=" . $data->N);
+
+        echo json_encode(["success" => "La sala fue eliminada de forma exitosa"]);
+    }
+    exit();
+}
 
 //POST REGISTRAR
 
