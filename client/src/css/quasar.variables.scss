@@ -23,3 +23,13 @@ $positive  : #21BA45;
 $negative  : #C10015;
 $info      : #31CCEC;
 $warning   : #F2C037;
+
+$typography-font-family: 'Poppins', sans-serif !default;
+$text-weights: (
+  thin: 300,
+  light: 400,
+  regular: 500,
+  medium: 600,
+  bold: 700,
+  bolder: 800
+) !default;
