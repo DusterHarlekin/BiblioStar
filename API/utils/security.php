@@ -12,7 +12,7 @@ function hashPass($pass)
     return password_hash($pass, PASSWORD_DEFAULT);
 }
 
-
+//FUNCION PARA AUTORIZACION
 function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = false)
 {
     if (!isset($data->session_user_name) || trim($data->session_user_name) == "" || !isset($data->session_user_role) || trim($data->session_user_role) == "") {
