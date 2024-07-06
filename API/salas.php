@@ -1,7 +1,6 @@
 <?php
 
 include "conexion.php";
-include "utils/filtering.php";
 include "utils/pagination.php";
 
 $conexion_bd = connect();
