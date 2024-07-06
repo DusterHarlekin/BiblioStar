@@ -49,21 +49,21 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 
     //DELETE ELIMINAR
 
-if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
+    if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 
-    $data = json_decode(file_get_contents("php://input"));
+        $data = json_decode(file_get_contents("php://input"));
 
-    if (trim($data->cod_idioma) == "") {
+        if (trim($data->cod_idioma) == "") {
 
-        echo json_encode(["error" => "los campos no pueden estar vacíos"]);
-    } else {
+            echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+        } else {
 
-        mysqli_query($conexion_bd, "DELETE FROM idiomas WHERE cod_idioma=" . $data->cod_idioma);
+            mysqli_query($conexion_bd, "DELETE FROM idiomas WHERE cod_idioma=" . $data->cod_idioma);
 
-        echo json_encode(["success" => "La sala fue eliminada de forma exitosa"]);
+            echo json_encode(["success" => "La sala fue eliminada de forma exitosa"]);
+        }
+        exit();
     }
-    exit();
-}
 
     //POST REGISTRAR
 
