@@ -2,6 +2,7 @@
 
 include "conexion.php";
 include "utils/pagination.php";
+include "utils/security.php";
 
 $conexion_bd = connect();
 
@@ -34,9 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
     $data = json_decode(file_get_contents("php://input"));
 
+
     if (trim($data->N) == "") {
         echo json_encode(["error" => "El campo clave no puede esta vacío"]);
     } else {
+
+        $data->DESCRIPCION = secureData($data->DESCRIPCION);
+        $data->cod_sala = secureData($data->cod_sala);
+
         mysqli_query($conexion_bd, "UPDATE salas SET cod_sala ='" . $data->cod_sala . "', DESCRIPCION ='" . $data->DESCRIPCION . "' WHERE N ='" . $data->N . "'");
         echo json_encode([
             "success" => "datos actualizados",
