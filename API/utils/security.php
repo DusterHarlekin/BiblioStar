@@ -16,7 +16,7 @@ function hashPass($pass)
 function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = false)
 {
     if (!isset($data->session_user_name) || trim($data->session_user_name) == "" || !isset($data->session_user_role) || trim($data->session_user_role) == "") {
-        echo json_encode(["empty_session" => true]);
+        echo json_encode(["invalid_session" => true]);
         return false;
     }
 
