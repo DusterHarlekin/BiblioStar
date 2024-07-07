@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     //LOGIN
     if (isset($data->request) && $data->request == 'Login') {
 
+
         if (!isset($data->usuario) || trim($data->usuario) == "" || !isset($data->clave) || trim($data->clave) == "") {
             echo json_encode(["error" => "El usuario y contraseña no pueden estar vacíos"]);
             exit();
@@ -48,12 +49,23 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         $sql_usuario = mysqli_query($conexion_bd, "SELECT usuario, rol, cedula, nombre, apellido FROM usuarios WHERE usuario='" . $data->usuario . "' AND clave='" . $data->clave . "'");
 
         if (mysqli_num_rows($sql_usuario) > 0) {
-
+            /*$token = bin2hex(openssl_random_pseudo_bytes(16)); //Generar token 32 caracteres
+            $c_date = date("d-m-Y");
+            echo json_encode(["success" => $c_date]);
+            exit();
+            mysqli_query($conexion_bd, "INSERT INTO `sessions`(`token`, `token_creation_date`, `token_expiration_date`, `token_expiration_date`) VALUES ('$token','$token','$data->cedula')"); */
             $usuario = mysqli_fetch_all($sql_usuario, MYSQLI_ASSOC);
             echo json_encode($usuario);
         } else {
-
-            echo json_encode(["error" => "Usuario y/o clave incorrectos, asegúrese de que los datos son correctos"]);
+            if (isset($data->rol) || trim($data->rol) == "invitado") {
+                if (!isset($data->cedula) || trim($data->cedula) == "") {
+                    echo json_encode(["error" => "Los campos no pueden estar vacios"]);
+                    exit();
+                }
+                echo json_encode(["cedula" => $data->cedula, "rol" => $data->rol]);
+            } else {
+                echo json_encode(["error" => "Usuario y/o clave incorrectos, asegúrese de que los datos son correctos"]);
+            }
         }
 
         exit();
