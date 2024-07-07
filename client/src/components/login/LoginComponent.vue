@@ -68,9 +68,29 @@ const onSubmit = async () => {
   };
   console.log(requestOptions.body);
 
-  fetch(process.env.API_URL + "auth/auth.php", requestOptions)
-    .then((response) => response.json())
-    .then((data) => console.log(data));
+  try {
+    const response = await fetch(
+      process.env.API_URL + "auth/auth.php",
+      requestOptions
+    );
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const data = await response.json();
+    console.log(data);
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    console.log(data);
+  } catch (error) {
+    console.log(error.message);
+    $q.notify({
+      color: "negative",
+      position: "top",
+      message: error.message,
+      icon: "warning",
+    });
+  }
 };
 </script>
 
