@@ -30,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 }
 
 //PUT EDITAR
-
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
     $data = json_decode(file_get_contents("php://input"));
@@ -40,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
         echo json_encode(["error" => "El campo clave no puede esta vacío"]);
     } else {
 
+        //Limpieza de datos a almacenar MODIFICADOS
         $data->DESCRIPCION = secureData($data->DESCRIPCION);
         $data->cod_sala = secureData($data->cod_sala);
 

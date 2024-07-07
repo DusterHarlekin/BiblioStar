@@ -1,7 +1,7 @@
 <?php
 
 include "conexion.php";
-
+include "utils/security.php";
 include "utils/pagination.php";
 
 $conexion_bd = connect();
@@ -28,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     }
 }
 //PUT EDITAR
-
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
     $data = json_decode(file_get_contents("php://input"));
@@ -36,6 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     if (trim($data->codigo_ciudad) == "") {
         echo json_encode(["error" => "El campo clave no puede esta vacío"]);
     } else {
+
+        //Limpieza de datos a almacenar MODIFICADOS
+        $data->codigo_pais = secureData($data->codigo_pais);
+        $data->ciudad = secureData($data->ciudad);
+
         mysqli_query($conexion_bd, "UPDATE ciudades SET codigo_pais ='" . $data->codigo_pais . "', ciudad ='" . $data->ciudad . "' WHERE codigo_ciudad ='" . $data->codigo_ciudad . "'");
         echo json_encode([
             "success" => "datos actualizados",

@@ -1,7 +1,7 @@
 <?php
 
 include "conexion.php";
-
+include "utils/security.php";
 include "utils/pagination.php";
 
 $conexion_bd = connect();
@@ -29,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 }
 
 //PUT EDITAR
-
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
     $data = json_decode(file_get_contents("php://input"));
@@ -37,6 +36,30 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     if (trim($data->N) == "") {
         echo json_encode(["error" => "El campo clave no puede esta vacío"]);
     } else {
+
+        //Limpieza de datos a almacenar MODIFICADOS
+        $data->cota = secureData($data->cota);
+        $data->autor = secureData($data->autor);
+        $data->titulo = secureData($data->titulo);
+        $data->pais = secureData($data->pais);
+        $data->editorial = secureData($data->editorial);
+        $data->edicion = secureData($data->edicion);
+        $data->ciudad = secureData($data->ciudad);
+        $data->anio = secureData($data->anio);
+        $data->tomo = secureData($data->tomo);
+        $data->pag = secureData($data->pag);
+        $data->descripcion = secureData($data->descripcion);
+        $data->cod_sala = secureData($data->cod_sala);
+        $data->cod_referencia = secureData($data->cod_referencia);
+        $data->costo = secureData($data->costo);
+        $data->fecha_ing = secureData($data->fecha_ing);
+        $data->idioma = secureData($data->idioma);
+        $data->participante = secureData($data->participante);
+        $data->impresion = secureData($data->impresion);
+        $data->observacion = secureData($data->observacion);
+        $data->cutter = secureData($data->cutter);
+        $data->cota_completa = secureData($data->cota_completa);
+
         mysqli_query($conexion_bd, "UPDATE libros SET cota ='" . $data->cota . "', cod_isbn ='" . $data->cod_isbn . "', autor ='" . $data->autor . "', titulo ='" . $data->titulo . "', pais ='" . $data->pais . "', editorial ='" . $data->editorial . "', edicion ='" . $data->edicion . "', ciudad ='" . $data->ciudad . "', anio ='" . $data->anio . "', tomo ='" . $data->tomo . "', pag ='" . $data->pag . "', descripcion ='" . $data->descripcion . "', cod_sala ='" . $data->cod_sala . "', cod_referencia ='" . $data->cod_referencia . "', costo ='" . $data->costo . "', fecha_ing ='" . $data->fecha_ing . "', idioma ='" . $data->idioma . "', participante ='" . $data->participante . "', impresion ='" . $data->impresion . "', observacion ='" . $data->observacion . "', cutter ='" . $data->cutter . "', cota_completa ='" . $data->cota_completa . "' WHERE N ='" . $data->N . "'");
         echo json_encode([
             "success" => "datos actualizados",
