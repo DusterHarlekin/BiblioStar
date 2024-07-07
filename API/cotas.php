@@ -1,7 +1,7 @@
 <?php
 
 include "conexion.php";
-
+include "utils/security.php";
 include "utils/pagination.php";
 
 $conexion_bd = connect();
@@ -30,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 }
 
 //PUT EDITAR
-
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
     $data = json_decode(file_get_contents("php://input"));
@@ -38,6 +37,17 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     if (trim($data->N) == "") {
         echo json_encode(["error" => "El campo clave no puede esta vacío"]);
     } else {
+
+        //Limpieza de datos a almacenar MODIFICADOS
+        $data->cota = secureData($data->cota);
+        $data->cod_isbn = secureData($data->cod_isbn);
+        $data->cutter = secureData($data->cutter);
+        $data->volumen = secureData($data->volumen);
+        $data->ejemplar = secureData($data->ejemplar);
+        $data->fecha_ing = secureData($data->fecha_ing);
+        $data->cota_completa = secureData($data->cota_completa);
+
+
         mysqli_query($conexion_bd, "UPDATE cota SET cod_isbn ='" . $data->cod_isbn . "', cota ='" . $data->cota . "', cutter ='" . $data->cutter . "', volumen ='" . $data->volumen . "', ejemplar ='" . $data->ejemplar . "', fecha_ing ='" . $data->fecha_ing . "', cota_completa ='" . $data->cota_completa . "' WHERE N ='" . $data->N . "'");
         echo json_encode([
             "success" => "datos actualizados",
