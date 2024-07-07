@@ -7,6 +7,7 @@ $conexion_bd = connect();
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     $data = json_decode(file_get_contents("php://input"));
+    echo(json_encode([result => $data]));
 
 
     //REGISTER
@@ -38,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     //LOGIN
     if (isset($data->request) && $data->request == 'Login') {
+        echo json_encode(["error" => "Loginnn", "code" => 401]);
         if (!isset($data->usuario) || trim($data->usuario) == "" || !isset($data->clave) || trim($data->clave) == "") {
             echo json_encode(["error" => "El usuario y contraseña no pueden estar vacíos"]);
             exit();
