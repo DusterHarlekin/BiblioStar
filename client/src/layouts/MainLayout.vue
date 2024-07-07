@@ -1,21 +1,29 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="lHr LpR lfr">
+    <q-header
+      v-if="$q.screen.lt.md"
+      reveal
+      bordered
+      :dark="true"
+      class="bg-dark"
+    >
       <q-toolbar>
         <q-btn
-          flat
           dense
+          flat
           round
           icon="menu"
-          aria-label="Menu"
           @click="toggleLeftDrawer"
+          class="text-accent"
         />
 
         <q-toolbar-title>
-          Quasar App
+          <div class="row items-center">
+            <div class="text-h6 text-weight-bold font-title text-accent">
+              SCALEUP
+            </div>
+          </div>
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -23,20 +31,243 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
+      :mini="drawerMiniState"
+      class="bg-primary text-white"
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+      <div class="column justify-between window-height q-py-lg no-wrap">
+        <div>
+          <q-item-label class="q-py-md">
+            <q-item v-ripple>
+              <q-item-section side>
+                <q-avatar rounded size="70px">
+                  <img src="../assets/logo.png" />
+                </q-avatar>
+              </q-item-section>
+              <q-item-section style="font-size: 1.5em">
+                <q-item-label>Mary</q-item-label>
+                <q-item-label class="text-subtitle1 text-grey"
+                  >Administrador</q-item-label
+                >
+              </q-item-section>
+            </q-item>
+          </q-item-label>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+          <q-list padding class="text-white q-pl-lg">
+            <div>
+              <q-item to="/libros" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="book" />
+                  <q-tooltip
+                    v-if="drawerMiniState"
+                    anchor="center right"
+                    self="center left"
+                    :offset="[22, 10]"
+                    class="text-caption bg-primary shadow-1"
+                  >
+                    Libros
+                  </q-tooltip>
+                </q-item-section>
+
+                <q-item-section style="font-size: 1.5em">
+                  Libros
+                </q-item-section>
+              </q-item>
+
+              <q-item to="/libros" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="book" />
+                  <q-tooltip
+                    v-if="drawerMiniState"
+                    anchor="center right"
+                    self="center left"
+                    :offset="[22, 10]"
+                    class="text-caption bg-primary shadow-1"
+                  >
+                    Libros
+                  </q-tooltip>
+                </q-item-section>
+
+                <q-item-section style="font-size: 1.5em">
+                  Libros
+                </q-item-section>
+              </q-item>
+
+              <q-item to="/libros" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="book" />
+                  <q-tooltip
+                    v-if="drawerMiniState"
+                    anchor="center right"
+                    self="center left"
+                    :offset="[22, 10]"
+                    class="text-caption bg-primary shadow-1"
+                  >
+                    Libros
+                  </q-tooltip>
+                </q-item-section>
+
+                <q-item-section style="font-size: 1.5em">
+                  Libros
+                </q-item-section>
+              </q-item>
+
+              <q-item to="/libros" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="book" />
+                  <q-tooltip
+                    v-if="drawerMiniState"
+                    anchor="center right"
+                    self="center left"
+                    :offset="[22, 10]"
+                    class="text-caption bg-primary shadow-1"
+                  >
+                    Libros
+                  </q-tooltip>
+                </q-item-section>
+
+                <q-item-section style="font-size: 1.5em">
+                  Libros
+                </q-item-section>
+              </q-item>
+
+              <q-item to="/libros" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="book" />
+                  <q-tooltip
+                    v-if="drawerMiniState"
+                    anchor="center right"
+                    self="center left"
+                    :offset="[22, 10]"
+                    class="text-caption bg-primary shadow-1"
+                  >
+                    Libros
+                  </q-tooltip>
+                </q-item-section>
+
+                <q-item-section style="font-size: 1.5em">
+                  Libros
+                </q-item-section>
+              </q-item>
+
+              <q-item to="/libros" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="book" />
+                  <q-tooltip
+                    v-if="drawerMiniState"
+                    anchor="center right"
+                    self="center left"
+                    :offset="[22, 10]"
+                    class="text-caption bg-primary shadow-1"
+                  >
+                    Libros
+                  </q-tooltip>
+                </q-item-section>
+
+                <q-item-section style="font-size: 1.5em">
+                  Libros
+                </q-item-section>
+              </q-item>
+
+              <q-item to="/libros" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="book" />
+                  <q-tooltip
+                    v-if="drawerMiniState"
+                    anchor="center right"
+                    self="center left"
+                    :offset="[22, 10]"
+                    class="text-caption bg-primary shadow-1"
+                  >
+                    Libros
+                  </q-tooltip>
+                </q-item-section>
+
+                <q-item-section style="font-size: 1.5em">
+                  Libros
+                </q-item-section>
+              </q-item>
+            </div>
+          </q-list>
+        </div>
+
+        <q-list padding class="text-white q-pl-lg">
+          <div>
+            <q-item to="/libros" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="book" />
+                <q-tooltip
+                  v-if="drawerMiniState"
+                  anchor="center right"
+                  self="center left"
+                  :offset="[22, 10]"
+                  class="text-caption bg-primary shadow-1"
+                >
+                  Libros
+                </q-tooltip>
+              </q-item-section>
+
+              <q-item-section style="font-size: 1.5em"> Libros </q-item-section>
+            </q-item>
+
+            <q-item to="/libros" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="book" />
+                <q-tooltip
+                  v-if="drawerMiniState"
+                  anchor="center right"
+                  self="center left"
+                  :offset="[22, 10]"
+                  class="text-caption bg-primary shadow-1"
+                >
+                  Libros
+                </q-tooltip>
+              </q-item-section>
+
+              <q-item-section style="font-size: 1.5em"> Libros </q-item-section>
+            </q-item>
+          </div>
+        </q-list>
+
+        <q-list padding class="text-white q-pl-lg">
+          <div>
+            <q-item to="/libros" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="book" />
+                <q-tooltip
+                  v-if="drawerMiniState"
+                  anchor="center right"
+                  self="center left"
+                  :offset="[22, 10]"
+                  class="text-caption bg-primary shadow-1"
+                >
+                  Libros
+                </q-tooltip>
+              </q-item-section>
+
+              <q-item-section style="font-size: 1.5em"> Libros </q-item-section>
+            </q-item>
+          </div>
+        </q-list>
+
+        <!-- Menu button (toggles drawer mini-mode) -->
+        <div
+          v-if="$q.screen.gt.sm && !$q.platform.is.capacitor"
+          class="absolute"
+          :style="[drawerMiniState ? { top: '70px' } : { top: '101px' }]"
+          style="right: -12px"
+        >
+          <q-btn
+            dense
+            round
+            unelevated
+            color="accent"
+            text-color="grey-10"
+            :icon="drawerMiniState ? 'chevron_right' : 'chevron_left'"
+            size="sm"
+            @click="toggleMiniState"
+          />
+        </div>
+      </div>
     </q-drawer>
 
     <q-page-container>
@@ -46,61 +277,66 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { ref } from "vue";
+import EssentialLink from "components/EssentialLink.vue";
 
 defineOptions({
-  name: 'MainLayout'
-})
+  name: "MainLayout",
+});
 
 const linksList = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+    title: "Libros",
 
-const leftDrawerOpen = ref(false)
+    icon: "book",
+    to: "/libros",
+  },
+  {
+    title: "Github",
+    caption: "github.com/quasarframework",
+    icon: "code",
+    link: "https://github.com/quasarframework",
+  },
+  {
+    title: "Discord Chat Channel",
+    caption: "chat.quasar.dev",
+    icon: "chat",
+    link: "https://chat.quasar.dev",
+  },
+  {
+    title: "Forum",
+    caption: "forum.quasar.dev",
+    icon: "record_voice_over",
+    link: "https://forum.quasar.dev",
+  },
+  {
+    title: "Twitter",
+    caption: "@quasarframework",
+    icon: "rss_feed",
+    link: "https://twitter.quasar.dev",
+  },
+  {
+    title: "Facebook",
+    caption: "@QuasarFramework",
+    icon: "public",
+    link: "https://facebook.quasar.dev",
+  },
+  {
+    title: "Quasar Awesome",
+    caption: "Community Quasar projects",
+    icon: "favorite",
+    link: "https://awesome.quasar.dev",
+  },
+];
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+const leftDrawerOpen = ref(false);
+const drawerMiniState = ref(false);
+
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function toggleMiniState() {
+  drawerMiniState.value = !drawerMiniState.value;
 }
 </script>

@@ -9,6 +9,7 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 
+const { Notify, Loading } = require('quasar');
 const { configure } = require('quasar/wrappers');
 
 
@@ -86,7 +87,24 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {},
+      config: {
+        dark: false,
+        notify: {
+          position: 'top',
+          actions: [{ icon: 'mdi-close', color: 'white' }],
+          timeout: 5000,
+          classes: 'text-subtitle1',
+          iconSize: '2em',
+        },
+        loading: {
+          delay: 400,
+          message: 'Cargando, por favor espere...',
+        },
+      },
+
+      iconSet: 'svg-mdi-v6', // Quasar icon set
+      lang: 'es', // Quasar language pack
+
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
@@ -99,7 +117,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Notify', 'Loading', 'LocalStorage'],
     },
 
     // animations: 'all', // --- includes all animations
