@@ -11,7 +11,7 @@ const routes = [
     component: () => import('layouts/LoginLayout.vue'),
     children: [
       { path: '', component: () => import('pages/auth/UserLogin.vue') },
-      { path: 'invitado', component: () => import('pages/IndexPage.vue') },
+      { path: 'invitado', component: () => import('pages/auth/GuestLogin.vue') },
     ]
   },
   

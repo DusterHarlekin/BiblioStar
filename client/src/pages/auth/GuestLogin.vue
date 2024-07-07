@@ -1,6 +1,6 @@
 <template>
   <q-page class="container-page flex flex-center">
-    <LoginComponent :is-guest="false" />
+    <LoginComponent :is-guest="true" />
   </q-page>
 </template>
 

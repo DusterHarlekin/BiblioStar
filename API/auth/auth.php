@@ -40,11 +40,19 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     //LOGIN
     if (isset($data->request) && $data->request == 'Login') {
 
-
-        if (!isset($data->usuario) || trim($data->usuario) == "" || !isset($data->clave) || trim($data->clave) == "") {
+        if (isset($data->rol) || trim($data->rol) == "invitado") {
+            if (!isset($data->cedula) || trim($data->cedula) == "") {
+                echo json_encode(["error" => "Los campos no pueden estar vacios"]);
+                exit();
+            }
+            echo json_encode(["cedula" => $data->cedula, "rol" => $data->rol]);
+            exit();
+        } else if (!isset($data->usuario) || trim($data->usuario) == "" || !isset($data->clave) || trim($data->clave) == "") {
             echo json_encode(["error" => "El usuario y contraseña no pueden estar vacíos"]);
             exit();
         }
+
+        
 
         $sql_usuario = mysqli_query($conexion_bd, "SELECT usuario, rol, cedula, nombre, apellido FROM usuarios WHERE usuario='" . $data->usuario . "' AND clave='" . $data->clave . "'");
 
@@ -57,15 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $usuario = mysqli_fetch_all($sql_usuario, MYSQLI_ASSOC);
             echo json_encode($usuario);
         } else {
-            if (isset($data->rol) || trim($data->rol) == "invitado") {
-                if (!isset($data->cedula) || trim($data->cedula) == "") {
-                    echo json_encode(["error" => "Los campos no pueden estar vacios"]);
-                    exit();
-                }
-                echo json_encode(["cedula" => $data->cedula, "rol" => $data->rol]);
-            } else {
+
                 echo json_encode(["error" => "Usuario y/o clave incorrectos, asegúrese de que los datos son correctos"]);
-            }
         }
 
         exit();
