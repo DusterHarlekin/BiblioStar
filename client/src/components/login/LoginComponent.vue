@@ -176,8 +176,9 @@ const onGuestSubmit = async () => {
 
 <style scoped>
 .my-card {
-  width: 100%;
-  min-width: 400px;
+  width: 40vw;
+  min-width: 300px;
+  max-width: 400px;
 }
 
 .logo-container {

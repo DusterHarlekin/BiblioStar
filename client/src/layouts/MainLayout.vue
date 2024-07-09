@@ -14,16 +14,8 @@
           round
           icon="menu"
           @click="toggleLeftDrawer"
-          class="text-accent"
+          class="text-white"
         />
-
-        <q-toolbar-title>
-          <div class="row items-center">
-            <div class="text-h6 text-weight-bold font-title text-accent">
-              SCALEUP
-            </div>
-          </div>
-        </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -32,7 +24,7 @@
       show-if-above
       bordered
       :mini="drawerMiniState"
-      class="bg-primary text-white"
+      class="bg-dark text-white"
     >
       <div class="column justify-between window-height q-py-lg no-wrap">
         <div>
