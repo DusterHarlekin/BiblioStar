@@ -14,8 +14,16 @@
           round
           icon="menu"
           @click="toggleLeftDrawer"
-          class="text-white"
+          class="text-accent"
         />
+
+        <q-toolbar-title>
+          <div class="row items-center">
+            <div class="text-h6 text-weight-bold font-title text-accent">
+              SCALEUP
+            </div>
+          </div>
+        </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -44,11 +52,11 @@
             </q-item>
           </q-item-label>
 
-          <q-list padding class="text-white q-pl-lg">
+          <q-list class="text-white" :class="drawerMiniState ? '' : 'q-pl-lg'">
             <div>
               <q-item to="/libros" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="book" />
+                  <q-icon name="description" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -56,12 +64,12 @@
                     :offset="[22, 10]"
                     class="text-caption bg-primary shadow-1"
                   >
-                    Libros
+                    Resumen
                   </q-tooltip>
                 </q-item-section>
 
                 <q-item-section style="font-size: 1.5em">
-                  Libros
+                  Resumen
                 </q-item-section>
               </q-item>
 
@@ -86,7 +94,7 @@
 
               <q-item to="/libros" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="book" />
+                  <q-icon name="bookmark" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -94,18 +102,18 @@
                     :offset="[22, 10]"
                     class="text-caption bg-primary shadow-1"
                   >
-                    Libros
+                    Cotas
                   </q-tooltip>
                 </q-item-section>
 
                 <q-item-section style="font-size: 1.5em">
-                  Libros
+                  Cotas
                 </q-item-section>
               </q-item>
 
               <q-item to="/libros" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="book" />
+                  <q-icon name="home" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -113,18 +121,18 @@
                     :offset="[22, 10]"
                     class="text-caption bg-primary shadow-1"
                   >
-                    Libros
+                    Salas
                   </q-tooltip>
                 </q-item-section>
 
                 <q-item-section style="font-size: 1.5em">
-                  Libros
+                  Salas
                 </q-item-section>
               </q-item>
 
               <q-item to="/libros" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="book" />
+                  <q-icon name="location_on" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -132,18 +140,18 @@
                     :offset="[22, 10]"
                     class="text-caption bg-primary shadow-1"
                   >
-                    Libros
+                    Países
                   </q-tooltip>
                 </q-item-section>
 
                 <q-item-section style="font-size: 1.5em">
-                  Libros
+                  Países
                 </q-item-section>
               </q-item>
 
               <q-item to="/libros" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="book" />
+                  <q-icon name="menu_book" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -151,18 +159,18 @@
                     :offset="[22, 10]"
                     class="text-caption bg-primary shadow-1"
                   >
-                    Libros
+                    Idiomas
                   </q-tooltip>
                 </q-item-section>
 
                 <q-item-section style="font-size: 1.5em">
-                  Libros
+                  Idiomas
                 </q-item-section>
               </q-item>
 
               <q-item to="/libros" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="book" />
+                  <q-icon name="pending_actions" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -170,23 +178,27 @@
                     :offset="[22, 10]"
                     class="text-caption bg-primary shadow-1"
                   >
-                    Libros
+                    Préstamos
                   </q-tooltip>
                 </q-item-section>
 
                 <q-item-section style="font-size: 1.5em">
-                  Libros
+                  Préstamos
                 </q-item-section>
               </q-item>
             </div>
           </q-list>
         </div>
 
-        <q-list padding class="text-white q-pl-lg">
+        <q-list
+          padding
+          class="text-white"
+          :class="drawerMiniState ? '' : 'q-pl-lg'"
+        >
           <div>
             <q-item to="/libros" clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="book" />
+                <q-icon name="bug_report" />
                 <q-tooltip
                   v-if="drawerMiniState"
                   anchor="center right"
@@ -194,16 +206,18 @@
                   :offset="[22, 10]"
                   class="text-caption bg-primary shadow-1"
                 >
-                  Libros
+                  Reportes
                 </q-tooltip>
               </q-item-section>
 
-              <q-item-section style="font-size: 1.5em"> Libros </q-item-section>
+              <q-item-section style="font-size: 1.5em">
+                Reportes</q-item-section
+              >
             </q-item>
 
             <q-item to="/libros" clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="book" />
+                <q-icon name="settings" />
                 <q-tooltip
                   v-if="drawerMiniState"
                   anchor="center right"
@@ -211,20 +225,26 @@
                   :offset="[22, 10]"
                   class="text-caption bg-primary shadow-1"
                 >
-                  Libros
+                  Configuración
                 </q-tooltip>
               </q-item-section>
 
-              <q-item-section style="font-size: 1.5em"> Libros </q-item-section>
+              <q-item-section style="font-size: 1.5em">
+                Configuración
+              </q-item-section>
             </q-item>
           </div>
         </q-list>
 
-        <q-list padding class="text-white q-pl-lg">
+        <q-list
+          padding
+          class="text-white"
+          :class="drawerMiniState ? '' : 'q-pl-lg'"
+        >
           <div>
             <q-item to="/libros" clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="book" />
+                <q-icon name="logout" />
                 <q-tooltip
                   v-if="drawerMiniState"
                   anchor="center right"
@@ -232,11 +252,13 @@
                   :offset="[22, 10]"
                   class="text-caption bg-primary shadow-1"
                 >
-                  Libros
+                  Cerrar sesión
                 </q-tooltip>
               </q-item-section>
 
-              <q-item-section style="font-size: 1.5em"> Libros </q-item-section>
+              <q-item-section style="font-size: 1.5em">
+                Cerrar sesión
+              </q-item-section>
             </q-item>
           </div>
         </q-list>
@@ -252,8 +274,8 @@
             dense
             round
             unelevated
-            color="accent"
-            text-color="grey-10"
+            color="secondary"
+            text-color="white-10"
             :icon="drawerMiniState ? 'chevron_right' : 'chevron_left'"
             size="sm"
             @click="toggleMiniState"
