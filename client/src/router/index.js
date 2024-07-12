@@ -38,6 +38,12 @@ export default route(function (/* { store, ssrContext } */) {
   Router.beforeEach(function (to, _, next) {
     if (to.meta.requiresAuth && !$auth.isAuthenticated) {
       next("/login");
+    } else if (
+      to.meta.requiresAuth &&
+      $auth.isAuthenticated &&
+      $auth.rol === "guest"
+    ) {
+      next("/libros");
     } else if (to.meta.requiresUnauth && $auth.isAuthenticated) {
       next("/");
     } else {
