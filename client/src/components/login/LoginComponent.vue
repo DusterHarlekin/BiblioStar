@@ -64,6 +64,15 @@
 <script setup>
 import { useQuasar } from "quasar";
 import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+import { useAuthStore } from "src/stores/auth/auth";
+
+const authStore = useAuthStore();
+
+const $route = useRoute();
+
+const $router = useRouter();
 
 defineProps({
   isGuest: Boolean,
@@ -77,48 +86,21 @@ const cedula = ref(null);
 const isPwd = ref(true);
 
 onMounted(() => {
-  $q.localStorage.clear();
+  //$q.localStorage.clear();
 });
 
 const onSubmit = async () => {
-  // $q.notify({
-  //   color: "green-4",
-  //   textColor: "white",
-  //   icon: "cloud_done",
-  //   message: "Submitted",
-  // });
-
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      usuario: username.value,
-      clave: password.value,
-      request: "Login",
-    }),
-  };
-  console.log(requestOptions.body);
-
   try {
-    const response = await fetch(
-      process.env.API_URL + "auth/auth.php",
-      requestOptions
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.error);
-    }
-
-    $q.localStorage.set("usuario", data[0].usuario);
-    $q.localStorage.set("rol", data[0].rol);
-
-    console.log(data[0]);
-    console.log($q.localStorage.getItem("rol"));
-    console.log($q.localStorage.getItem("usuario"));
+    await authStore.login({
+      username: username.value,
+      password: password.value,
+    });
+    const redirectUrl = "/" + ($route.query.redirect || "");
+    $router.replace(redirectUrl);
+    $q.notify({
+      type: "positive",
+      message: "Iniciaste sesión correctamente.",
+    });
   } catch (error) {
     console.log(error.message);
     $q.notify({
@@ -131,37 +113,16 @@ const onSubmit = async () => {
 };
 
 const onGuestSubmit = async () => {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      cedula: cedula.value,
-      rol: "invitado",
-      request: "Login",
-    }),
-  };
-  console.log(requestOptions.body);
-
   try {
-    const response = await fetch(
-      process.env.API_URL + "auth/auth.php",
-      requestOptions
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.error);
-    }
-
-    $q.localStorage.set("cedula", data.cedula);
-    $q.localStorage.set("rol", data.rol);
-
-    console.log(data);
-    console.log($q.localStorage.getItem("rol"));
-    console.log($q.localStorage.getItem("cedula"));
+    await authStore.loginGuest({
+      cedula: cedula.value,
+    });
+    const redirectUrl = "/" + ($route.query.redirect || "");
+    $router.replace(redirectUrl);
+    $q.notify({
+      type: "positive",
+      message: "Iniciaste sesión correctamente.",
+    });
   } catch (error) {
     console.log(error.message);
     $q.notify({

@@ -44,10 +44,10 @@
                 </q-avatar>
               </q-item-section>
               <q-item-section style="font-size: 1.5em">
-                <q-item-label>Mary</q-item-label>
-                <q-item-label class="text-subtitle1 text-grey"
-                  >Administrador</q-item-label
-                >
+                <q-item-label>{{ name }}</q-item-label>
+                <q-item-label class="text-subtitle1 text-grey">{{
+                  role
+                }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-item-label>
@@ -242,7 +242,7 @@
           :class="drawerMiniState ? '' : 'q-pl-lg'"
         >
           <div>
-            <q-item to="/libros" clickable v-ripple>
+            <q-item @click="logout" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="logout" />
                 <q-tooltip
@@ -291,12 +291,23 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
+import { onMounted, ref } from "vue";
+import { useAuthStore } from "src/stores/auth/auth";
+import { useRouter } from "vue-router";
+import { useQuasar } from "quasar";
+
+const $router = useRouter();
+const $q = useQuasar();
+const authStore = useAuthStore();
+
+const name = authStore.nombre;
+const role = authStore.showRol;
 
 defineOptions({
   name: "MainLayout",
 });
+
+onMounted(() => {});
 
 const linksList = [
   {
@@ -353,4 +364,13 @@ function toggleLeftDrawer() {
 function toggleMiniState() {
   drawerMiniState.value = !drawerMiniState.value;
 }
+
+const logout = () => {
+  authStore.logout();
+  $router.replace("/login");
+  $q.notify({
+    type: "positive",
+    message: "Cerraste sesión correctamente.",
+  });
+};
 </script>

@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     //LOGIN
     if (isset($data->request) && $data->request == 'Login') {
 
-        if (isset($data->rol) || trim($data->rol) == "invitado") {
+        if (isset($data->rol) || trim($data->rol) == "guest") {
             if (!isset($data->cedula) || trim($data->cedula) == "") {
                 echo json_encode(["error" => "Los campos no pueden estar vacios"]);
                 exit();
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             exit();
         }
 
-        
+
 
         $sql_usuario = mysqli_query($conexion_bd, "SELECT usuario, rol, cedula, nombre, apellido FROM usuarios WHERE usuario='" . $data->usuario . "' AND clave='" . $data->clave . "'");
 
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             echo json_encode($usuario);
         } else {
 
-                echo json_encode(["error" => "Usuario y/o clave incorrectos, asegúrese de que los datos son correctos"]);
+            echo json_encode(["error" => "Usuario y/o clave incorrectos, asegúrese de que los datos son correctos"]);
         }
 
         exit();
