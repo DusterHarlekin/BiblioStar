@@ -14,7 +14,7 @@
           round
           icon="menu"
           @click="toggleLeftDrawer"
-          class="text-accent"
+          class="text-white"
         />
 
         <q-toolbar-title>
@@ -52,7 +52,7 @@
 
           <q-list class="text-white" :class="drawerMiniState ? '' : 'q-pl-lg'">
             <div>
-              <q-item to="/libros" clickable v-ripple>
+              <q-item to="/resumen" clickable v-ripple>
                 <q-item-section avatar>
                   <q-icon name="description" />
                   <q-tooltip
@@ -90,7 +90,7 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/libros" clickable v-ripple>
+              <q-item to="/cotas" clickable v-ripple>
                 <q-item-section avatar>
                   <q-icon name="bookmark" />
                   <q-tooltip
@@ -109,7 +109,7 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/libros" clickable v-ripple>
+              <q-item to="/salas" clickable v-ripple>
                 <q-item-section avatar>
                   <q-icon name="home" />
                   <q-tooltip
@@ -128,7 +128,7 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/libros" clickable v-ripple>
+              <q-item to="/paises" clickable v-ripple>
                 <q-item-section avatar>
                   <q-icon name="location_on" />
                   <q-tooltip
@@ -147,7 +147,7 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/libros" clickable v-ripple>
+              <q-item to="/idiomas" clickable v-ripple>
                 <q-item-section avatar>
                   <q-icon name="menu_book" />
                   <q-tooltip
@@ -166,7 +166,7 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/libros" clickable v-ripple>
+              <q-item to="/prestamos" clickable v-ripple>
                 <q-item-section avatar>
                   <q-icon name="pending_actions" />
                   <q-tooltip
@@ -194,7 +194,7 @@
           :class="drawerMiniState ? '' : 'q-pl-lg'"
         >
           <div>
-            <q-item to="/libros" clickable v-ripple>
+            <q-item to="/reportes" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="bug_report" />
                 <q-tooltip
@@ -213,7 +213,7 @@
               >
             </q-item>
 
-            <q-item to="/libros" clickable v-ripple>
+            <q-item to="/configuracion" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="settings" />
                 <q-tooltip
@@ -307,51 +307,6 @@ defineOptions({
 
 onMounted(() => {});
 
-const linksList = [
-  {
-    title: "Libros",
-
-    icon: "book",
-    to: "/libros",
-  },
-  {
-    title: "Github",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework",
-  },
-  {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
-    icon: "chat",
-    link: "https://chat.quasar.dev",
-  },
-  {
-    title: "Forum",
-    caption: "forum.quasar.dev",
-    icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
-  },
-  {
-    title: "Twitter",
-    caption: "@quasarframework",
-    icon: "rss_feed",
-    link: "https://twitter.quasar.dev",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
-  },
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
-  },
-];
-
 const leftDrawerOpen = ref(false);
 const drawerMiniState = ref(false);
 
@@ -372,3 +327,15 @@ const logout = () => {
   });
 };
 </script>
+\
+<style scoped lang="scss">
+.q-item {
+  color: #b6b6b6;
+}
+
+.q-item.q-router-link--active,
+.q-item--active {
+  border-bottom: 1px solid #fff;
+  color: #fff;
+}
+</style>

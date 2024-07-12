@@ -11,6 +11,7 @@ function paginar($sqlReq, $getArray, $table)
     $page = $getArray["page"];
 
     if (is_numeric($page)) {
+        $page = (int)$page;
         $start = (($page - 1) * $registros);
     } else {
         $start = 0;
@@ -25,7 +26,8 @@ function paginar($sqlReq, $getArray, $table)
         "perPage" => $registros,
         "total" => $numRegistros,
         "start" => $start + 1,
-        "totalPages" => ceil($numRegistros / $registros)
+        "totalPages" => ceil($numRegistros / $registros),
+        "currentPage" => $page
     ];
 
     $data["query"] = $query;
