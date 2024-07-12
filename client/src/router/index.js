@@ -39,9 +39,10 @@ export default route(function (/* { store, ssrContext } */) {
     if (to.meta.requiresAuth && !$auth.isAuthenticated) {
       next("/login");
     } else if (
-      to.meta.requiresAuth &&
+      (to.meta.requiresUnauth || to.meta.requiresAuth) &&
       $auth.isAuthenticated &&
-      $auth.rol === "guest"
+      $auth.rol === "guest" &&
+      to.path !== "/libros"
     ) {
       next("/libros");
     } else if (to.meta.requiresUnauth && $auth.isAuthenticated) {
