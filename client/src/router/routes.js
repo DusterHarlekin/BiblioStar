@@ -16,6 +16,14 @@ const routes = [
       { path: 'invitado', component: () => import('pages/auth/GuestLogin.vue') },
     ]
   },
+  {
+    path: '/libros',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      { path: '', component: () => import('pages/books/BooksList.vue') },
+    ]
+  },
   
 
   // Always leave this as last one,

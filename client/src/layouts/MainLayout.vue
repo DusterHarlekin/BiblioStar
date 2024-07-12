@@ -19,9 +19,7 @@
 
         <q-toolbar-title>
           <div class="row items-center">
-            <div class="text-h6 text-weight-bold font-title text-accent">
-              SCALEUP
-            </div>
+            <div class="text-h6 text-weight-bold font-title text-accent"></div>
           </div>
         </q-toolbar-title>
       </q-toolbar>
