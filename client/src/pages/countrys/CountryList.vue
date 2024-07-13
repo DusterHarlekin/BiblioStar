@@ -11,7 +11,7 @@
       </div>
       <div class="col-auto">
         <q-btn
-          label="Nueva Sala"
+          label="Nuevo País"
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
@@ -30,21 +30,21 @@
 
                 <div class="col-auto">
                   <q-input
-                    v-model="filter.cod_sala"
+                    v-model="filter.pais"
                     outlined
                     dense
                     debounce="400"
-                    label="Código de sala"
+                    label="País"
                   />
                 </div>
 
                 <div class="col-auto">
                   <q-input
-                    v-model="filter.DESCRIPCION"
+                    v-model="filter.codigo"
                     outlined
                     dense
                     debounce="400"
-                    label="Descripción"
+                    label="Código de país"
                   />
                 </div>
               </div>
@@ -69,7 +69,7 @@
             icon="mdi-reload"
             color="primary"
             class="q-ml-sm"
-            @click="fetchSalas()"
+            @click="fetchPaises()"
           >
             <q-tooltip> Actualizar tabla </q-tooltip>
           </q-btn>
@@ -82,11 +82,11 @@
       :dense="$q.screen.lt.lg"
       bordered
       v-model:pagination="pagination"
-      :rows="cod_salas"
+      :rows="paises"
       :columns="columns"
       :filter="filter"
       :loading="isloading"
-      row-key="N"
+      row-key="codigo"
       :rows-per-page-options="[]"
       @request="handleRequest"
     >
@@ -133,7 +133,7 @@ const isloading = ref(false);
 const columns = [
   {
     name: "codigo",
-    label: "Código del país",
+    label: "Código de país",
     field: "codigo",
     align: "left",
   },
