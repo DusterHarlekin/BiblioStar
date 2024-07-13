@@ -5,13 +5,13 @@
     >
       <div class="col-md-6">
         <div class="row q-gutter-sm items-center">
-          <q-icon name="mdi-book" size="lg" color="primary" />
-          <div class="text-h4 text-weight-medium font-title">Libros</div>
+          <q-icon name="bookmark" size="lg" color="primary" />
+          <div class="text-h4 text-weight-medium font-title">Cotas</div>
         </div>
       </div>
       <div class="col-auto">
         <q-btn
-          label="Nuevo libro"
+          label="Nueva cota"
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
@@ -26,46 +26,7 @@
           <div class="row items-center">
             <div class="col-xs-12 col-lg-auto">
               <div class="row items-center q-gutter-md">
-                <q-btn
-                  @click="filterExpanded = !filterExpanded"
-                  size="lg"
-                  :icon="
-                    filterExpanded
-                      ? 'mdi-filter-variant-minus'
-                      : 'mdi-filter-variant-plus'
-                  "
-                  flat
-                  class="text-weight-semibold"
-                  :color="filterExpanded ? 'grey-8' : 'primary'"
-                />
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.titulo"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Título"
-                  />
-                </div>
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.autor"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Autor"
-                  />
-                </div>
-
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.editorial"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Editorial"
-                  />
-                </div>
+                <q-icon name="mdi-filter-variant" size="lg" color="grey-10" />
 
                 <div class="col-auto">
                   <q-input
@@ -76,17 +37,33 @@
                     label="Cota"
                   />
                 </div>
+                <div class="col-auto">
+                  <q-input
+                    v-model="filter.cod_isbn"
+                    outlined
+                    dense
+                    debounce="400"
+                    label="Código ISBN"
+                  />
+                </div>
 
                 <div class="col-auto">
-                  <q-select
-                    v-model="filter.cod_sala"
-                    style="min-width: 140px"
-                    map-options
-                    dense
+                  <q-input
+                    v-model="filter.cutter"
                     outlined
-                    emit-value
-                    :options="salas"
-                    label="Sala"
+                    dense
+                    debounce="400"
+                    label="Cutter"
+                  />
+                </div>
+
+                <div class="col-auto">
+                  <q-input
+                    v-model="filter.cota_completa"
+                    outlined
+                    dense
+                    debounce="400"
+                    label="Cota Completa"
                   />
                 </div>
               </div>
@@ -111,7 +88,7 @@
             icon="mdi-reload"
             color="primary"
             class="q-ml-sm"
-            @click="fetchLibros()"
+            @click="fetchCotas()"
           >
             <q-tooltip> Actualizar tabla </q-tooltip>
           </q-btn>
@@ -124,7 +101,7 @@
       :dense="$q.screen.lt.lg"
       bordered
       v-model:pagination="pagination"
-      :rows="libros"
+      :rows="cotas"
       :columns="columns"
       :filter="filter"
       :loading="isloading"
@@ -164,16 +141,13 @@ const pagination = ref({
 });
 
 const filter = reactive({
-  titulo: "",
-  autor: "",
-  editorial: "",
   cota: "",
-  cod_sala: "",
+  cod_isbn: "",
+  cutter: "",
+  cota_completa: "",
 });
 
-const salas = ref([]);
-const libros = ref([]);
-const filterExpanded = ref(false);
+const cotas = ref([]);
 const isloading = ref(false);
 
 // Q-Table columns
@@ -187,40 +161,29 @@ const columns = [
   {
     name: "cota",
     label: "Cota",
-    field: "cota",
+    field: (row) => (row.cota && row.cota.trim() != "" ? row.cota : "--"),
     align: "left",
   },
   {
-    name: "titulo",
-    label: "Título",
-    field: "titulo",
-    classes: "text-capitalize",
+    name: "cod_isbn",
+    label: "Código ISBN",
+    field: (row) =>
+      row.cod_isbn && row.cod_isbn.trim() != "" ? row.cod_isbn : "--",
     align: "left",
   },
   {
-    name: "autor",
-    label: "Autor",
-    field: "autor",
-    classes: "text-capitalize",
+    name: "cutter",
+    label: "Cutter",
+    field: (row) => (row.cutter && row.cutter.trim() != "" ? row.cutter : "--"),
     align: "left",
   },
   {
-    name: "editorial",
-    label: "Editorial",
-    field: "editorial",
-    classes: "text-capitalize",
-    align: "left",
-  },
-  {
-    name: "edicion",
-    label: "Edición",
-    field: "edicion",
-    align: "left",
-  },
-  {
-    name: "cod_sala",
-    label: "Sala",
-    field: "cod_sala",
+    name: "cota_completa",
+    label: "Cota Completa",
+    field: (row) =>
+      row.cota_completa && row.cota_completa.trim() != ""
+        ? row.cota_completa
+        : "--",
     align: "left",
   },
 
@@ -231,14 +194,14 @@ const columns = [
   },
 ];
 
-const fetchLibros = async (page = 1) => {
+const fetchCotas = async (page = 1) => {
   try {
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
     // API URL
-    let url = process.env.API_URL + `libros.php?page=${page}`;
+    let url = process.env.API_URL + `cotas.php?page=${page}`;
 
     let params = new URLSearchParams(filter);
     let keysForDel = [];
@@ -260,7 +223,7 @@ const fetchLibros = async (page = 1) => {
     const response = await fetch(url, requestOptions);
     const data = await response.json();
 
-    libros.value = data.data ? data.data : [];
+    cotas.value = data.data ? data.data : [];
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total
@@ -286,50 +249,15 @@ const fetchLibros = async (page = 1) => {
 };
 
 const handleRequest = (props) => {
-  fetchLibros(props.pagination.page);
-};
-
-const fetchSalas = async () => {
-  try {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    const response = await fetch(
-      process.env.API_URL + "salas.php",
-      requestOptions
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    const data = await response.json();
-
-    for (const sala of data.data) {
-      salas.value.push({ label: sala.cod_sala, value: sala.cod_sala });
-    }
-
-    if (data.error) {
-      throw new Error(data.error);
-    }
-  } catch (error) {
-    $q.notify({
-      color: "negative",
-      position: "top",
-      message: error.message,
-      icon: "mdi-alert",
-    });
-  }
+  fetchCotas(props.pagination.page);
 };
 
 const clearFilters = () => {
-  filter.titulo = "";
-  filter.autor = "";
-  filter.editorial = "";
+  filter.cota = "";
+  filter.cod_isbn = "";
   filter.cutter = "";
-  filter.cod_sala = "";
+  filter.cota_completa = "";
 };
 
-fetchSalas();
-fetchLibros();
+fetchCotas();
 </script>

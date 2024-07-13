@@ -31,7 +31,7 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     meta: { requiresAuth: true },
     children: [
-      { path: "", component: () => import("pages/auth/UserLogin.vue") },
+      { path: "", component: () => import("pages/quotes/QuoteList.vue") },
     ],
   },
 
