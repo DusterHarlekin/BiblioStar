@@ -10,7 +10,7 @@ $conexion_bd = connect();
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 
     //Selección de id (ROGER)  
-    if (isset($_GET["codigo_ciudad"])) {
+    if (isset($_GET["codigo_ciudad"]) && !isset($_GET["codigo_pais"]) && !isset($_GET["ciudad"])) {
 
         //VALIDACIÓN DE USUARIO
 
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     if (trim($data->codigo_ciudad) == "") {
         echo json_encode(["error" => "El campo clave no puede esta vacío"]);
     } else {
-
+        validateFields($data);
         //Limpieza de datos a almacenar MODIFICADOS
         $data->codigo_pais = secureData($data->codigo_pais);
         $data->ciudad = secureData($data->ciudad);

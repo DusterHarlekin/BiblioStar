@@ -12,12 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     if (isset($data->request) && $data->request == 'Register') {
         if (isAuthorized($data, $conexion_bd)) {
-            foreach ($data as $clave => $valor) {
-                if (!isset($valor) || trim($valor) == "") {
-                    echo json_encode(["error" => "Los campos no pueden estar vacios"]);
-                    exit();
-                }
-            }
+            validateFields($data);
 
             try {
                 mysqli_query($conexion_bd, "INSERT INTO `usuarios`(`usuario`, `cedula`, `nombre`, `apellido`, `clave`, `rol`) VALUES ('$data->usuario','$data->cedula','$data->nombre','$data->apellido','$data->clave','$data->rol')");

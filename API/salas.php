@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     if (trim($data->N) == "") {
         echo json_encode(["error" => "El campo clave no puede esta vacío"]);
     } else {
-
+        validateFields($data);
         //Limpieza de datos a almacenar MODIFICADOS
         $data->DESCRIPCION = secureData($data->DESCRIPCION);
         $data->cod_sala = secureData($data->cod_sala);
@@ -77,13 +77,14 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     $data = json_decode(file_get_contents("php://input"));
+    validateFields($data);
 
     if (trim($data->N) == "") {
 
         echo json_encode(["error" => "los campos no pueden estar vacíos"]);
     } else {
 
-        mysqli_query($conexion_bd, "INSERT INTO `salas`(`N`, `cod_sala`, `DESCRIPCION`) VALUES ('$data->N','$data->cod_sala','$data->DESCRIPCION')");
+        mysqli_query($conexion_bd, "INSERT INTO `salas`(`cod_sala`, `DESCRIPCION`) VALUES ('$data->cod_sala','$data->DESCRIPCION')");
 
         echo json_encode(["success" => "datos registrados"]);
     }

@@ -10,7 +10,7 @@ $conexion_bd = connect();
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 
     //Selección de id (ROGER)
-    if (isset($_GET["cod_idioma"])) {
+    if (isset($_GET["cod_idioma"]) && !isset($_GET["descripcion"])) {
 
         //VALIDACIÓN DE USUARIO
 
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     if (trim($data->cod_idioma) == "") {
         echo json_encode(["error" => "El campo clave no puede esta vacío"]);
     } else {
-
+        validateFields($data);
         //Limpieza de datos a almacenar MODIFICADOS
         $data->descripcion = secureData($data->descripcion);
 
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     $data = json_decode(file_get_contents("php://input"));
-
+    validateFields($data);
     if (trim($data->cod_idioma) == "") {
         echo json_encode(["error" => "los campos no pueden estar vacíos"]);
     } else {

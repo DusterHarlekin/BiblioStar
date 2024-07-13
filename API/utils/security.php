@@ -51,3 +51,13 @@ function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = fa
             return false;
     }
 }
+
+function validateFields($data)
+{
+    foreach ($data as $clave => $valor) {
+        if (!isset($valor) || trim($valor) == "") {
+            echo json_encode(["error" => "Los campos no pueden estar vacios"]);
+            exit();
+        }
+    }
+}

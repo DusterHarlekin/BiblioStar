@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         echo json_encode(["error" => "los campos no pueden estar vacíos"]);
     } else {
 
-        mysqli_query($conexion_bd, "INSERT INTO `serie`(`N`, `cod_serie`, `DESCRIPCION`) VALUES ('$data->N','$data->cod_serie','$data->DESCRIPCION')");
+        mysqli_query($conexion_bd, "INSERT INTO `serie`(`cod_serie`, `DESCRIPCION`) VALUES ('$data->cod_serie','$data->DESCRIPCION')");
 
         echo json_encode(["success" => "datos registrados"]);
     }
