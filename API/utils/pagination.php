@@ -1,5 +1,7 @@
 <?php
 include "filtering.php";
+include "conexion.php";
+
 function paginar($sqlReq, $getArray, $table)
 {
     //OBTENER LA CANTIDAD TOTAL DE REGISTROS
