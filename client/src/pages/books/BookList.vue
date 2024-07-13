@@ -1,5 +1,5 @@
 <template>
-  <q-page class="container-page q-py-md q-px-lg">
+  <q-page class="q-py-md q-px-lg">
     <div
       class="row justify-between items-center q-gutter-x-xl q-gutter-y-md q-mb-md q-pt-sm"
     >
@@ -18,6 +18,8 @@
         />
       </div>
     </div>
+
+    <!--FILTROS-->
     <q-card class="q-pa-md q-mb-lg">
       <div class="row justify-between content-end items-center q-col-gutter-sm">
         <div class="col-auto">
@@ -33,7 +35,7 @@
                       : 'mdi-filter-variant-plus'
                   "
                   flat
-                  class="text-weight-semibold text-uppercase text-caption"
+                  class="text-weight-semibold"
                   :color="filterExpanded ? 'grey-8' : 'primary'"
                 />
                 <div class="col-auto">
@@ -119,7 +121,7 @@
 
     <q-table
       flat
-      :dense="$q.screen.lt.md"
+      :dense="$q.screen.lt.lg"
       bordered
       v-model:pagination="pagination"
       :rows="libros"
@@ -127,7 +129,6 @@
       :filter="filter"
       :loading="isloading"
       row-key="N"
-      binary-state-sort
       :rows-per-page-options="[]"
       @request="handleRequest"
     >
@@ -155,6 +156,7 @@ import { useQuasar } from "quasar";
 
 const $q = useQuasar();
 
+//VALORES INICIALES
 const pagination = ref({
   page: 1,
   rowsPerPage: 10,
@@ -213,14 +215,12 @@ const columns = [
     name: "edicion",
     label: "Edición",
     field: "edicion",
-    classes: "text-capitalize",
     align: "left",
   },
   {
     name: "cod_sala",
     label: "Sala",
     field: "cod_sala",
-    classes: "text-capitalize",
     align: "left",
   },
 
@@ -237,7 +237,7 @@ const fetchLibros = async (page = 1) => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-
+    // API URL
     let url = process.env.API_URL + `libros.php?page=${page}`;
 
     let params = new URLSearchParams(filter);
@@ -262,6 +262,7 @@ const fetchLibros = async (page = 1) => {
 
     libros.value = data.data ? data.data : [];
 
+    //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total
       ? data.pagination.total
       : 0;
