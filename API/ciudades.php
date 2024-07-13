@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
         exit();
     }
 }
+//CAMBIOS EN PUT
 //PUT EDITAR
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
