@@ -5,13 +5,13 @@
     >
       <div class="col-md-6">
         <div class="row q-gutter-sm items-center">
-          <q-icon name="mdi-bookmark" size="lg" color="primary" />
-          <div class="text-h4 text-weight-medium font-title">Cotas</div>
+          <q-icon name="mdi-home-search" size="lg" color="primary" />
+          <div class="text-h4 text-weight-medium font-title">Salas</div>
         </div>
       </div>
       <div class="col-auto">
         <q-btn
-          label="Nueva cota"
+          label="Nueva Sala"
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
@@ -30,40 +30,21 @@
 
                 <div class="col-auto">
                   <q-input
-                    v-model="filter.cota"
+                    v-model="filter.cod_sala"
                     outlined
                     dense
                     debounce="400"
-                    label="Cota"
-                  />
-                </div>
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.cod_isbn"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Código ISBN"
+                    label="Código de sala"
                   />
                 </div>
 
                 <div class="col-auto">
                   <q-input
-                    v-model="filter.cutter"
+                    v-model="filter.DESCRIPCION"
                     outlined
                     dense
                     debounce="400"
-                    label="Cutter"
-                  />
-                </div>
-
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.cota_completa"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Cota Completa"
+                    label="Descripción"
                   />
                 </div>
               </div>
@@ -88,7 +69,7 @@
             icon="mdi-reload"
             color="primary"
             class="q-ml-sm"
-            @click="fetchCotas()"
+            @click="fetchSalas()"
           >
             <q-tooltip> Actualizar tabla </q-tooltip>
           </q-btn>
@@ -101,7 +82,7 @@
       :dense="$q.screen.lt.lg"
       bordered
       v-model:pagination="pagination"
-      :rows="cotas"
+      :rows="cod_salas"
       :columns="columns"
       :filter="filter"
       :loading="isloading"
@@ -141,13 +122,11 @@ const pagination = ref({
 });
 
 const filter = reactive({
-  cota: "",
-  cod_isbn: "",
-  cutter: "",
-  cota_completa: "",
+  cod_sala: "",
+  DESCRIPCION: "",
 });
 
-const cotas = ref([]);
+const cod_salas = ref([]);
 const isloading = ref(false);
 
 // Q-Table columns
@@ -159,34 +138,18 @@ const columns = [
     align: "left",
   },
   {
-    name: "cota",
-    label: "Cota",
-    field: (row) => (row.cota && row.cota.trim() != "" ? row.cota : "--"),
+    name: "cod_sala",
+    label: "Código de sala",
+    field: "cod_sala",
     align: "left",
   },
   {
-    name: "cod_isbn",
-    label: "Código ISBN",
+    name: "DESCRIPCION",
+    label: "Descripción",
     field: (row) =>
-      row.cod_isbn && row.cod_isbn.trim() != "" ? row.cod_isbn : "--",
+      row.DESCRIPCION && row.DESCRIPCION.trim() != "" ? row.DESCRIPCION : "--",
     align: "left",
   },
-  {
-    name: "cutter",
-    label: "Cutter",
-    field: (row) => (row.cutter && row.cutter.trim() != "" ? row.cutter : "--"),
-    align: "left",
-  },
-  {
-    name: "cota_completa",
-    label: "Cota Completa",
-    field: (row) =>
-      row.cota_completa && row.cota_completa.trim() != ""
-        ? row.cota_completa
-        : "--",
-    align: "left",
-  },
-
   {
     name: "actions",
     label: "Acciones",
@@ -194,14 +157,14 @@ const columns = [
   },
 ];
 
-const fetchCotas = async (page = 1) => {
+const fetchSalas = async (page = 1) => {
   try {
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
     // API URL
-    let url = process.env.API_URL + `cotas.php?page=${page}`;
+    let url = process.env.API_URL + `salas.php?page=${page}`;
 
     let params = new URLSearchParams(filter);
     let keysForDel = [];
@@ -223,7 +186,7 @@ const fetchCotas = async (page = 1) => {
     const response = await fetch(url, requestOptions);
     const data = await response.json();
 
-    cotas.value = data.data ? data.data : [];
+    cod_salas.value = data.data ? data.data : [];
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total
@@ -249,15 +212,13 @@ const fetchCotas = async (page = 1) => {
 };
 
 const handleRequest = (props) => {
-  fetchCotas(props.pagination.page);
+  fetchSalas(props.pagination.page);
 };
 
 const clearFilters = () => {
-  filter.cota = "";
-  filter.cod_isbn = "";
-  filter.cutter = "";
-  filter.cota_completa = "";
+  filter.cod_sala = "";
+  filter.DESCRIPCION = "";
 };
 
-fetchCotas();
+fetchSalas();
 </script>

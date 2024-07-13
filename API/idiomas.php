@@ -10,7 +10,7 @@ $conexion_bd = connect();
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 
     //Selección de id (ROGER)
-    if (isset($_GET["cod_idioma"]) && !isset($_GET["descripcion"])) {
+    if (isset($_GET["cod_idioma"]) && !isset($_GET["page"])) {
 
         //VALIDACIÓN DE USUARIO
 

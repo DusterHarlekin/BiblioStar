@@ -54,7 +54,7 @@
             <div>
               <q-item to="/resumen" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="description" />
+                  <q-icon name="mdi-file-document-minus" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -73,7 +73,7 @@
 
               <q-item to="/libros" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="book" />
+                  <q-icon name="mdi-book" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -92,7 +92,7 @@
 
               <q-item to="/cotas" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="bookmark" />
+                  <q-icon name="mdi-bookmark" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -111,7 +111,7 @@
 
               <q-item to="/salas" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="home" />
+                  <q-icon name="mdi-home-search" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -130,7 +130,7 @@
 
               <q-item to="/paises" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="location_on" />
+                  <q-icon name="mdi-map-marker" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -147,9 +147,28 @@
                 </q-item-section>
               </q-item>
 
+              <q-item to="/ciudades" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="mdi-home-city" />
+                  <q-tooltip
+                    v-if="drawerMiniState"
+                    anchor="center right"
+                    self="center left"
+                    :offset="[22, 10]"
+                    class="text-caption bg-primary shadow-1"
+                  >
+                    Ciudades
+                  </q-tooltip>
+                </q-item-section>
+
+                <q-item-section style="font-size: 1.5em">
+                  Ciudades
+                </q-item-section>
+              </q-item>
+
               <q-item to="/idiomas" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="menu_book" />
+                  <q-icon name="mdi-book-open-blank-variant-outline" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -168,7 +187,7 @@
 
               <q-item to="/prestamos" clickable v-ripple>
                 <q-item-section avatar>
-                  <q-icon name="pending_actions" />
+                  <q-icon name="mdi-account-clock" />
                   <q-tooltip
                     v-if="drawerMiniState"
                     anchor="center right"
@@ -196,7 +215,7 @@
           <div>
             <q-item to="/reportes" clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="bug_report" />
+                <q-icon name="mdi-bug" />
                 <q-tooltip
                   v-if="drawerMiniState"
                   anchor="center right"
@@ -215,7 +234,7 @@
 
             <q-item to="/configuracion" clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="settings" />
+                <q-icon name="mdi-cog" />
                 <q-tooltip
                   v-if="drawerMiniState"
                   anchor="center right"
@@ -242,7 +261,7 @@
           <div>
             <q-item @click="logout" clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="logout" />
+                <q-icon name="mdi-logout" />
                 <q-tooltip
                   v-if="drawerMiniState"
                   anchor="center right"

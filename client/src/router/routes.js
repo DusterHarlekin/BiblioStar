@@ -34,6 +34,38 @@ const routes = [
       { path: "", component: () => import("pages/quotes/QuoteList.vue") },
     ],
   },
+  {
+    path: "/salas",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      { path: "", component: () => import("pages/rooms/RoomList.vue") },
+    ],
+  },
+  {
+    path: "/paises",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      { path: "", component: () => import("pages/countrys/CountryList.vue") },
+    ],
+  },
+  {
+    path: "/ciudades",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      { path: "", component: () => import("pages/cities/CityList.vue") },
+    ],
+  },
+  {
+    path: "/idiomas",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      { path: "", component: () => import("pages/languages/LanguageList.vue") },
+    ],
+  },
 
   // Always leave this as last one,
   // but you can also remove it

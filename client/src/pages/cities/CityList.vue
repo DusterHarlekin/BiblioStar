@@ -5,13 +5,13 @@
     >
       <div class="col-md-6">
         <div class="row q-gutter-sm items-center">
-          <q-icon name="mdi-bookmark" size="lg" color="primary" />
-          <div class="text-h4 text-weight-medium font-title">Cotas</div>
+          <q-icon name="mdi-home-city" size="lg" color="primary" />
+          <div class="text-h4 text-weight-medium font-title">Ciudades</div>
         </div>
       </div>
       <div class="col-auto">
         <q-btn
-          label="Nueva cota"
+          label="Nueva Ciudad"
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
@@ -30,40 +30,31 @@
 
                 <div class="col-auto">
                   <q-input
-                    v-model="filter.cota"
+                    v-model="filter.ciudad"
                     outlined
                     dense
                     debounce="400"
-                    label="Cota"
-                  />
-                </div>
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.cod_isbn"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Código ISBN"
+                    label="Ciudad"
                   />
                 </div>
 
                 <div class="col-auto">
                   <q-input
-                    v-model="filter.cutter"
+                    v-model="filter.codigo_ciudad"
                     outlined
                     dense
                     debounce="400"
-                    label="Cutter"
+                    label="Código de ciudad"
                   />
                 </div>
 
                 <div class="col-auto">
                   <q-input
-                    v-model="filter.cota_completa"
+                    v-model="filter.codigo_pais"
                     outlined
                     dense
                     debounce="400"
-                    label="Cota Completa"
+                    label="Código de país"
                   />
                 </div>
               </div>
@@ -88,7 +79,7 @@
             icon="mdi-reload"
             color="primary"
             class="q-ml-sm"
-            @click="fetchCotas()"
+            @click="fetchCiudades()"
           >
             <q-tooltip> Actualizar tabla </q-tooltip>
           </q-btn>
@@ -101,11 +92,11 @@
       :dense="$q.screen.lt.lg"
       bordered
       v-model:pagination="pagination"
-      :rows="cotas"
+      :rows="ciudades"
       :columns="columns"
       :filter="filter"
       :loading="isloading"
-      row-key="N"
+      row-key="codigo_ciudad"
       :rows-per-page-options="[]"
       @request="handleRequest"
     >
@@ -141,49 +132,36 @@ const pagination = ref({
 });
 
 const filter = reactive({
-  cota: "",
-  cod_isbn: "",
-  cutter: "",
-  cota_completa: "",
+  codigo_pais: "",
+  codigo_ciudad: "",
+  ciudad: "",
 });
 
-const cotas = ref([]);
+const ciudades = ref([]);
 const isloading = ref(false);
 
 // Q-Table columns
 const columns = [
   {
-    name: "N",
-    label: "Número",
-    field: "N",
-    align: "left",
-  },
-  {
-    name: "cota",
-    label: "Cota",
-    field: (row) => (row.cota && row.cota.trim() != "" ? row.cota : "--"),
-    align: "left",
-  },
-  {
-    name: "cod_isbn",
-    label: "Código ISBN",
+    name: "codigo_ciudad",
+    label: "Código de ciudad",
     field: (row) =>
-      row.cod_isbn && row.cod_isbn.trim() != "" ? row.cod_isbn : "--",
-    align: "left",
-  },
-  {
-    name: "cutter",
-    label: "Cutter",
-    field: (row) => (row.cutter && row.cutter.trim() != "" ? row.cutter : "--"),
-    align: "left",
-  },
-  {
-    name: "cota_completa",
-    label: "Cota Completa",
-    field: (row) =>
-      row.cota_completa && row.cota_completa.trim() != ""
-        ? row.cota_completa
+      row.codigo_ciudad && row.codigo_ciudad.trim() != ""
+        ? row.codigo_ciudad
         : "--",
+    align: "left",
+  },
+  {
+    name: "ciudad",
+    label: "Ciudad",
+    field: (row) => (row.ciudad && row.ciudad.trim() != "" ? row.ciudad : "--"),
+    align: "left",
+  },
+  {
+    name: "codigo_pais",
+    label: "Código de país",
+    field: (row) =>
+      row.codigo_pais && row.codigo_pais.trim() != "" ? row.codigo_pais : "--",
     align: "left",
   },
 
@@ -194,14 +172,14 @@ const columns = [
   },
 ];
 
-const fetchCotas = async (page = 1) => {
+const fetchCiudades = async (page = 1) => {
   try {
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
     // API URL
-    let url = process.env.API_URL + `cotas.php?page=${page}`;
+    let url = process.env.API_URL + `ciudades.php?page=${page}`;
 
     let params = new URLSearchParams(filter);
     let keysForDel = [];
@@ -219,11 +197,13 @@ const fetchCotas = async (page = 1) => {
       url += `&${params.toString()}`;
     }
 
+    console.log(url);
+
     isloading.value = true;
     const response = await fetch(url, requestOptions);
     const data = await response.json();
 
-    cotas.value = data.data ? data.data : [];
+    ciudades.value = data.data ? data.data : [];
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total
@@ -249,15 +229,14 @@ const fetchCotas = async (page = 1) => {
 };
 
 const handleRequest = (props) => {
-  fetchCotas(props.pagination.page);
+  fetchCiudades(props.pagination.page);
 };
 
 const clearFilters = () => {
-  filter.cota = "";
-  filter.cod_isbn = "";
-  filter.cutter = "";
-  filter.cota_completa = "";
+  filter.codigo_pais = "";
+  filter.codigo_ciudad = "";
+  filter.ciudad = "";
 };
 
-fetchCotas();
+fetchCiudades();
 </script>
