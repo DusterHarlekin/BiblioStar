@@ -37,8 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     } else {
 
         //Limpieza de datos a almacenar MODIFICADOS
-        $data->descripcion = secureData($data->descripcion);
-
+        $data->nombre_organizacion = secureData($data->nombre_organizacion);
+        $data->RIF = secureData($data->RIF);
+        $data->direccion = secureData($data->direccion);
+        
 
         mysqli_query($conexion_bd, "UPDATE informacion_general SET nombre_organizacion ='" . $data->nombre_organizacion . "', RIF ='" . $data->RIF . "', direccion ='" . $data->direccion . "' WHERE N ='" . $data->N . "'");
         echo json_encode([
