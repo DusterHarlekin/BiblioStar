@@ -15,6 +15,7 @@
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
+          @click="nuevoLibro()"
         />
       </div>
     </div>
@@ -69,7 +70,7 @@
 
                 <div class="col-auto">
                   <q-input
-                    v-model="filter.cota"
+                    v-model="filter.cota_completa"
                     outlined
                     dense
                     debounce="400"
@@ -151,11 +152,12 @@
 
 <script setup>
 import { reactive, ref } from "vue";
-
+import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 
 const $q = useQuasar();
 
+const $router = useRouter();
 //VALORES INICIALES
 const pagination = ref({
   page: 1,
@@ -167,7 +169,7 @@ const filter = reactive({
   titulo: "",
   autor: "",
   editorial: "",
-  cota: "",
+  cota_completa: "",
   cod_sala: "",
 });
 
@@ -185,9 +187,12 @@ const columns = [
     align: "left",
   },
   {
-    name: "cota",
+    name: "cota_completa",
     label: "Cota",
-    field: "cota",
+    field: (row) =>
+      row.cota_completa && row.cota_completa.trim() != ""
+        ? row.cota_completa
+        : "--",
     align: "left",
   },
   {
@@ -320,6 +325,10 @@ const fetchSalas = async () => {
       icon: "mdi-alert",
     });
   }
+};
+
+const nuevoLibro = () => {
+  $router.push("/libros/nuevo");
 };
 
 const clearFilters = () => {

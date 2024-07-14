@@ -55,7 +55,7 @@ function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = fa
 function validateFields($data)
 {
     foreach ($data as $clave => $valor) {
-        if (!isset($valor) || trim($valor) == "") {
+        if ((!isset($valor) || trim($valor) == "") && gettype($valor) != "boolean") {
             echo json_encode(["error" => "Los campos no pueden estar vacios"]);
             exit();
         }

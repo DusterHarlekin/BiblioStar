@@ -1,7 +1,7 @@
 <?php
 include "filtering.php";
 
-function paginar($sqlReq, $getArray, $table)
+function paginar($sqlReq, $getArray, $table, $id = "N")
 {
     //OBTENER LA CANTIDAD TOTAL DE REGISTROS
 
@@ -20,7 +20,7 @@ function paginar($sqlReq, $getArray, $table)
 
     //VOLVER A ARMAR LA QUERY
 
-    $query = filtrarBusqueda($getArray, $table, "LIMIT $start,$registros");
+    $query = filtrarBusqueda($getArray, $table, "ORDER By $id DESC LIMIT $start,$registros");
 
 
     $data["pagination"] = [

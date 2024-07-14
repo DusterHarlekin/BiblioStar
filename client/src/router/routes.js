@@ -23,6 +23,11 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: "", component: () => import("pages/books/BookList.vue") },
+      { path: "nuevo", component: () => import("pages/books/BookForm.vue") },
+      {
+        path: "editar/:id",
+        component: () => import("pages/books/BookForm.vue"),
+      },
     ],
   },
 

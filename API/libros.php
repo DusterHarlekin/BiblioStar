@@ -113,16 +113,42 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 //POST REGISTRAR
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-
     $data = json_decode(file_get_contents("php://input"));
-    validateFields($data);
 
+    if (isAuthorized($data, $conexion_bd)) {
 
-    mysqli_query($conexion_bd, "INSERT INTO `libros`(`cota`, `cod_isbn`, `autor`, `titulo`, `pais`, `editorial`, `edicion`, `ciudad`, `anio`, `tomo`, `pag`, `descripcion`, `cod_sala`, `cod_referencia`, `costo`, `fecha_ing`, `idioma`, `participante`, `impresion`, `observacion`, `cutter`, `cota_completa`) VALUES ('$data->cota','$data->cod_isbn','$data->autor','$data->titulo','$data->pais','$data->editorial','$data->edicion','$data->ciudad','$data->anio','$data->tomo','$data->pag','$data->descripcion','$data->cod_sala','$data->cod_referencia','$data->costo','$data->fecha_ing','$data->idioma','$data->participante','$data->impresion','$data->observacion','$data->cutter','$data->cota_completa')");
+        validateFields($data);
 
-    echo json_encode(["success" => "datos registrados"]);
+        if (!$data->isNewQuote) {
+            $sql_cota = mysqli_query($conexion_bd, "SELECT * FROM cota WHERE N=" . $data->cota_n);
 
-    exit();
+            if (mysqli_num_rows($sql_cota) > 0) {
+
+                $cota = mysqli_fetch_all($sql_cota, MYSQLI_ASSOC);
+                $data->cota = $cota[0]["cota"];
+                $data->cod_isbn = $cota[0]["cod_isbn"];
+                $data->cutter = $cota[0]["cutter"];
+                $data->volumen = $cota[0]["volumen"];
+                $data->ejemplar = $cota[0]["ejemplar"];
+                $data->fecha_ing = $cota[0]["fecha_ing"];
+            } else {
+
+                echo json_encode(["error" => "Error al obtener cota existente"]);
+                exit();
+            }
+        } else {
+
+            mysqli_query($conexion_bd, "INSERT INTO `cota`(`cod_isbn`, `cota`, `cutter`, `volumen`, `ejemplar`, `fecha_ing`, `cota_completa`) VALUES ('$data->cod_isbn','$data->cota','$data->cutter','$data->volumen','$data->ejemplar','$data->fecha_ing','$data->cota_completa')");
+        }
+
+        mysqli_query($conexion_bd, "INSERT INTO `libros`(`cota`, `cod_isbn`, `autor`, `titulo`, `pais`, `editorial`, `edicion`, `ciudad`, `anio`, `tomo`, `pag`, `descripcion`, `cod_sala`, `cod_referencia`, `costo`, `fecha_ing`, `idioma`, `participante`, `impresion`, `observacion`, `cutter`, `cota_completa`) VALUES ('$data->cota','$data->cod_isbn','$data->autor','$data->titulo','$data->pais','$data->editorial','$data->edicion','$data->ciudad','$data->anio','$data->tomo','$data->pag','$data->descripcion','$data->cod_sala','$data->cod_referencia','$data->costo','$data->fecha_ing','$data->idioma','$data->participante','$data->impresion','$data->observacion','$data->cutter','$data->cota_completa')");
+
+        echo json_encode(["success" => "datos regisdasdtrados"]);
+        exit();
+    } else {
+        json_encode(["error" => "No autorizado"]);
+        exit();
+    }
 }
 
 

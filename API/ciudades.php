@@ -99,7 +99,7 @@ $query = filtrarBusqueda($_GET, 'ciudades');
 
 $sql_ciudad = mysqli_query($conexion_bd, $query);
 
-$resData = paginar($sql_ciudad, $_GET, 'ciudades');
+$resData = paginar($sql_ciudad, $_GET, 'ciudades', "codigo_ciudad");
 
 $sql_ciudad = mysqli_query($conexion_bd, $resData["query"]);
 

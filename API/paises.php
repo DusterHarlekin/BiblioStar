@@ -98,7 +98,7 @@ $query = filtrarBusqueda($_GET, 'paises');
 
 $sql_pais = mysqli_query($conexion_bd, $query);
 
-$resData = paginar($sql_pais, $_GET, 'paises');
+$resData = paginar($sql_pais, $_GET, 'paises', 'codigo');
 
 $sql_pais = mysqli_query($conexion_bd, $resData["query"]);
 

@@ -88,15 +88,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     $data = json_decode(file_get_contents("php://input"));
     validateFields($data);
-    if (trim($data->N) == "") {
 
-        echo json_encode(["error" => "los campos no pueden estar vacíos"]);
-    } else {
 
-        mysqli_query($conexion_bd, "INSERT INTO `cota`(`cod_isbn`, `cota`, `cutter`, `volumen`, `ejemplar`, `fecha_ing`, `cota_completa`) VALUES ('$data->cod_isbn','$data->cota','$data->cutter','$data->volumen','$data->ejemplar','$data->fecha_ing','$data->cota_completa')");
+    mysqli_query($conexion_bd, "INSERT INTO `cota`(`cod_isbn`, `cota`, `cutter`, `volumen`, `ejemplar`, `fecha_ing`, `cota_completa`) VALUES ('$data->cod_isbn','$data->cota','$data->cutter','$data->volumen','$data->ejemplar','$data->fecha_ing','$data->cota_completa')");
 
-        echo json_encode(["success" => "datos registrados"]);
-    }
+    echo json_encode(["success" => "datos registrados"]);
+
     exit();
 }
 

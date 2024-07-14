@@ -16,7 +16,7 @@ function filtrarBusqueda($getArray, $table, $pagQuery = null)
         $query .= " WHERE";
 
         foreach ($filtered_get as $key => $value) {
-            $query .= " $key LIKE '$value%'";  // $filtered_get keyname = $filtered_get['keyname'] value
+            $query .= " $key LIKE '%$value%'";  // $filtered_get keyname = $filtered_get['keyname'] value
             if (count($filtered_get) > 1 && (count($filtered_get) - 1 > array_search($key, array_keys($filtered_get)))) { // more than one search filter, and not the last
                 $query .= " AND";
             }

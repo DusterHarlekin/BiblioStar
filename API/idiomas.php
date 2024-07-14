@@ -96,7 +96,7 @@ $query = filtrarBusqueda($_GET, 'idiomas');
 
 $sql_idiomas = mysqli_query($conexion_bd, $query);
 
-$resData = paginar($sql_idiomas, $_GET, 'idiomas');
+$resData = paginar($sql_idiomas, $_GET, 'idiomas', 'cod_idioma');
 
 $sql_idiomas = mysqli_query($conexion_bd, $resData["query"]);
 
