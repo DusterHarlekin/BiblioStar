@@ -13,7 +13,7 @@
         />
         <q-icon name="mdi-book" size="md" color="grey-9" />
         <div class="text-h5 text-weight-medium font-title text-grey-9">
-          Nuevo Libro
+          {{ isEditForm ? "Editar" : "Nuevo" }} Libro
         </div>
       </div>
       <div class="text-right font-title">
@@ -102,7 +102,6 @@
                 v-model="record.pag"
                 label="Número de páginas"
                 class="required q-my-md"
-                type="number"
                 outlined
               />
 
@@ -317,10 +316,11 @@ import { date, useQuasar } from "quasar";
 
 import { reactive, ref, toRefs } from "vue";
 
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 const $q = useQuasar();
 const $router = useRouter();
+const $route = useRoute();
 
 const isLoading = ref(false);
 
@@ -331,6 +331,8 @@ const quoteOptions = ref([]);
 const langOptions = ref([]);
 const countryOptions = ref([]);
 const cityOptions = ref([]);
+const isEditForm =
+  $route.path.includes("editar") && $route.params.id ? true : false;
 
 const state = reactive({
   record: {
@@ -341,17 +343,10 @@ const state = reactive({
     cod_sala: "",
     tomo: "",
     anio: "",
-    pag: 0,
+    pag: "0",
     cod_referencia: "",
-    costo: 0,
+    costo: "0",
     impresion: "",
-
-    idioma: "",
-    pais: "",
-    ciudad: "",
-    descripcion: "",
-
-    observacion: "",
 
     isNewQuote: true,
     fecha_ing: date.formatDate(Date.now(), "DD/MM/YYYY"),
@@ -508,15 +503,70 @@ const fetchEntries = async (filter, file) => {
   }
 };
 
-/***** Fill dropdowns *****/
+const syncChanges = async () => {
+  try {
+    if (isEditForm) {
+      const requestOptions = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
 
-//const addressOptions = ref<any[]>([]);
+      // API URL
+      const url = process.env.API_URL + `libros.php?N=${$route.params.id}`;
 
-/**** Update Address dropdown based on selected contact ****/
+      const response = await fetch(url, requestOptions);
 
-/**** Update Romana number on scaleNumber change ****/
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      const data = await response.json();
 
-/**** Submit form to create ticket ****/
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      console.log(data[0]);
+      state.record = data[0];
+
+      const urlCotas =
+        process.env.API_URL +
+        `cotas.php?cota_completa=${state.record.cota_completa}`;
+
+      const responseCotas = await fetch(urlCotas, requestOptions);
+      if (!responseCotas.ok) {
+        throw new Error(responseCotas.statusText);
+      }
+      if (state.record.cota_completa.trim() != "") {
+        const dataCotas = await responseCotas.json();
+        if (dataCotas.error) {
+          throw new Error(dataCotas.error);
+        }
+
+        let foundQuote = dataCotas.data[0];
+        if (foundQuote) {
+          quoteOptions.value = [];
+          quoteOptions.value.push({
+            label: foundQuote.cota_completa,
+            value: foundQuote.N,
+          });
+
+          state.cota_n = foundQuote.N;
+        } else {
+          state.cota_n = "";
+        }
+      }
+      state.record.session_user_name = localStorage.getItem("usuario");
+      state.record.session_user_role = localStorage.getItem("rol");
+      isNewQuote.value = false;
+    }
+  } catch (error) {
+    $q.notify({
+      color: "negative",
+      position: "top",
+      message: error.message,
+      icon: "mdi-alert",
+    });
+  }
+};
 
 const submitForm = async () => {
   try {
@@ -539,6 +589,7 @@ const submitForm = async () => {
     }
 
     state.record.isNewQuote = isNewQuote.value;
+    state.record.participante = "BPCPT";
 
     state.record.descripcion = state.record.descripcion
       ? state.record.descripcion
@@ -549,12 +600,10 @@ const submitForm = async () => {
       : "NINGUNA";
 
     const requestOptions = {
-      method: "POST",
+      method: isEditForm ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(state.record),
     };
-
-    console.log(requestOptions.body);
 
     const response = await fetch(
       process.env.API_URL + "libros.php",
@@ -570,7 +619,7 @@ const submitForm = async () => {
     $q.notify({
       color: "positive",
       position: "top",
-      message: "El libro se ha registrado existosamente",
+      message: data.success,
       icon: "mdi-checkbox-marked-circle",
     });
     $router.push({ path: "/libros" });
@@ -583,5 +632,7 @@ const submitForm = async () => {
     });
   }
 };
+
+syncChanges();
 const { record } = toRefs(state);
 </script>
