@@ -18,7 +18,9 @@ function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = fa
     if (!isset($data->session_user_name) || trim($data->session_user_name) == "" || !isset($data->session_user_role) || trim($data->session_user_role) == "") {
 
 
-        return false;
+        echo json_encode(["error" => "Invalid session"]);
+
+        exit();
     }
 
     $sql_usuario = mysqli_query($conexion_bd, "SELECT usuario, rol FROM usuarios WHERE usuario='" . $data->session_user_name . "' AND rol='" . $data->session_user_role . "'");
@@ -48,7 +50,7 @@ function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = fa
 
 
         default:
-            echo json_encode(["error" => "No estás autorizado", "code" => 401]);
+
             return false;
     }
 }
