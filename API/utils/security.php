@@ -16,14 +16,15 @@ function hashPass($pass)
 function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = false)
 {
     if (!isset($data->session_user_name) || trim($data->session_user_name) == "" || !isset($data->session_user_role) || trim($data->session_user_role) == "") {
-        echo json_encode(["invalid_session" => true]);
+
+
         return false;
     }
 
     $sql_usuario = mysqli_query($conexion_bd, "SELECT usuario, rol FROM usuarios WHERE usuario='" . $data->session_user_name . "' AND rol='" . $data->session_user_role . "'");
 
     if (mysqli_num_rows($sql_usuario) <= 0) {
-        echo json_encode(["code" => 404, "error" => "Not found"]);
+
         return false;
     }
 
