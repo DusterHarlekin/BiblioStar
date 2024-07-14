@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
         echo json_encode(["error" => "los campos no pueden estar vacíos"]);
     } else {
 
-        mysqli_query($conexion_bd, "DELETE FROM salas WHERE N=" . $data->N);
+        mysqli_query($conexion_bd, "DELETE FROM salas WHERE N='" . $data->N. "'");
 
         echo json_encode(["success" => "La sala fue eliminada de forma exitosa"]);
     }

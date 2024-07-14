@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
         echo json_encode(["error" => "los campos no pueden estar vacíos"]);
     } else {
 
-        mysqli_query($conexion_bd, "DELETE FROM paises WHERE codigo=" . $data->codigo);
+        mysqli_query($conexion_bd, "DELETE FROM paises WHERE codigo='" . $data->codigo. "'");
 
         echo json_encode(["success" => "El país fue eliminado de forma exitosa"]);
     }

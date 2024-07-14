@@ -108,7 +108,13 @@
           <q-btn flat round icon="mdi-lead-pencil" color="accent">
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
-          <q-btn flat round icon="mdi-delete-variant" color="red">
+          <q-btn
+            flat
+            round
+            icon="mdi-delete-variant"
+            color="red"
+            @click="deleteCity(props.row)"
+          >
             <q-tooltip>Eliminar</q-tooltip>
           </q-btn>
         </q-td>
@@ -119,7 +125,6 @@
 
 <script setup>
 import { reactive, ref } from "vue";
-
 import { useQuasar } from "quasar";
 
 const $q = useQuasar();
@@ -171,6 +176,55 @@ const columns = [
     align: "left",
   },
 ];
+
+const deleteCity = (city) => {
+  $q.dialog({
+    title: "Eliminar ciudad",
+    message: `¿Estás seguro de que deseas eliminar esta ciudad? (${city.ciudad})`,
+    cancel: true,
+    persistent: true,
+  }).onOk(async () => {
+    try {
+      const requestOptions = {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ codigo_ciudad: city.codigo_ciudad }),
+      };
+
+      // API URL
+      const url = process.env.API_URL + `ciudades.php`;
+
+      console.log(requestOptions.body);
+      const response = await fetch(url, requestOptions);
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      $q.notify({
+        color: "positive",
+        position: "top",
+        message: "Ciudad eliminada correctamente",
+        icon: "mdi-check",
+      });
+
+      fetchCiudades();
+    } catch (error) {
+      $q.notify({
+        color: "negative",
+        position: "top",
+        message: error.message,
+        icon: "mdi-alert",
+      });
+    }
+  });
+};
 
 const fetchCiudades = async (page = 1) => {
   try {

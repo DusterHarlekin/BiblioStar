@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
         echo json_encode(["error" => "los campos no pueden estar vacíos"]);
     } else {
 
-        mysqli_query($conexion_bd, "DELETE FROM idiomas WHERE cod_idioma=" . $data->cod_idioma);
+        mysqli_query($conexion_bd, "DELETE FROM idiomas WHERE cod_idioma='" . $data->cod_idioma. "'");
 
         echo json_encode(["success" => "La sala fue eliminada de forma exitosa"]);
     }

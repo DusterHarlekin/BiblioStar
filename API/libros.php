@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 
         mysqli_query($conexion_bd, "DELETE FROM libros WHERE N=" . $data->N);
 
-        echo json_encode(["success" => "La sala fue eliminada de forma exitosa"]);
+        echo json_encode(["success" => "El libro fue eliminado de forma exitosa"]);
     }
     exit();
 }

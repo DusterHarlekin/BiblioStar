@@ -102,7 +102,13 @@
           <q-btn flat round icon="mdi-lead-pencil" color="accent">
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
-          <q-btn flat round icon="mdi-delete-variant" color="red">
+          <q-btn
+            flat
+            round
+            icon="mdi-delete-variant"
+            color="red"
+            @click="deleteLang(props.row)"
+          >
             <q-tooltip>Eliminar</q-tooltip>
           </q-btn>
         </q-td>
@@ -154,6 +160,55 @@ const columns = [
     align: "left",
   },
 ];
+
+const deleteLang = (lang) => {
+  $q.dialog({
+    title: "Eliminar idioma",
+    message: `¿Estás seguro de que deseas eliminar este idioma? (${lang.cod_idioma})`,
+    cancel: true,
+    persistent: true,
+  }).onOk(async () => {
+    try {
+      const requestOptions = {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cod_idioma: lang.cod_idioma }),
+      };
+
+      // API URL
+      const url = process.env.API_URL + `idiomas.php`;
+
+      console.log(requestOptions.body);
+      const response = await fetch(url, requestOptions);
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      $q.notify({
+        color: "positive",
+        position: "top",
+        message: "Idioma eliminado correctamente",
+        icon: "mdi-check",
+      });
+
+      fetchIdiomas();
+    } catch (error) {
+      $q.notify({
+        color: "negative",
+        position: "top",
+        message: error.message,
+        icon: "mdi-alert",
+      });
+    }
+  });
+};
 
 const fetchIdiomas = async (page = 1) => {
   try {
