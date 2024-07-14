@@ -371,8 +371,8 @@ const clearCities = () => {
 
 const roomFilterFn = (textInput, update) => {
   update(async () => {
-    let data = await fetchEntries({ cod_sala: textInput }, "salas");
     if (textInput.length > 0) {
+      let data = await fetchEntries({ cod_sala: textInput }, "salas");
       roomOptions.value = [];
       if (data.data) {
         for (const entry of data.data) {
@@ -388,8 +388,8 @@ const roomFilterFn = (textInput, update) => {
 
 const quoteFilterFn = (textInput, update) => {
   update(async () => {
-    let data = await fetchEntries({ cota_completa: textInput }, "cotas");
     if (textInput.length > 0) {
+      let data = await fetchEntries({ cota_completa: textInput }, "cotas");
       quoteOptions.value = [];
       if (data.data) {
         for (const entry of data.data) {
@@ -405,8 +405,8 @@ const quoteFilterFn = (textInput, update) => {
 
 const langFilterFn = (textInput, update) => {
   update(async () => {
-    let data = await fetchEntries({ cod_idioma: textInput }, "idiomas");
     if (textInput.length > 0) {
+      let data = await fetchEntries({ cod_idioma: textInput }, "idiomas");
       langOptions.value = [];
       if (data.data) {
         for (const entry of data.data) {
@@ -422,8 +422,8 @@ const langFilterFn = (textInput, update) => {
 
 const countryFilterFn = (textInput, update) => {
   update(async () => {
-    let data = await fetchEntries({ codigo: textInput }, "paises");
     if (textInput.length > 0) {
+      let data = await fetchEntries({ codigo: textInput }, "paises");
       countryOptions.value = [];
       if (data.data) {
         for (const entry of data.data) {
@@ -439,11 +439,11 @@ const countryFilterFn = (textInput, update) => {
 
 const cityFilterFn = (textInput, update) => {
   update(async () => {
-    let data = await fetchEntries(
-      { codigo_ciudad: textInput, codigo_pais: state.record.pais },
-      "ciudades"
-    );
     if (textInput.length > 0) {
+      let data = await fetchEntries(
+        { codigo_ciudad: textInput, codigo_pais: state.record.pais },
+        "ciudades"
+      );
       cityOptions.value = [];
       if (data.data) {
         for (const entry of data.data) {
