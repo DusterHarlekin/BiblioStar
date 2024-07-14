@@ -8,9 +8,9 @@ $conexion_bd = connect();
 
 //Prueba consulta de ciudad
 $data = json_decode(json_encode($_GET));
+if ($_SERVER["REQUEST_METHOD"] == 'GET') {
+    if (isAuthorized($data, $conexion_bd)) {
 
-if (isAuthorized($data, $conexion_bd)) {
-    if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 
         //Selección de id (ROGER)
         if (isset($_GET["cod_idioma"]) && !isset($_GET["page"])) {
@@ -30,14 +30,13 @@ if (isAuthorized($data, $conexion_bd)) {
 
             exit();
         }
+    } else {
+
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
+
+        exit();
     }
-} else {
-
-    echo json_encode(["error" => "No estás autorizado", "code" => 401]);
-
-    exit();
 }
-
 
 
 
@@ -74,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
 if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
     $data = json_decode(file_get_contents("php://input"));
+
     if (isAuthorized($data, $conexion_bd)) {
 
 
