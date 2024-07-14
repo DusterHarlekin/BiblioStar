@@ -43,8 +43,8 @@ if (isAuthorized($data, $conexion_bd)) {
 
 //PUT EDITAR
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
+    $data = json_decode(file_get_contents("php://input"));
     if (isAuthorized($data, $conexion_bd)) {
-        $data = json_decode(file_get_contents("php://input"));
 
         if (trim($data->cod_idioma) == "") {
             echo json_encode(["error" => "El campo clave no puede esta vacío"]);
@@ -73,8 +73,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 //DELETE ELIMINAR
 
 if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
+    $data = json_decode(file_get_contents("php://input"));
     if (isAuthorized($data, $conexion_bd)) {
-        $data = json_decode(file_get_contents("php://input"));
+
 
         if (trim($data->cod_idioma) == "") {
 
@@ -99,18 +100,25 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     $data = json_decode(file_get_contents("php://input"));
-    validateFields($data);
-    if (trim($data->cod_idioma) == "") {
-        echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+    if (isAuthorized($data, $conexion_bd)) {
+        validateFields($data);
+        if (trim($data->cod_idioma) == "") {
+            echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+        } else {
+            mysqli_query($conexion_bd, "INSERT INTO `idiomas`(`cod_idioma`, `descripcion`) VALUES ('$data->cod_idioma','$data->descripcion')");
+            echo json_encode([
+                "success" => "datos registrados",
+                "cod_idioma" => $data->cod_idioma,
+                "descripcion" => $data->descripcion
+            ]);
+        }
+        exit();
     } else {
-        mysqli_query($conexion_bd, "INSERT INTO `idiomas`(`cod_idioma`, `descripcion`) VALUES ('$data->cod_idioma','$data->descripcion')");
-        echo json_encode([
-            "success" => "datos registrados",
-            "cod_idioma" => $data->cod_idioma,
-            "descripcion" => $data->descripcion
-        ]);
+
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
+
+        exit();
     }
-    exit();
 }
 
 
