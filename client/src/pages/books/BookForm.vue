@@ -29,7 +29,7 @@
         />
       </div>
     </div>
-    <q-form @submit="submitForm">
+    <q-form>
       <q-card>
         <div class="row">
           <div class="col-md-6 col-xs-12">
@@ -465,7 +465,11 @@ const fetchEntries = async (filter, file) => {
     };
 
     // API URL
-    let url = process.env.API_URL + `${file}.php?page=1`;
+    let url =
+      process.env.API_URL +
+      `${file}.php?page=1&session_user_name=${localStorage.getItem(
+        "usuario"
+      )}&session_user_role=${localStorage.getItem("rol")}`;
 
     let params = new URLSearchParams(filter);
     let keysForDel = [];
@@ -512,7 +516,13 @@ const syncChanges = async () => {
       };
 
       // API URL
-      const url = process.env.API_URL + `libros.php?N=${$route.params.id}`;
+      const url =
+        process.env.API_URL +
+        `libros.php?N=${
+          $route.params.id
+        }&session_user_name=${localStorage.getItem(
+          "usuario"
+        )}&session_user_role=${localStorage.getItem("rol")}`;
 
       const response = await fetch(url, requestOptions);
 
@@ -529,7 +539,11 @@ const syncChanges = async () => {
 
       const urlCotas =
         process.env.API_URL +
-        `cotas.php?cota_completa=${state.record.cota_completa}`;
+        `cotas.php?cota_completa=${
+          state.record.cota_completa
+        }&session_user_name=${localStorage.getItem(
+          "usuario"
+        )}&session_user_role=${localStorage.getItem("rol")}`;
 
       const responseCotas = await fetch(urlCotas, requestOptions);
       if (!responseCotas.ok) {

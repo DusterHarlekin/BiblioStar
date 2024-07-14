@@ -188,7 +188,11 @@ const deleteCity = (city) => {
       const requestOptions = {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ codigo_ciudad: city.codigo_ciudad }),
+        body: JSON.stringify({
+          codigo_ciudad: city.codigo_ciudad,
+          session_user_name: localStorage.getItem("usuario"),
+          session_user_role: localStorage.getItem("rol"),
+        }),
       };
 
       // API URL
@@ -233,7 +237,11 @@ const fetchCiudades = async (page = 1) => {
       headers: { "Content-Type": "application/json" },
     };
     // API URL
-    let url = process.env.API_URL + `ciudades.php?page=${page}`;
+    let url =
+      process.env.API_URL +
+      `ciudades.php?page=${page}&session_user_name=${localStorage.getItem(
+        "usuario"
+      )}&session_user_role=${localStorage.getItem("rol")}`;
 
     let params = new URLSearchParams(filter);
     let keysForDel = [];

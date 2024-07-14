@@ -11,6 +11,8 @@ function filtrarBusqueda($getArray, $table, $pagQuery = null)
 
 
     unset($filtered_get["page"]);
+    unset($filtered_get["session_user_name"]);
+    unset($filtered_get["session_user_role"]);
 
     if (count($filtered_get)) { // not empty
         $query .= " WHERE";

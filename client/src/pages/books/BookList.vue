@@ -303,7 +303,11 @@ const fetchLibros = async (page = 1) => {
       headers: { "Content-Type": "application/json" },
     };
     // API URL
-    let url = process.env.API_URL + `libros.php?page=${page}`;
+    let url =
+      process.env.API_URL +
+      `libros.php?page=${page}&session_user_name=${localStorage.getItem(
+        "usuario"
+      )}&session_user_role=${localStorage.getItem("rol")}`;
 
     let params = new URLSearchParams(filter);
     let keysForDel = [];
@@ -320,7 +324,7 @@ const fetchLibros = async (page = 1) => {
     if (params.toString() != "") {
       url += `&${params.toString()}`;
     }
-
+    console.log(url);
     isloading.value = true;
     const response = await fetch(url, requestOptions);
     const data = await response.json();
@@ -362,7 +366,10 @@ const fetchSalas = async () => {
     };
 
     const response = await fetch(
-      process.env.API_URL + "salas.php",
+      process.env.API_URL +
+        `salas.php?session_user_name=${localStorage.getItem(
+          "usuario"
+        )}&session_user_role=${localStorage.getItem("rol")}`,
       requestOptions
     );
     if (!response.ok) {

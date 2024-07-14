@@ -167,7 +167,11 @@ const deleteCountry = (country) => {
       const requestOptions = {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ codigo: country.codigo }),
+        body: JSON.stringify({
+          codigo: country.codigo,
+          session_user_name: localStorage.getItem("usuario"),
+          session_user_role: localStorage.getItem("rol"),
+        }),
       };
 
       // API URL
@@ -212,7 +216,11 @@ const fetchPaises = async (page = 1) => {
       headers: { "Content-Type": "application/json" },
     };
     // API URL
-    let url = process.env.API_URL + `paises.php?page=${page}`;
+    let url =
+      process.env.API_URL +
+      `paises.php?page=${page}&session_user_name=${localStorage.getItem(
+        "usuario"
+      )}&session_user_role=${localStorage.getItem("rol")}`;
 
     let params = new URLSearchParams(filter);
     let keysForDel = [];
