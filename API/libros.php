@@ -8,21 +8,28 @@ $conexion_bd = connect();
 
 //Prueba consulta de ciudad
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
+    $data = json_decode(json_encode($_GET));
+    if (isAuthorized($data, $conexion_bd)) {
+        //Selección de id (ROGER)    
+        if (isset($_GET["N"])) {
 
-    //Selección de id (ROGER)    
-    if (isset($_GET["N"])) {
+            //VALIDACIÓN DE USUARIO
+            $sql_libros = mysqli_query($conexion_bd, "SELECT * FROM libros WHERE N=" . $_GET["N"]);
 
-        //VALIDACIÓN DE USUARIO
-        $sql_libros = mysqli_query($conexion_bd, "SELECT * FROM libros WHERE N=" . $_GET["N"]);
+            if (mysqli_num_rows($sql_libros) > 0) {
 
-        if (mysqli_num_rows($sql_libros) > 0) {
+                $libros = mysqli_fetch_all($sql_libros, MYSQLI_ASSOC);
+                echo json_encode($libros);
+            } else {
 
-            $libros = mysqli_fetch_all($sql_libros, MYSQLI_ASSOC);
-            echo json_encode($libros);
-        } else {
+                echo json_encode(["success" => 0]);
+            }
 
-            echo json_encode(["success" => 0]);
+            exit();
         }
+    } else {
+
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
 
         exit();
     }
@@ -118,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
         exit();
     } else {
 
-        echo json_encode(["error" => "No autorizado"]);
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
 
         exit();
     }
@@ -129,17 +136,25 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 
     $data = json_decode(file_get_contents("php://input"));
+    if (isAuthorized($data, $conexion_bd)) {
 
-    if (trim($data->N) == "") {
 
-        echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+        if (trim($data->N) == "") {
+
+            echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+        } else {
+
+            mysqli_query($conexion_bd, "DELETE FROM libros WHERE N=" . $data->N);
+
+            echo json_encode(["success" => "El libro fue eliminado de forma exitosa"]);
+        }
+        exit();
     } else {
 
-        mysqli_query($conexion_bd, "DELETE FROM libros WHERE N=" . $data->N);
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
 
-        echo json_encode(["success" => "El libro fue eliminado de forma exitosa"]);
+        exit();
     }
-    exit();
 }
 
 //POST REGISTRAR
@@ -178,37 +193,46 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         echo json_encode(["success" => "El libro se ha registrado exitosamente"]);
         exit();
     } else {
-        json_encode(["error" => "No autorizado"]);
+        json_encode(["error" => "No estás autorizado", "code" => 401]);
         exit();
     }
 }
 
 
 //CONSULTAR TODOS LOS LIBROS
-$query = filtrarBusqueda($_GET, 'libros');
+$data = json_decode(json_encode($_GET));
 
-$sql_libros = mysqli_query($conexion_bd, $query);
+if (isAuthorized($data, $conexion_bd)) {
+    $query = filtrarBusqueda($_GET, 'libros');
 
-$resData = paginar($sql_libros, $_GET, 'libros');
+    $sql_libros = mysqli_query($conexion_bd, $query);
 
-$sql_libros = mysqli_query($conexion_bd, $resData["query"]);
+    $resData = paginar($sql_libros, $_GET, 'libros');
 
-//GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
-$rows = mysqli_num_rows($sql_libros);
+    $sql_libros = mysqli_query($conexion_bd, $resData["query"]);
 
-$resData["pagination"]["end"] = $resData["pagination"]["start"] - 1 + $rows;
+    //GUARDAR LA CANTIDAD DE FILAS EN UNA VARIABLE PARA FACILIDAD DE USO
+    $rows = mysqli_num_rows($sql_libros);
 
-if ($rows > 0) {
+    $resData["pagination"]["end"] = $resData["pagination"]["start"] - 1 + $rows;
 
-    $libros["data"] = mysqli_fetch_all($sql_libros, MYSQLI_ASSOC);
+    if ($rows > 0) {
 
-    //AGREGAR INFORMACION UTIL PARA EL FRONTEND
+        $libros["data"] = mysqli_fetch_all($sql_libros, MYSQLI_ASSOC);
 
-    $libros["pagination"] = $resData["pagination"];
-    echo json_encode($libros);
+        //AGREGAR INFORMACION UTIL PARA EL FRONTEND
+
+        $libros["pagination"] = $resData["pagination"];
+        echo json_encode($libros);
+    } else {
+
+        echo json_encode(["success" => 0]);
+    }
 } else {
 
-    echo json_encode(["success" => 0]);
+    echo json_encode(["error" => "No estás autorizado", "code" => 401]);
+
+    exit();
 }
 
 exit();

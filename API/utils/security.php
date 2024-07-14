@@ -23,27 +23,27 @@ function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = fa
 
     $sql_usuario = mysqli_query($conexion_bd, "SELECT usuario, rol FROM usuarios WHERE usuario='" . $data->session_user_name . "' AND rol='" . $data->session_user_role . "'");
 
-    if (mysqli_num_rows($sql_usuario) <= 0) {
 
-        return false;
-    }
 
     switch ($data->session_user_role) {
         case "admin":
+            if (mysqli_num_rows($sql_usuario) <= 0) {
+
+                return false;
+            }
             return true;
 
         case "librarian":
-            if ($isLibAuth) {
-                return true;
+            if (!$isLibAuth || mysqli_num_rows($sql_usuario) <= 0) {
+                return false;
             }
-            echo json_encode(["error" => "No estás autorizado", "code" => 401]);
-            return false;
+
+            return true;
 
         case "guest":
             if ($isGuestAuth) {
                 return true;
             }
-            echo json_encode(["error" => "No estás autorizado", "code" => 401]);
             return false;
 
 
