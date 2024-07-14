@@ -28,6 +28,10 @@ const routes = [
         path: "editar/:id",
         component: () => import("pages/books/BookForm.vue"),
       },
+      {
+        path: "libro/:id",
+        component: () => import("pages/books/BookView.vue"),
+      },
     ],
   },
 

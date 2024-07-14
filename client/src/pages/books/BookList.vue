@@ -135,7 +135,13 @@
     >
       <template #body-cell-actions="props">
         <q-td :props="props">
-          <q-btn flat round icon="mdi-eye" color="positive">
+          <q-btn
+            flat
+            round
+            icon="mdi-eye"
+            color="positive"
+            :to="`/libros/libro/${props.row.N}`"
+          >
             <q-tooltip>Ver</q-tooltip>
           </q-btn>
           <q-btn
