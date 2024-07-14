@@ -141,7 +141,13 @@
           <q-btn flat round icon="mdi-lead-pencil" color="accent">
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
-          <q-btn flat round icon="mdi-delete-variant" color="red">
+          <q-btn
+            flat
+            round
+            icon="mdi-delete-variant"
+            color="red"
+            @click="deleteBook(props.row)"
+          >
             <q-tooltip>Eliminar</q-tooltip>
           </q-btn>
         </q-td>
@@ -235,6 +241,54 @@ const columns = [
     align: "left",
   },
 ];
+
+const deleteBook = (book) => {
+  $q.dialog({
+    title: "Eliminar libro",
+    message: `¿Estás seguro de que deseas eliminar este libro? (${book.titulo})`,
+    cancel: true,
+    persistent: true,
+  }).onOk(async () => {
+    try {
+      const requestOptions = {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ N: book.N }),
+      };
+
+      // API URL
+      const url = process.env.API_URL + `libros.php`;
+
+      const response = await fetch(url, requestOptions);
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      $q.notify({
+        color: "positive",
+        position: "top",
+        message: "Libro eliminado correctamente",
+        icon: "mdi-check",
+      });
+
+      fetchLibros();
+    } catch (error) {
+      $q.notify({
+        color: "negative",
+        position: "top",
+        message: error.message,
+        icon: "mdi-alert",
+      });
+    }
+  });
+};
 
 const fetchLibros = async (page = 1) => {
   try {
