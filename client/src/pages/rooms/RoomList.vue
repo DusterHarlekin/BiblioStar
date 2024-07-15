@@ -15,6 +15,7 @@
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
+          to="/salas/nuevo"
         />
       </div>
     </div>
@@ -92,10 +93,22 @@
     >
       <template #body-cell-actions="props">
         <q-td :props="props">
-          <q-btn flat round icon="mdi-eye" color="positive">
+          <q-btn
+            flat
+            round
+            icon="mdi-eye"
+            color="positive"
+            :to="`/salas/sala/${props.row.N}`"
+          >
             <q-tooltip>Ver</q-tooltip>
           </q-btn>
-          <q-btn flat round icon="mdi-lead-pencil" color="accent">
+          <q-btn
+            flat
+            round
+            icon="mdi-lead-pencil"
+            color="accent"
+            :to="`/salas/editar/${props.row.N}`"
+          >
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
           <q-btn

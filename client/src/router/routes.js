@@ -58,6 +58,15 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: "", component: () => import("pages/rooms/RoomList.vue") },
+      { path: "nuevo", component: () => import("pages/rooms/RoomForm.vue") },
+      {
+        path: "editar/:id",
+        component: () => import("pages/rooms/RoomForm.vue"),
+      },
+      {
+        path: "sala/:id",
+        component: () => import("pages/rooms/RoomView.vue"),
+      },
     ],
   },
   {
