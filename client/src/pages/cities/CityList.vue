@@ -15,6 +15,7 @@
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
+          to="/ciudades/nuevo"
         />
       </div>
     </div>
@@ -102,10 +103,22 @@
     >
       <template #body-cell-actions="props">
         <q-td :props="props">
-          <q-btn flat round icon="mdi-eye" color="positive">
+          <q-btn
+            flat
+            round
+            icon="mdi-eye"
+            color="positive"
+            :to="`/ciudades/ciudad/${props.row.codigo_ciudad}`"
+          >
             <q-tooltip>Ver</q-tooltip>
           </q-btn>
-          <q-btn flat round icon="mdi-lead-pencil" color="accent">
+          <q-btn
+            flat
+            round
+            icon="mdi-lead-pencil"
+            color="accent"
+            :to="`/ciudades/editar/${props.row.codigo_ciudad}`"
+          >
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
           <q-btn
