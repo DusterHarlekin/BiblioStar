@@ -537,14 +537,12 @@ const syncChanges = async () => {
       if (data.error) {
         throw new Error(data.error);
       }
-      console.log(data[0]);
+
       state.record = data[0];
 
       const urlCotas =
         process.env.API_URL +
-        `cotas.php?cota_completa=${
-          state.record.cota_completa
-        }&session_user_name=${localStorage.getItem(
+        `cotas.php?cota_completa=${state.record.cota_completa.trim()}&session_user_name=${localStorage.getItem(
           "usuario"
         )}&session_user_role=${localStorage.getItem("rol")}`;
 

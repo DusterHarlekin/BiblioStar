@@ -220,6 +220,10 @@ const deleteQuote = (quote) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           N: quote.N,
+          cota: quote.cota,
+          cod_isbn: quote.cod_isbn,
+          cutter: quote.cutter,
+          cota_completa: quote.cota_completa,
           session_user_name: localStorage.getItem("usuario"),
           session_user_role: localStorage.getItem("rol"),
         }),
@@ -228,7 +232,6 @@ const deleteQuote = (quote) => {
       // API URL
       const url = process.env.API_URL + `cotas.php`;
 
-      console.log(requestOptions.body);
       const response = await fetch(url, requestOptions);
 
       if (!response.ok) {
@@ -241,14 +244,70 @@ const deleteQuote = (quote) => {
         throw new Error(data.error);
       }
 
-      $q.notify({
-        color: "positive",
-        position: "top",
-        message: "Cota eliminada correctamente",
-        icon: "mdi-check",
-      });
+      if (data.bookFound) {
+        $q.dialog({
+          title: "Libro encontrado",
+          message: data.foundMessage,
+          cancel: true,
+          persistent: true,
+        }).onOk(async () => {
+          try {
+            const urlConfirm = process.env.API_URL + `cotas.php`;
+            const requestOptionsConfirm = {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                N: quote.N,
+                cota: quote.cota,
+                cod_isbn: quote.cod_isbn,
+                cutter: quote.cutter,
+                cota_completa: quote.cota_completa,
+                session_user_name: localStorage.getItem("usuario"),
+                session_user_role: localStorage.getItem("rol"),
+                confirmed: true,
+              }),
+            };
 
-      fetchCotas();
+            const responseConfirm = await fetch(
+              urlConfirm,
+              requestOptionsConfirm
+            );
+
+            if (!responseConfirm.ok) {
+              throw new Error(response.statusText);
+            }
+
+            const data = await responseConfirm.json();
+
+            if (data.error) {
+              throw new Error(data.error);
+            }
+
+            $q.notify({
+              color: "positive",
+              position: "top",
+              message: data.success,
+              icon: "mdi-check",
+            });
+            fetchCotas();
+          } catch (error) {
+            $q.notify({
+              color: "negative",
+              position: "top",
+              message: error.message,
+              icon: "mdi-alert",
+            });
+          }
+        });
+      } else {
+        $q.notify({
+          color: "positive",
+          position: "top",
+          message: data.success,
+          icon: "mdi-check",
+        });
+        fetchCotas();
+      }
     } catch (error) {
       $q.notify({
         color: "negative",
