@@ -34,6 +34,84 @@
         <div class="row">
           <div class="col-md-6 col-xs-12">
             <q-card-section class="q-pb-none">
+              <div class="row q-py-none q-mb-none items-center">
+                <div class="col-12 col-lg-9">
+                  <q-select
+                    v-if="!isNewQuote"
+                    v-model="state.cota_n"
+                    label="Cota completa"
+                    class="required q-mt-md"
+                    use-input
+                    input-debounce="400"
+                    option-label="label"
+                    option-value="value"
+                    emit-value
+                    map-options
+                    outlined
+                    :options="quoteOptions"
+                    @filter="quoteFilterFn"
+                  >
+                    <template #no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                          No se encontraron resultados
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </q-select>
+
+                  <q-input
+                    v-model="state.cota"
+                    label="Cota"
+                    class="required q-mt-md"
+                    outlined
+                    v-if="isNewQuote"
+                  />
+                </div>
+                <div class="col-12 col-lg-3">
+                  <q-toggle
+                    class="text-subtitle2"
+                    label="Nueva cota"
+                    v-model="isNewQuote"
+                  />
+                </div>
+              </div>
+
+              <div v-if="isNewQuote">
+                <q-input
+                  v-model="state.cod_isbn"
+                  label="Código ISBN"
+                  class="required q-my-md"
+                  outlined
+                />
+                <q-input
+                  v-model="state.cutter"
+                  label="Cutter"
+                  class="required q-my-md"
+                  outlined
+                />
+
+                <q-input
+                  v-model="state.cota_completa"
+                  label="Cota completa"
+                  class="required q-my-md"
+                  outlined
+                />
+
+                <q-input
+                  v-model="state.volumen"
+                  label="Volumen"
+                  class="required q-my-md"
+                  outlined
+                />
+                <q-input
+                  v-model="state.ejemplar"
+                  label="Ejemplares"
+                  class="required q-my-md"
+                  outlined
+                />
+              </div>
+
               <q-input
                 v-model="record.titulo"
                 label="Título"
@@ -61,6 +139,18 @@
                 outlined
               />
 
+              <q-input
+                v-model="record.descripcion"
+                label="Descripción"
+                class="required q-my-md"
+                outlined
+                type="textarea"
+              />
+            </q-card-section>
+          </div>
+
+          <div class="col-md-6 col-xs-12">
+            <q-card-section class="q-pb-none">
               <q-select
                 v-model="record.cod_sala"
                 label="Sala"
@@ -118,93 +208,6 @@
                 class="required q-my-md"
                 outlined
               />
-              <q-input
-                v-model="record.descripcion"
-                label="Descripción"
-                class="required q-my-md"
-                outlined
-                type="textarea"
-              />
-            </q-card-section>
-          </div>
-
-          <div class="col-md-6 col-xs-12">
-            <q-card-section class="q-pb-none">
-              <div class="row q-py-none q-mb-none items-center">
-                <div class="col-12 col-lg-9">
-                  <q-select
-                    v-if="!isNewQuote"
-                    v-model="state.cota_n"
-                    label="Cota completa"
-                    class="required q-mt-md"
-                    use-input
-                    input-debounce="400"
-                    option-label="label"
-                    option-value="value"
-                    emit-value
-                    map-options
-                    outlined
-                    :options="quoteOptions"
-                    @filter="quoteFilterFn"
-                  >
-                    <template #no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          No se encontraron resultados
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-select>
-
-                  <q-input
-                    v-model="state.cota"
-                    label="Cota"
-                    class="required q-mt-md"
-                    outlined
-                    v-if="isNewQuote"
-                  />
-                </div>
-                <div class="col-12 col-lg-3">
-                  <q-toggle
-                    class="text-subtitle2"
-                    label="Nueva cota"
-                    v-model="isNewQuote"
-                  />
-                </div>
-              </div>
-
-              <div v-if="isNewQuote">
-                <q-input
-                  v-model="state.cod_isbn"
-                  label="Código ISBN"
-                  class="required q-my-md"
-                  outlined
-                />
-                <q-input
-                  v-model="state.cutter"
-                  label="Cutter"
-                  class="required q-my-md"
-                  outlined
-                />
-                <q-input
-                  v-model="state.volumen"
-                  label="Volumen"
-                  class="required q-my-md"
-                  outlined
-                />
-                <q-input
-                  v-model="state.ejemplar"
-                  label="Ejemplar"
-                  class="required q-my-md"
-                  outlined
-                />
-                <q-input
-                  v-model="state.cota_completa"
-                  label="Cota completa"
-                  class="required q-my-md"
-                  outlined
-                />
-              </div>
 
               <!-- :options="itemOptions"
               @filter="itemFilterFn" -->
