@@ -9,7 +9,7 @@ $conexion_bd = connect();
 //Prueba consulta de ciudad
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     $data = json_decode(json_encode($_GET));
-    if (isAuthorized($data, $conexion_bd)) {
+    if (isAuthorized($data, $conexion_bd, true, true)) {
         //Selección de id (ROGER)    
         if (isset($_GET["N"])) {
 
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
     $data = json_decode(file_get_contents("php://input"));
 
-    if (isAuthorized($data, $conexion_bd)) {
+    if (isAuthorized($data, $conexion_bd, true)) {
         if (trim($data->N) == "") {
             echo json_encode(["error" => "El campo clave no puede esta vacío"]);
         } else {
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
             mysqli_query($conexion_bd, "UPDATE libros SET cota ='" . $data->cota . "', cod_isbn ='" . $data->cod_isbn . "', autor ='" . $data->autor . "', titulo ='" . $data->titulo . "', pais ='" . $data->pais . "', editorial ='" . $data->editorial . "', edicion ='" . $data->edicion . "', ciudad ='" . $data->ciudad . "', anio ='" . $data->anio . "', tomo ='" . $data->tomo . "', pag ='" . $data->pag . "', descripcion ='" . $data->descripcion . "', cod_sala ='" . $data->cod_sala . "', cod_referencia ='" . $data->cod_referencia . "', costo ='" . $data->costo . "', fecha_ing ='" . $data->fecha_ing . "', idioma ='" . $data->idioma . "', participante ='" . $data->participante . "', impresion ='" . $data->impresion . "', observacion ='" . $data->observacion . "', cutter ='" . $data->cutter . "', cota_completa ='" . $data->cota_completa . "' WHERE N ='" . $data->N . "'");
             echo json_encode([
-                "success" => "datos actualizados",
+                "success" => "El libro se ha editado exitosamente",
                 "N" => $data->N,
                 "cota" => $data->cota,
                 "autor" => $data->autor,
@@ -136,7 +136,8 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 
     $data = json_decode(file_get_contents("php://input"));
-    if (isAuthorized($data, $conexion_bd)) {
+
+    if (isAuthorized($data, $conexion_bd, true)) {
 
 
         if (trim($data->N) == "") {
@@ -162,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $data = json_decode(file_get_contents("php://input"));
 
-    if (isAuthorized($data, $conexion_bd)) {
+    if (isAuthorized($data, $conexion_bd, true)) {
 
         validateFields($data);
 
@@ -202,7 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 //CONSULTAR TODOS LOS LIBROS
 $data = json_decode(json_encode($_GET));
 
-if (isAuthorized($data, $conexion_bd)) {
+if (isAuthorized($data, $conexion_bd, true, true)) {
     $query = filtrarBusqueda($_GET, 'libros');
 
     $sql_libros = mysqli_query($conexion_bd, $query);

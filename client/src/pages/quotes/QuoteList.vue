@@ -15,6 +15,7 @@
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
+          to="/cotas/nuevo"
         />
       </div>
     </div>
@@ -114,7 +115,13 @@
           <q-btn flat round icon="mdi-eye" color="positive">
             <q-tooltip>Ver</q-tooltip>
           </q-btn>
-          <q-btn flat round icon="mdi-lead-pencil" color="accent">
+          <q-btn
+            flat
+            round
+            icon="mdi-lead-pencil"
+            color="accent"
+            :to="`/cotas/editar/${props.row.N}`"
+          >
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
           <q-btn

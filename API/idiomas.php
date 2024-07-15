@@ -9,7 +9,7 @@ $conexion_bd = connect();
 //Prueba consulta de ciudad
 $data = json_decode(json_encode($_GET));
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
-    if (isAuthorized($data, $conexion_bd)) {
+    if (isAuthorized($data, $conexion_bd, true, true)) {
 
 
         //Selección de id (ROGER)
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 //PUT EDITAR
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
     $data = json_decode(file_get_contents("php://input"));
-    if (isAuthorized($data, $conexion_bd)) {
+    if (isAuthorized($data, $conexion_bd, true)) {
 
         if (trim($data->cod_idioma) == "") {
             echo json_encode(["error" => "El campo clave no puede esta vacío"]);
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
     $data = json_decode(file_get_contents("php://input"));
 
-    if (isAuthorized($data, $conexion_bd)) {
+    if (isAuthorized($data, $conexion_bd, true)) {
 
 
         if (trim($data->cod_idioma) == "") {
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     $data = json_decode(file_get_contents("php://input"));
-    if (isAuthorized($data, $conexion_bd)) {
+    if (isAuthorized($data, $conexion_bd, true)) {
         validateFields($data);
         if (trim($data->cod_idioma) == "") {
             echo json_encode(["error" => "los campos no pueden estar vacíos"]);
@@ -126,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 //CONSULTAR TODOS LOS IDIOMAS
 $data = json_decode(json_encode($_GET));
 
-if (isAuthorized($data, $conexion_bd)) {
+if (isAuthorized($data, $conexion_bd, true, true)) {
     $query = filtrarBusqueda($_GET, 'idiomas');
 
     $sql_idiomas = mysqli_query($conexion_bd, $query);

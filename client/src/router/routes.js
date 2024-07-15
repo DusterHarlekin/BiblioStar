@@ -41,6 +41,15 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: "", component: () => import("pages/quotes/QuoteList.vue") },
+      { path: "nuevo", component: () => import("pages/quotes/QuoteForm.vue") },
+      {
+        path: "editar/:id",
+        component: () => import("pages/quotes/QuoteForm.vue"),
+      },
+      {
+        path: "cota/:id",
+        component: () => import("pages/quotes/QuoteView.vue"),
+      },
     ],
   },
   {

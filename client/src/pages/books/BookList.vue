@@ -15,7 +15,7 @@
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
-          @click="nuevoLibro()"
+          to="/libros/nuevo"
         />
       </div>
     </div>
@@ -265,7 +265,11 @@ const deleteBook = (book) => {
       const requestOptions = {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ N: book.N }),
+        body: JSON.stringify({
+          N: book.N,
+          session_user_name: localStorage.getItem("usuario"),
+          session_user_role: localStorage.getItem("rol"),
+        }),
       };
 
       // API URL
@@ -278,6 +282,7 @@ const deleteBook = (book) => {
       }
 
       const data = await response.json();
+      console.log(data);
 
       if (data.error) {
         throw new Error(data.error);
@@ -398,10 +403,6 @@ const fetchSalas = async () => {
       icon: "mdi-alert",
     });
   }
-};
-
-const nuevoLibro = () => {
-  $router.push("/libros/nuevo");
 };
 
 const clearFilters = () => {
