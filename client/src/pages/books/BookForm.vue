@@ -542,7 +542,9 @@ const syncChanges = async () => {
 
       const urlCotas =
         process.env.API_URL +
-        `cotas.php?cota_completa=${state.record.cota_completa.trim()}&session_user_name=${localStorage.getItem(
+        `cotas.php?cota_completa=${
+          state.record.cota_completa
+        }&session_user_name=${localStorage.getItem(
           "usuario"
         )}&session_user_role=${localStorage.getItem("rol")}`;
 
@@ -556,7 +558,8 @@ const syncChanges = async () => {
           throw new Error(dataCotas.error);
         }
 
-        let foundQuote = dataCotas.data[0];
+        let foundQuote = dataCotas.data ? dataCotas.data[0] : null;
+
         if (foundQuote) {
           quoteOptions.value = [];
           quoteOptions.value.push({

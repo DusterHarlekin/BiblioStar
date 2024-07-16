@@ -5,18 +5,17 @@
     >
       <div class="col-md-6">
         <div class="row q-gutter-sm items-center">
-          <q-icon name="mdi-book" size="lg" color="primary" />
-          <div class="text-h4 text-weight-medium font-title">Libros</div>
+          <q-icon name="mdi-account-clock" size="lg" color="primary" />
+          <div class="text-h4 text-weight-medium font-title">Préstamos</div>
         </div>
       </div>
       <div class="col-auto">
         <q-btn
-          label="Nuevo libro"
+          label="Nuevo prestamo"
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
-          to="/libros/nuevo"
-          v-if="authStore.rol === 'admin' || authStore.rol === 'librarian'"
+          to="/prestamos/nuevo"
         />
       </div>
     </div>
@@ -28,18 +27,7 @@
           <div class="row items-center">
             <div class="col-xs-12 col-lg-auto">
               <div class="row items-center q-gutter-md">
-                <q-btn
-                  @click="filterExpanded = !filterExpanded"
-                  size="lg"
-                  :icon="
-                    filterExpanded
-                      ? 'mdi-filter-variant-minus'
-                      : 'mdi-filter-variant-plus'
-                  "
-                  flat
-                  class="text-weight-semibold"
-                  :color="filterExpanded ? 'grey-8' : 'primary'"
-                />
+                <q-icon name="mdi-filter-variant" size="lg" color="grey-10" />
                 <div class="col-auto">
                   <q-input
                     v-model="filter.titulo"
@@ -47,35 +35,6 @@
                     dense
                     debounce="400"
                     label="Título"
-                  />
-                </div>
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.autor"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Autor"
-                  />
-                </div>
-
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.editorial"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Editorial"
-                  />
-                </div>
-
-                <div class="col-auto">
-                  <q-input
-                    v-model="filter.cota_completa"
-                    outlined
-                    dense
-                    debounce="400"
-                    label="Cota completa"
                   />
                 </div>
 
@@ -90,77 +49,84 @@
                 </div>
 
                 <div class="col-auto">
-                  <q-select
-                    v-model="filter.cod_sala"
-                    style="min-width: 140px"
-                    map-options
-                    dense
+                  <q-input
+                    v-model="filter.cedula"
                     outlined
-                    emit-value
-                    :options="salas"
-                    label="Sala"
+                    dense
+                    debounce="400"
+                    label="Cédula"
                   />
                 </div>
-              </div>
-              <div
-                class="row items-center q-gutter-md q-mt-md"
-                v-show="filterExpanded"
-              >
-                <q-input
-                  v-model="filter.anio"
-                  outlined
-                  dense
-                  debounce="400"
-                  label="Año de publicación"
-                />
 
-                <q-item-label class="q-ml-lg">Fecha de ingreso:</q-item-label>
-                <q-btn
-                  color="primary"
-                  flat
-                  icon="mdi-calendar"
-                  class="cursor-pointer q-pa-sm q-ml-xs"
-                  rounded
-                >
-                  <q-popup-proxy
-                    cover
-                    transition-show="scale"
-                    transition-hide="scale"
-                  >
-                    <q-date mask="DD/MM/YYYY" range v-model="filter.date">
-                      <div class="row items-center justify-end">
-                        <q-btn
-                          v-close-popup
-                          label="Close"
-                          color="primary"
-                          flat
-                        />
-                      </div>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-btn>
-                <q-item-label caption class="q-ml-xs">
-                  <span
-                    caption
-                    v-if="filter.date && filter.date.from"
-                    class="text-weight-medium"
-                    >Desde
-                    {{
-                      filter.date.from && filter.date.to
-                        ? filter.date.from + " Hasta " + filter.date.to
-                        : filter.date.from
-                    }}
-                  </span>
+                <div class="col-auto flex no-wrap items-center">
+                  <div class="row items-center justify-center q-gutter-md">
+                    <div class="q-ml-lg">
+                      <q-select
+                        v-model="dateType"
+                        style="min-width: 140px"
+                        map-options
+                        dense
+                        outlined
+                        emit-value
+                        :options="[
+                          { label: 'Fecha de salida', value: 'fecha_s' },
+                          { label: 'Fecha de entrega', value: 'fecha_e' },
+                        ]"
+                        label="Tipo de fecha"
+                        @update:model-value="fetchPrestamos"
+                      />
+                    </div>
+                    <q-btn
+                      color="primary"
+                      flat
+                      icon="mdi-calendar"
+                      class="cursor-pointer q-pa-sm q-ml-xs"
+                      rounded
+                    >
+                      <q-popup-proxy
+                        cover
+                        transition-show="scale"
+                        transition-hide="scale"
+                      >
+                        <q-date mask="DD/MM/YYYY" range v-model="filter.date">
+                          <div class="row items-center justify-end">
+                            <q-btn
+                              v-close-popup
+                              label="Close"
+                              color="primary"
+                              flat
+                            />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-btn>
 
-                  <span
-                    caption
-                    v-else-if="filter.date && !filter.date.from"
-                    class="text-weight-medium"
-                    >{{ filter.date }}</span
-                  >
+                    <q-item-label caption class="q-ml-xs">
+                      <span
+                        caption
+                        v-if="filter.date && filter.date.from"
+                        class="text-weight-medium"
+                        >Desde
+                        {{
+                          filter.date.from && filter.date.to
+                            ? filter.date.from + " Hasta " + filter.date.to
+                            : filter.date.from
+                        }}
+                      </span>
 
-                  <span caption v-else class="text-weight-medium">Todas</span>
-                </q-item-label>
+                      <span
+                        caption
+                        v-else-if="filter.date && !filter.date.from"
+                        class="text-weight-medium"
+                        >{{ filter.date }}</span
+                      >
+
+                      <span caption v-else class="text-weight-medium"
+                        >Todas</span
+                      >
+                    </q-item-label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -183,7 +149,7 @@
             icon="mdi-reload"
             color="primary"
             class="q-ml-sm"
-            @click="fetchLibros()"
+            @click="fetchPrestamos()"
           >
             <q-tooltip> Actualizar tabla </q-tooltip>
           </q-btn>
@@ -211,7 +177,7 @@
             round
             icon="mdi-eye"
             color="positive"
-            :to="`/libros/libro/${props.row.N}`"
+            :to="`/prestamos/prestamo/${props.row.cod_isbn}`"
           >
             <q-tooltip>Ver</q-tooltip>
           </q-btn>
@@ -221,7 +187,7 @@
             round
             icon="mdi-lead-pencil"
             color="accent"
-            :to="`/libros/editar/${props.row.N}`"
+            :to="`/prestamos/editar/${props.row.cod_isbn}`"
           >
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
@@ -229,11 +195,11 @@
             v-if="authStore.rol === 'admin' || authStore.rol === 'librarian'"
             flat
             round
-            icon="mdi-delete-variant"
-            color="red"
-            @click="deleteBook(props.row)"
+            icon="mdi-check-circle"
+            color="secondary"
+            @click="deleteLoan(props.row)"
           >
-            <q-tooltip>Eliminar</q-tooltip>
+            <q-tooltip>Confirmar entrega</q-tooltip>
           </q-btn>
         </q-td>
       </template>
@@ -256,37 +222,32 @@ const pagination = ref({
   rowsNumber: 0,
 });
 
+const dateType = ref("fecha_s");
+
 const filter = reactive({
   titulo: "",
-  autor: "",
-  editorial: "",
-  cota_completa: "",
-  cod_sala: "",
-  date: "",
-  anio: "",
   cod_isbn: "",
+  cedula: "",
+  date: "",
 });
 
 const salas = ref([]);
 const libros = ref([]);
-const filterExpanded = ref(false);
 const isloading = ref(false);
 
 // Q-Table columns
 const columns = [
   {
-    name: "N",
-    label: "Número",
-    field: "N",
+    name: "cedula",
+    label: "Cédula",
+    field: "cedula",
     align: "left",
   },
   {
-    name: "cota_completa",
-    label: "Cota completa",
+    name: "cod_isbn",
+    label: "Código ISBN",
     field: (row) =>
-      row.cota_completa && row.cota_completa.trim() != ""
-        ? row.cota_completa
-        : "--",
+      row.cod_isbn && row.cod_isbn.trim() != "" ? row.cod_isbn : "--",
     align: "left",
   },
   {
@@ -297,29 +258,23 @@ const columns = [
     align: "left",
   },
   {
-    name: "autor",
-    label: "Autor",
-    field: "autor",
+    name: "fecha_s",
+    label: "Fecha de salida",
+    field: (row) =>
+      row.fecha_s && row.fecha_s.trim() != ""
+        ? row.fecha_s + " " + row.hora_s
+        : "--",
     classes: "text-capitalize",
     align: "left",
   },
   {
-    name: "editorial",
-    label: "Editorial",
-    field: "editorial",
+    name: "fecha_e",
+    label: "Fecha de entrega",
+    field: (row) =>
+      row.fecha_e && row.fecha_e.trim() != ""
+        ? row.fecha_e + " " + row.hora_e
+        : "--",
     classes: "text-capitalize",
-    align: "left",
-  },
-  {
-    name: "edicion",
-    label: "Edición",
-    field: "edicion",
-    align: "left",
-  },
-  {
-    name: "cod_sala",
-    label: "Sala",
-    field: "cod_sala",
     align: "left",
   },
 
@@ -330,10 +285,10 @@ const columns = [
   },
 ];
 
-const deleteBook = (book) => {
+const deleteLoan = (loan) => {
   $q.dialog({
-    title: "Eliminar libro",
-    message: `¿Estás seguro de que deseas eliminar este libro? (${book.titulo})`,
+    title: "Confirmar devolución",
+    message: `¿Estás seguro de que deseas confirmar la devolució́n de este libro? (${loan.titulo})`,
     cancel: true,
     persistent: true,
   }).onOk(async () => {
@@ -342,14 +297,14 @@ const deleteBook = (book) => {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          N: book.N,
+          cod_isbn: loan.cod_isbn,
           session_user_name: localStorage.getItem("usuario"),
           session_user_role: localStorage.getItem("rol"),
         }),
       };
 
       // API URL
-      const url = process.env.API_URL + `libros.php`;
+      const url = process.env.API_URL + `prestamos.php`;
 
       const response = await fetch(url, requestOptions);
 
@@ -367,11 +322,11 @@ const deleteBook = (book) => {
       $q.notify({
         color: "positive",
         position: "top",
-        message: "Libro eliminado correctamente",
+        message: data.success,
         icon: "mdi-check",
       });
 
-      fetchLibros();
+      fetchPrestamos();
     } catch (error) {
       $q.notify({
         color: "negative",
@@ -383,7 +338,7 @@ const deleteBook = (book) => {
   });
 };
 
-const fetchLibros = async (page = 1) => {
+const fetchPrestamos = async (page = 1) => {
   try {
     const requestOptions = {
       method: "GET",
@@ -392,7 +347,7 @@ const fetchLibros = async (page = 1) => {
     // API URL
     let url =
       process.env.API_URL +
-      `libros.php?page=${page}&session_user_name=${localStorage.getItem(
+      `prestamos.php?page=${page}&session_user_name=${localStorage.getItem(
         "usuario"
       )}&session_user_role=${localStorage.getItem("rol")}`;
 
@@ -407,7 +362,7 @@ const fetchLibros = async (page = 1) => {
     });
     //CONTROL DE FECHA
     if (filter.date) {
-      params.set("dateQuery", "fecha_ing");
+      params.set("dateQuery", dateType.value);
     } else {
       params.delete("date");
     }
@@ -457,55 +412,15 @@ const fetchLibros = async (page = 1) => {
 };
 
 const handleRequest = (props) => {
-  fetchLibros(props.pagination.page);
-};
-
-const fetchSalas = async () => {
-  try {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    const response = await fetch(
-      process.env.API_URL +
-        `salas.php?session_user_name=${localStorage.getItem(
-          "usuario"
-        )}&session_user_role=${localStorage.getItem("rol")}`,
-      requestOptions
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    const data = await response.json();
-
-    for (const sala of data.data) {
-      salas.value.push({ label: sala.cod_sala, value: sala.cod_sala });
-    }
-
-    if (data.error) {
-      throw new Error(data.error);
-    }
-  } catch (error) {
-    $q.notify({
-      color: "negative",
-      position: "top",
-      message: error.message,
-      icon: "mdi-alert",
-    });
-  }
+  fetchPrestamos(props.pagination.page);
 };
 
 const clearFilters = () => {
   filter.titulo = "";
-  filter.autor = "";
-  filter.editorial = "";
-  filter.cutter = "";
-  filter.cod_sala = "";
-  filter.anio = "";
+  filter.cedula = "";
+  filter.cod_isbn = "";
   filter.date = null;
 };
 
-fetchSalas();
-fetchLibros();
+fetchPrestamos();
 </script>

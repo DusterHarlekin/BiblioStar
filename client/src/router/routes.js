@@ -75,7 +75,10 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: "", component: () => import("pages/countrys/CountryList.vue") },
-      { path: "nuevo", component: () => import("pages/countrys/CountryForm.vue") },
+      {
+        path: "nuevo",
+        component: () => import("pages/countrys/CountryForm.vue"),
+      },
       {
         path: "editar/:id",
         component: () => import("pages/countrys/CountryForm.vue"),
@@ -109,7 +112,10 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: "", component: () => import("pages/languages/LanguageList.vue") },
-      { path: "nuevo", component: () => import("pages/languages/LanguageForm.vue") },
+      {
+        path: "nuevo",
+        component: () => import("pages/languages/LanguageForm.vue"),
+      },
       {
         path: "editar/:id",
         component: () => import("pages/languages/LanguageForm.vue"),
@@ -117,6 +123,24 @@ const routes = [
       {
         path: "idioma/:id",
         component: () => import("pages/languages/LanguageView.vue"),
+      },
+    ],
+  },
+
+  {
+    path: "/prestamos",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      { path: "", component: () => import("pages/loans/LoanList.vue") },
+      { path: "nuevo", component: () => import("pages/loans/LoanForm.vue") },
+      {
+        path: "editar/:id",
+        component: () => import("pages/loans/LoanForm.vue"),
+      },
+      {
+        path: "libro/:id",
+        component: () => import("pages/loans/LoanView.vue"),
       },
     ],
   },

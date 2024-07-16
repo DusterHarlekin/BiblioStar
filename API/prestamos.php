@@ -14,15 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     if (isAuthorized($data, $conexion_bd, true, true)) {
 
         //Selección de id (ROGER)   
-        if (isset($_GET["cod_isbn"])) {
+        if (isset($_GET["cod_isbn"]) && !isset($_GET["page"])) {
 
             //VALIDACIÓN DE USUARIO
-
-            $sql_prestamo = mysqli_query($conexion_bd, "SELECT * FROM prestamos_lib WHERE cod_isbn=" . $_GET["cod_isbn"]);
+            $sql_prestamo = mysqli_query($conexion_bd, "SELECT * FROM lib_prestamos WHERE cod_isbn='" . $_GET["cod_isbn"] . "'");
 
             if (mysqli_num_rows($sql_prestamo) > 0) {
 
-                $sql_prestamo = mysqli_fetch_all($sql_prestamo, MYSQLI_ASSOC);
+                $prestamo = mysqli_fetch_all($sql_prestamo, MYSQLI_ASSOC);
                 echo json_encode($prestamo);
             } else {
 
@@ -38,6 +37,63 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
         exit();
     }
 }
+
+
+//PUT EDITAR
+if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
+
+    $data = json_decode(file_get_contents("php://input"));
+
+    if (isAuthorized($data, $conexion_bd, true)) {
+
+        if (trim($data->cod_isbn) == "") {
+            echo json_encode(["error" => "El campo clave no puede esta vacío"]);
+        } else {
+            validateFields($data);
+            //Limpieza de datos a almacenar MODIFICADOS
+
+            mysqli_query($conexion_bd, "UPDATE lib_prestamos SET cedula ='" . $data->cedula . "', observacion='" . $data->observacion .  "' WHERE cod_isbn ='" . $data->cod_isbn . "'");
+            echo json_encode([
+                "success" => "El préstamo se ha editado exitosamente",
+                "codigo" => $data->codigo,
+                "pais" => $data->pais,
+            ]);
+        }
+        exit();
+    } else {
+
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
+
+        exit();
+    }
+}
+
+//DELETE ELIMINAR
+
+if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
+
+    $data = json_decode(file_get_contents("php://input"));
+
+    if (isAuthorized($data, $conexion_bd, true)) {
+
+        if (trim($data->cod_isbn) == "") {
+
+            echo json_encode(["error" => "Los campos no pueden estar vacíos"]);
+        } else {
+
+            mysqli_query($conexion_bd, "DELETE FROM lib_prestamos WHERE cod_isbn='" . $data->cod_isbn . "'");
+
+            echo json_encode(["success" => "Devolución confirmada correctamente"]);
+        }
+        exit();
+    } else {
+
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
+
+        exit();
+    }
+}
+
 
 
 

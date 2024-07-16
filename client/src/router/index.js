@@ -44,7 +44,11 @@ export default route(function (/* { store, ssrContext } */) {
       $auth.rol === "guest" &&
       to.path !== "/libros"
     ) {
-      next("/libros");
+      if (to.path.includes("libro/")) {
+        next();
+      } else {
+        next("/libros");
+      }
     } else if (to.meta.requiresUnauth && $auth.isAuthenticated) {
       next("/");
     } else {

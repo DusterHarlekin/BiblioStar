@@ -52,7 +52,15 @@
 
           <q-list class="text-white" :class="drawerMiniState ? '' : 'q-pl-lg'">
             <div>
-              <q-item to="/resumen" clickable v-ripple>
+              <q-item
+                to="/resumen"
+                clickable
+                v-ripple
+                v-if="
+                  session_user_role === 'admin' ||
+                  session_user_role === 'librarian'
+                "
+              >
                 <q-item-section avatar>
                   <q-icon name="mdi-file-document-minus" />
                   <q-tooltip
@@ -90,7 +98,15 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/cotas" clickable v-ripple>
+              <q-item
+                to="/cotas"
+                clickable
+                v-ripple
+                v-if="
+                  session_user_role === 'admin' ||
+                  session_user_role === 'librarian'
+                "
+              >
                 <q-item-section avatar>
                   <q-icon name="mdi-bookmark" />
                   <q-tooltip
@@ -109,7 +125,15 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/salas" clickable v-ripple>
+              <q-item
+                to="/salas"
+                clickable
+                v-ripple
+                v-if="
+                  session_user_role === 'admin' ||
+                  session_user_role === 'librarian'
+                "
+              >
                 <q-item-section avatar>
                   <q-icon name="mdi-home-search" />
                   <q-tooltip
@@ -128,7 +152,15 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/paises" clickable v-ripple>
+              <q-item
+                to="/paises"
+                clickable
+                v-ripple
+                v-if="
+                  session_user_role === 'admin' ||
+                  session_user_role === 'librarian'
+                "
+              >
                 <q-item-section avatar>
                   <q-icon name="mdi-map-marker" />
                   <q-tooltip
@@ -147,7 +179,15 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/ciudades" clickable v-ripple>
+              <q-item
+                to="/ciudades"
+                clickable
+                v-ripple
+                v-if="
+                  session_user_role === 'admin' ||
+                  session_user_role === 'librarian'
+                "
+              >
                 <q-item-section avatar>
                   <q-icon name="mdi-home-city" />
                   <q-tooltip
@@ -166,7 +206,15 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/idiomas" clickable v-ripple>
+              <q-item
+                to="/idiomas"
+                clickable
+                v-ripple
+                v-if="
+                  session_user_role === 'admin' ||
+                  session_user_role === 'librarian'
+                "
+              >
                 <q-item-section avatar>
                   <q-icon name="mdi-book-open-blank-variant-outline" />
                   <q-tooltip
@@ -185,7 +233,15 @@
                 </q-item-section>
               </q-item>
 
-              <q-item to="/prestamos" clickable v-ripple>
+              <q-item
+                to="/prestamos"
+                clickable
+                v-ripple
+                v-if="
+                  session_user_role === 'admin' ||
+                  session_user_role === 'librarian'
+                "
+              >
                 <q-item-section avatar>
                   <q-icon name="mdi-account-clock" />
                   <q-tooltip
@@ -213,9 +269,17 @@
           :class="drawerMiniState ? '' : 'q-pl-lg'"
         >
           <div>
-            <q-item to="/reportes" clickable v-ripple>
+            <q-item
+              to="/reportes"
+              clickable
+              v-ripple
+              v-if="
+                session_user_role === 'admin' ||
+                session_user_role === 'librarian'
+              "
+            >
               <q-item-section avatar>
-                <q-icon name="mdi-file-pdf" />
+                <q-icon name="mdi-printer" />
                 <q-tooltip
                   v-if="drawerMiniState"
                   anchor="center right"
@@ -232,7 +296,15 @@
               >
             </q-item>
 
-            <q-item to="/configuracion" clickable v-ripple>
+            <q-item
+              to="/configuracion"
+              clickable
+              v-ripple
+              v-if="
+                session_user_role === 'admin' ||
+                session_user_role === 'librarian'
+              "
+            >
               <q-item-section avatar>
                 <q-icon name="mdi-cog" />
                 <q-tooltip
@@ -320,6 +392,7 @@ const authStore = useAuthStore();
 const name = authStore.nombre;
 const role = authStore.showRol;
 
+const session_user_role = authStore.rol;
 defineOptions({
   name: "MainLayout",
 });

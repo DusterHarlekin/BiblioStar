@@ -42,11 +42,11 @@ export const useAuthStore = defineStore("auth", {
         throw new Error(data.error);
       }
 
-      localStorage.setItem("nombre", data[0].nombre);
+      localStorage.setItem("nombre", data[0].nombre + " " + data[0].apellido);
       localStorage.setItem("usuario", data[0].usuario);
       localStorage.setItem("rol", data[0].rol);
 
-      this.nombre = data[0].nombre;
+      this.nombre = data[0].nombre + " " + data[0].apellido;
       this.usuario = data[0].usuario;
       this.rol = data[0].rol;
 
