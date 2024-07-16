@@ -6,8 +6,9 @@ include "utils/security.php";
 
 $conexion_bd = connect();
 
-//Prueba consulta de ciudad
+//Prueba consulta de idioma
 $data = json_decode(json_encode($_GET));
+
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     if (isAuthorized($data, $conexion_bd, true, true)) {
 
@@ -55,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
             mysqli_query($conexion_bd, "UPDATE idiomas SET descripcion ='" . $data->descripcion . "' WHERE cod_idioma ='" . $data->cod_idioma . "'");
             echo json_encode([
-                "success" => "datos actualizados",
+                "success" => "El idioma se ha editado exitosamente",
                 "cod_idioma" => $data->cod_idioma,
                 "descripcion" => $data->descripcion
             ]);
@@ -79,12 +80,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 
         if (trim($data->cod_idioma) == "") {
 
-            echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+            echo json_encode(["error" => "Los campos no pueden estar vacíos"]);
         } else {
 
             mysqli_query($conexion_bd, "DELETE FROM idiomas WHERE cod_idioma='" . $data->cod_idioma . "'");
 
-            echo json_encode(["success" => "La sala fue eliminada de forma exitosa"]);
+            echo json_encode(["success" => "El idioma fue eliminado exitosamente"]);
         }
         exit();
     } else {
@@ -103,11 +104,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     if (isAuthorized($data, $conexion_bd, true)) {
         validateFields($data);
         if (trim($data->cod_idioma) == "") {
-            echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+            echo json_encode(["error" => "Los campos no pueden estar vacíos"]);
         } else {
             mysqli_query($conexion_bd, "INSERT INTO `idiomas`(`cod_idioma`, `descripcion`) VALUES ('$data->cod_idioma','$data->descripcion')");
             echo json_encode([
-                "success" => "datos registrados",
+                "success" => "El idioma se ha registrado exitosamente",
                 "cod_idioma" => $data->cod_idioma,
                 "descripcion" => $data->descripcion
             ]);

@@ -75,6 +75,15 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: "", component: () => import("pages/countrys/CountryList.vue") },
+      { path: "nuevo", component: () => import("pages/countrys/CountryForm.vue") },
+      {
+        path: "editar/:id",
+        component: () => import("pages/countrys/CountryForm.vue"),
+      },
+      {
+        path: "pais/:id",
+        component: () => import("pages/countrys/CountryView.vue"),
+      },
     ],
   },
   {
@@ -83,6 +92,15 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: "", component: () => import("pages/cities/CityList.vue") },
+      { path: "nuevo", component: () => import("pages/cities/CityForm.vue") },
+      {
+        path: "editar/:id",
+        component: () => import("pages/cities/CityForm.vue"),
+      },
+      {
+        path: "ciudad/:id",
+        component: () => import("pages/cities/CityView.vue"),
+      },
     ],
   },
   {
@@ -91,6 +109,15 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: "", component: () => import("pages/languages/LanguageList.vue") },
+      { path: "nuevo", component: () => import("pages/languages/LanguageForm.vue") },
+      {
+        path: "editar/:id",
+        component: () => import("pages/languages/LanguageForm.vue"),
+      },
+      {
+        path: "idioma/:id",
+        component: () => import("pages/languages/LanguageView.vue"),
+      },
     ],
   },
 

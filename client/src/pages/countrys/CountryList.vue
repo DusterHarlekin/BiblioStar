@@ -15,6 +15,7 @@
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
+          to="/paises/nuevo"
         />
       </div>
     </div>
@@ -92,10 +93,22 @@
     >
       <template #body-cell-actions="props">
         <q-td :props="props">
-          <q-btn flat round icon="mdi-eye" color="positive">
+          <q-btn
+            flat
+            round
+            icon="mdi-eye"
+            color="positive"
+            :to="`/paises/pais/${props.row.codigo}`"
+          >
             <q-tooltip>Ver</q-tooltip>
           </q-btn>
-          <q-btn flat round icon="mdi-lead-pencil" color="accent">
+          <q-btn
+            flat
+            round
+            icon="mdi-lead-pencil"
+            color="accent"
+            :to="`/paises/editar/${props.row.codigo}`"
+          >
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
           <q-btn
@@ -243,6 +256,7 @@ const fetchPaises = async (page = 1) => {
     const data = await response.json();
 
     paises.value = data.data ? data.data : [];
+    console.log(data);
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total

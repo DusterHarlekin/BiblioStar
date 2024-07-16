@@ -6,7 +6,7 @@ include "utils/pagination.php";
 
 $conexion_bd = connect();
 
-//Prueba consulta de ciudad
+//Prueba consulta de libro
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     $data = json_decode(json_encode($_GET));
     if (isAuthorized($data, $conexion_bd, true, true)) {
@@ -142,7 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
 
         if (trim($data->N) == "") {
 
-            echo json_encode(["error" => "los campos no pueden estar vacíos"]);
+            echo json_encode(["error" => "Los campos no pueden estar vacíos"]);
         } else {
 
             mysqli_query($conexion_bd, "DELETE FROM libros WHERE N=" . $data->N);

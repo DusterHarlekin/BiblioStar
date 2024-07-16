@@ -19,6 +19,7 @@
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
+          to="/idiomas/nuevo"
         />
       </div>
     </div>
@@ -96,10 +97,22 @@
     >
       <template #body-cell-actions="props">
         <q-td :props="props">
-          <q-btn flat round icon="mdi-eye" color="positive">
+          <q-btn
+            flat
+            round
+            icon="mdi-eye"
+            color="positive"
+            :to="`/idiomas/idioma/${props.row.cod_idioma}`"
+          >
             <q-tooltip>Ver</q-tooltip>
           </q-btn>
-          <q-btn flat round icon="mdi-lead-pencil" color="accent">
+          <q-btn
+            flat
+            round
+            icon="mdi-lead-pencil"
+            color="accent"
+            :to="`/idiomas/editar/${props.row.cod_idioma}`"
+          >
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
           <q-btn
