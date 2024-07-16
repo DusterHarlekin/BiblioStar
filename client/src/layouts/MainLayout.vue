@@ -215,7 +215,7 @@
           <div>
             <q-item to="/reportes" clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="mdi-bug" />
+                <q-icon name="mdi-file-pdf" />
                 <q-tooltip
                   v-if="drawerMiniState"
                   anchor="center right"
