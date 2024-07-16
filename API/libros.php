@@ -178,7 +178,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
                 $data->cutter = $cota[0]["cutter"];
                 $data->volumen = $cota[0]["volumen"];
                 $data->ejemplar = $cota[0]["ejemplar"];
-                $data->fecha_ing = $cota[0]["fecha_ing"];
             } else {
 
                 echo json_encode(["error" => "Error al obtener cota existente"]);
@@ -206,9 +205,13 @@ $data = json_decode(json_encode($_GET));
 if (isAuthorized($data, $conexion_bd, true, true)) {
     $query = filtrarBusqueda($_GET, 'libros');
 
+    // echo json_encode(["success" => 1, "query" => $query]);
+    // exit();
+
     $sql_libros = mysqli_query($conexion_bd, $query);
 
     $resData = paginar($sql_libros, $_GET, 'libros');
+
 
     $sql_libros = mysqli_query($conexion_bd, $resData["query"]);
 
