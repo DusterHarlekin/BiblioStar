@@ -53,7 +53,7 @@
           <q-list class="text-white" :class="drawerMiniState ? '' : 'q-pl-lg'">
             <div>
               <q-item
-                to="/resumen"
+                to="/"
                 clickable
                 v-ripple
                 v-if="

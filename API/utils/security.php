@@ -23,7 +23,6 @@ function isAuthorized($data, $conexion_bd, $isLibAuth = false, $isGuestAuth = fa
 {
     if (!isset($data->session_user_name) || trim($data->session_user_name) == "" || !isset($data->session_user_role) || trim($data->session_user_role) == "") {
 
-
         echo json_encode(["error" => "invalid session"]);
 
         exit();

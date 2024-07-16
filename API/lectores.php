@@ -14,11 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 
 
         //Selección de id (ROGER)
-        if (isset($_GET["cedula"]) && !isset($_GET["page"])) {
+        if (isset($_GET["N"]) && !isset($_GET["page"])) {
 
             //VALIDACIÓN DE USUARIO
 
-            $sql_lectores = mysqli_query($conexion_bd, "SELECT * FROM lect_prestamos WHERE cedula ='" . $_GET["cedula"] . "'");
+            $sql_lectores = mysqli_query($conexion_bd, "SELECT * FROM lect_prestamos WHERE N ='" . $_GET["N"] . "'");
 
             if (mysqli_num_rows($sql_lectores) > 0) {
 
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
             validateFields($data);
 
 
-            mysqli_query($conexion_bd, "UPDATE lect_prestamos SET nombre =" . $data->nombre . ", apellido =" . $data->apellido . ", correo =" . $data->correo . ", direccion =" . $data->direccion . ", telefono =" . $data->telefono . ", sexo =" . $data->sexo . ", edad =" . $data->edad . " WHERE cedula ='" . $data->cedula . "'");
+            mysqli_query($conexion_bd, "UPDATE `lect_prestamos` SET `cedula` = '$data->cedula', `nombre` = '$data->nombre', `apellido`= '$data->apellido', `direccion` = '$data->direccion', `telefono` = '$data->telefono', `correo` = '$data->correo', `edad` = '$data->edad', `sexo` = '$data->sexo' WHERE `N` = '$data->N'");
             echo json_encode([
                 "success" => "El lector se ha editado exitosamente",
                 "cedula" => $data->cedula,
@@ -83,12 +83,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
     if (isAuthorized($data, $conexion_bd, true)) {
 
 
-        if (trim($data->cedula) == "") {
+        if (trim($data->N) == "") {
 
             echo json_encode(["error" => "Los campos no pueden estar vacíos"]);
         } else {
 
-            mysqli_query($conexion_bd, "DELETE FROM lect_prestamos WHERE cedula='" . $data->cedula . "'");
+            mysqli_query($conexion_bd, "DELETE FROM lect_prestamos WHERE N='" . $data->N . "'");
 
             echo json_encode(["success" => "El lector fue eliminado exitosamente"]);
         }
