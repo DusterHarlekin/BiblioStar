@@ -91,6 +91,66 @@
                   />
                 </div>
               </div>
+              <div
+                class="row items-center q-gutter-md q-mt-md"
+                v-show="filterExpanded"
+              >
+                <q-input
+                  v-model="filter.anio"
+                  outlined
+                  dense
+                  debounce="400"
+                  label="Año de publicación"
+                />
+
+                <q-item-label class="q-ml-lg">Fecha de ingreso:</q-item-label>
+                <q-btn
+                  color="primary"
+                  flat
+                  icon="mdi-calendar"
+                  class="cursor-pointer q-pa-sm q-ml-xs"
+                  rounded
+                >
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date mask="DD/MM/YYYY" range v-model="filter.date">
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-btn>
+                <q-item-label caption class="q-ml-xs">
+                  <span
+                    caption
+                    v-if="filter.date && filter.date.from"
+                    class="text-weight-medium"
+                    >Desde
+                    {{
+                      filter.date.from && filter.date.to
+                        ? filter.date.from + " Hasta " + filter.date.to
+                        : filter.date.from
+                    }}
+                  </span>
+
+                  <span
+                    caption
+                    v-else-if="filter.date && !filter.date.from"
+                    class="text-weight-medium"
+                    >{{ filter.date }}</span
+                  >
+
+                  <span caption v-else class="text-weight-medium">Siempre</span>
+                </q-item-label>
+              </div>
             </div>
           </div>
         </div>
@@ -175,7 +235,6 @@ import { useQuasar } from "quasar";
 
 const $q = useQuasar();
 
-const $router = useRouter();
 //VALORES INICIALES
 const pagination = ref({
   page: 1,
@@ -189,6 +248,8 @@ const filter = reactive({
   editorial: "",
   cota_completa: "",
   cod_sala: "",
+  date: "",
+  anio: "",
 });
 
 const salas = ref([]);
@@ -321,13 +382,27 @@ const fetchLibros = async (page = 1) => {
       )}&session_user_role=${localStorage.getItem("rol")}`;
 
     let params = new URLSearchParams(filter);
+
     let keysForDel = [];
     params.forEach((value, key) => {
-      if (value.trim() == "") {
+      if (value == null || value.trim() == "") {
+        console.log(key, value);
         keysForDel.push(key);
       }
     });
+    //CONTROL DE FECHA
+    if (filter.date) {
+      params.set("dateQuery", "fecha_ing");
+    } else {
+      params.delete("date");
+    }
 
+    if (filter.date && filter.date.from && filter.date.to) {
+      params.set("date_from", filter.date.from);
+      params.set("date_to", filter.date.to);
+      params.delete("date");
+    }
+    //ELIMINAR KEYS VACIOS
     keysForDel.forEach((key) => {
       params.delete(key);
     });
@@ -341,6 +416,7 @@ const fetchLibros = async (page = 1) => {
     const data = await response.json();
 
     libros.value = data.data ? data.data : [];
+    console.log(data);
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total
@@ -411,6 +487,7 @@ const clearFilters = () => {
   filter.editorial = "";
   filter.cutter = "";
   filter.cod_sala = "";
+  filter.date = null;
 };
 
 fetchSalas();
