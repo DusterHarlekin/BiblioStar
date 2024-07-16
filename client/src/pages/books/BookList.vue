@@ -487,6 +487,7 @@ const clearFilters = () => {
   filter.editorial = "";
   filter.cutter = "";
   filter.cod_sala = "";
+  filter.anio = "";
   filter.date = null;
 };
 

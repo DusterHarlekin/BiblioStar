@@ -10,7 +10,7 @@ header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Allow-Origin");
 
-error_reporting(0);
+date_default_timezone_set('America/Caracas');
 function connect()
 {
 
