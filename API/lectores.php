@@ -50,15 +50,20 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
             echo json_encode(["error" => "El campo clave no puede esta vacío"]);
         } else {
             validateFields($data);
-            //Limpieza de datos a almacenar MODIFICADOS
-            $data->descripcion = secureData($data->descripcion);
 
 
-            mysqli_query($conexion_bd, "UPDATE lect_prestamos SET descripcion ='" . $data->descripcion . "' WHERE cedula ='" . $data->cedula . "'");
+            mysqli_query($conexion_bd, "UPDATE lect_prestamos SET nombre =" . $data->nombre . ", apellido =" . $data->apellido . ", correo =" . $data->correo . ", direccion =" . $data->direccion . ", telefono =" . $data->telefono . ", sexo =" . $data->sexo . ", edad =" . $data->edad . " WHERE cedula ='" . $data->cedula . "'");
             echo json_encode([
                 "success" => "El lector se ha editado exitosamente",
                 "cedula" => $data->cedula,
-                "descripcion" => $data->descripcion
+                "descripcion" => $data->descripcion,
+                "sexo" => $data->sexo,
+                "edad" => $data->edad,
+                "telefono" => $data->telefono,
+                "direccion" => $data->direccion,
+                "correo" => $data->correo,
+                "apellido" => $data->apellido,
+                "nombre" => $data->nombre
             ]);
         }
         exit();
