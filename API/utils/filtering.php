@@ -1,5 +1,5 @@
 <?php
-include "../utils/security.php";
+include "security.php";
 //error_reporting(0);
 function filtrarBusqueda($getArray, $table, $pagQuery = null)
 {

@@ -9,7 +9,7 @@
   >
     <q-card class="q-pa-md" style="width: 500px; max-width: 100vw">
       <q-card-section>
-        <div class="text-h6">{{ isEditForm ? "Editar" : "Nuevo" }} Lector</div>
+        <div class="text-h6">{{ isEditForm ? "Editar" : "Nuevo" }} Usuario</div>
       </q-card-section>
 
       <q-form @submit="submitForm">
@@ -29,24 +29,34 @@
             class="required"
           />
 
-          <q-input v-model="record.edad" label="Edad" class="required" />
-
-          <q-input v-model="record.sexo" label="sexo" class="required" />
+          <q-input v-model="record.usuario" label="Usuario" class="required" />
 
           <q-input
-            v-model="record.telefono"
-            label="Teléfono"
-            class="required"
-          />
+            v-model="record.clave"
+            label="Contraseña"
+            :type="isPwd ? 'password' : 'text'"
+          >
+            <template v-slot:append>
+              <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+              />
+            </template>
+          </q-input>
 
-          <q-input v-model="record.correo" label="Correo" class="required" />
-
-          <q-input
-            v-model="record.direccion"
-            label="Dirección"
-            class="required"
-            type="textarea"
-          />
+          <div class="col-auto">
+            <q-select
+              v-model="record.rol"
+              map-options
+              emit-value
+              :options="[
+                { label: 'Administrador', value: 'admin' },
+                { label: 'Bibliotecario', value: 'librarian' },
+              ]"
+              label="Rol"
+            />
+          </div>
         </q-card-section>
 
         <q-card-actions>
@@ -66,7 +76,7 @@
 
 <script setup>
 import { useDialogPluginComponent, useQuasar } from "quasar";
-import { reactive, toRefs } from "vue";
+import { reactive, ref, toRefs } from "vue";
 
 defineEmits([...useDialogPluginComponent.emits]);
 
@@ -79,26 +89,24 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  creatingFromLoan: {
-    type: Boolean,
-    default: false,
-  },
   cedula: {
     type: String,
     default: null,
   },
 });
 
+const isPwd = ref(true);
+
 const state = reactive({
   record: {
     cedula: "",
     nombre: "",
     apellido: "",
-    edad: "",
-    sexo: "",
-    telefono: "",
-    correo: "",
-    direccion: "",
+    usuario: "",
+    clave: "",
+    rol: "",
+
+    request: "Register",
 
     session_user_name: localStorage.getItem("usuario"),
     session_user_role: localStorage.getItem("rol"),
@@ -118,7 +126,7 @@ const syncChanges = async () => {
       // API URL
       const url =
         process.env.API_URL +
-        `lectores.php?cedula=${
+        `auth/auth.php?cedula=${
           props.cedula
         }&session_user_name=${localStorage.getItem(
           "usuario"
@@ -134,8 +142,10 @@ const syncChanges = async () => {
       if (data.error) {
         throw new Error(data.error);
       }
-      state.record = data.data[0];
 
+      state.record = data[0];
+
+      state.record.clave = "";
       state.record.session_user_name = localStorage.getItem("usuario");
       state.record.session_user_role = localStorage.getItem("rol");
     }
@@ -153,8 +163,6 @@ const syncChanges = async () => {
 
 const submitForm = async () => {
   try {
-    console.log(state.record);
-
     const requestOptions = {
       method: props.isEditForm ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
@@ -162,7 +170,7 @@ const submitForm = async () => {
     };
 
     const response = await fetch(
-      process.env.API_URL + "lectores.php",
+      process.env.API_URL + "auth/auth.php",
       requestOptions
     );
     if (!response.ok) {
@@ -179,9 +187,7 @@ const submitForm = async () => {
       icon: "mdi-checkbox-marked-circle",
     });
 
-    onDialogOK({
-      reader: state.record,
-    });
+    onDialogOK({});
   } catch (error) {
     $q.notify({
       color: "negative",
@@ -192,11 +198,11 @@ const submitForm = async () => {
   }
 };
 
-const onCancelClick = () => onDialogCancel();
-
 if (props.isEditForm) {
   syncChanges();
 }
+
+const onCancelClick = () => onDialogCancel();
 
 const { record, isLoading } = toRefs(state);
 </script>

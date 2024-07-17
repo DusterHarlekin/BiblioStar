@@ -296,30 +296,65 @@
               >
             </q-item>
 
+            <q-expansion-item
+              icon="mdi-cog"
+              label="Configuración"
+              group="config"
+              dense-toggle
+              expand-icon-class="text-white"
+              style="font-size: 1.5em"
+              :content-inset-level="0.5"
+              v-if="!drawerMiniState && session_user_role === 'admin'"
+            >
+              <q-item to="/configuracion/info-general" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="mdi-file-eye" />
+                </q-item-section>
+
+                <q-item-section> Información </q-item-section>
+              </q-item>
+
+              <q-item to="/configuracion/usuarios" clickable v-ripple>
+                <q-item-section avatar>
+                  <q-icon name="mdi-account" />
+                </q-item-section>
+
+                <q-item-section> Usuarios </q-item-section>
+              </q-item>
+            </q-expansion-item>
+
             <q-item
-              to="/configuracion"
               clickable
               v-ripple
-              v-if="
-                session_user_role === 'admin' ||
-                session_user_role === 'librarian'
-              "
+              v-else-if="session_user_role === 'admin'"
             >
-              <q-item-section avatar>
+              <q-item-section
+                avatar
+                class="row items-center"
+                style="width: 100%"
+              >
                 <q-icon name="mdi-cog" />
-                <q-tooltip
-                  v-if="drawerMiniState"
-                  anchor="center right"
-                  self="center left"
-                  :offset="[22, 10]"
-                  class="text-caption bg-primary shadow-1"
-                >
-                  Configuración
-                </q-tooltip>
-              </q-item-section>
+                <q-menu class="bg-dark">
+                  <q-list>
+                    <q-item to="/configuracion/info-general" clickable v-ripple>
+                      <q-item>
+                        <q-item-section avatar>
+                          <q-icon name="mdi-file-eye" />
+                        </q-item-section>
+                        <q-item-section> Información </q-item-section>
+                      </q-item>
+                    </q-item>
 
-              <q-item-section style="font-size: 1.5em">
-                Configuración
+                    <q-item to="/configuracion/usuarios" clickable v-ripple>
+                      <q-item>
+                        <q-item-section avatar>
+                          <q-icon name="mdi-account" />
+                        </q-item-section>
+                        <q-item-section> Usuarios </q-item-section>
+                      </q-item>
+                    </q-item>
+                  </q-list>
+                </q-menu>
               </q-item-section>
             </q-item>
           </div>
@@ -421,7 +456,8 @@ const logout = () => {
 </script>
 \
 <style scoped lang="scss">
-.q-item {
+.q-item,
+.q-expansion-item {
   color: #b6b6b6;
 }
 

@@ -156,6 +156,21 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/configuracion",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: "info-general",
+        component: () => import("pages/config/info/GeneralInfo.vue"),
+      },
+      {
+        path: "usuarios",
+        component: () => import("pages/config/users/UserList.vue"),
+      },
+    ],
+  },
 
   // Always leave this as last one,
   // but you can also remove it

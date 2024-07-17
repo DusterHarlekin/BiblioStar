@@ -2,7 +2,7 @@
 
 include "conexion.php";
 include "utils/pagination.php";
-include "utils/security.php";
+
 
 $conexion_bd = connect();
 

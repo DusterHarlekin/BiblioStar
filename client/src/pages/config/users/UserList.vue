@@ -5,26 +5,17 @@
     >
       <div class="col-md-6">
         <div class="row q-gutter-sm items-center">
-          <q-btn
-            icon="mdi-chevron-left"
-            flat
-            color="primary"
-            padding="none"
-            to="/prestamos"
-            size="lg"
-            class="col-md-1 q-mr-sm"
-          />
-          <q-icon name="mdi-library" size="lg" color="primary" />
-          <div class="text-h4 text-weight-medium font-title">Lectores</div>
+          <q-icon name="mdi-account" size="lg" color="primary" />
+          <div class="text-h4 text-weight-medium font-title">Usuarios</div>
         </div>
       </div>
       <div class="col-auto">
         <q-btn
-          label="Nuevo lector"
+          label="Nuevo Usuario"
           icon="mdi-plus-circle"
           color="secondary"
           text-color="white"
-          @click="createReader"
+          @click="createUser"
         />
       </div>
     </div>
@@ -47,6 +38,33 @@
                     label="Cedula"
                   />
                 </div>
+
+                <div class="col-auto">
+                  <q-input
+                    v-model="filter.usuario"
+                    outlined
+                    dense
+                    debounce="400"
+                    label="Usuario"
+                  />
+                </div>
+
+                <div class="col-auto">
+                  <q-select
+                    v-model="filter.rol"
+                    style="min-width: 140px"
+                    map-options
+                    dense
+                    outlined
+                    emit-value
+                    :options="[
+                      { label: 'Administrador', value: 'admin' },
+                      { label: 'Bibliotecario', value: 'librarian' },
+                    ]"
+                    label="Rol"
+                  />
+                </div>
+
                 <div class="col-auto">
                   <q-input
                     v-model="filter.nombre"
@@ -88,7 +106,7 @@
             icon="mdi-reload"
             color="primary"
             class="q-ml-sm"
-            @click="fetchLectores()"
+            @click="fetchUsuarios()"
           >
             <q-tooltip> Actualizar tabla </q-tooltip>
           </q-btn>
@@ -101,11 +119,11 @@
       :dense="$q.screen.lt.lg"
       bordered
       v-model:pagination="pagination"
-      :rows="lectores"
+      :rows="usuarios"
       :columns="columns"
       :filter="filter"
       :loading="isloading"
-      row-key="N"
+      row-key="cedula"
       :rows-per-page-options="[]"
       @request="handleRequest"
     >
@@ -114,27 +132,19 @@
           <q-btn
             flat
             round
-            icon="mdi-eye"
-            color="positive"
-            :to="`/lectores/lector/${props.row.N}`"
-          >
-            <q-tooltip>Ver</q-tooltip>
-          </q-btn>
-          <q-btn
-            flat
-            round
             icon="mdi-lead-pencil"
             color="accent"
-            @click="editReader(props.row)"
+            @click="editUser(props.row)"
           >
             <q-tooltip>Editar</q-tooltip>
           </q-btn>
           <q-btn
+            v-if="props.row.usuario != authStore.usuario"
             flat
             round
             icon="mdi-delete-variant"
             color="red"
-            @click="deleteReader(props.row)"
+            @click="deleteUser(props.row)"
           >
             <q-tooltip>Eliminar</q-tooltip>
           </q-btn>
@@ -146,9 +156,11 @@
 
 <script setup>
 import { reactive, ref } from "vue";
-
+import UserForm from "components/users/UserForm.vue";
 import { useQuasar } from "quasar";
-import ReaderForm from "components/readers/ReaderForm.vue";
+import { useAuthStore } from "src/stores/auth/auth";
+
+const authStore = useAuthStore();
 
 const $q = useQuasar();
 
@@ -161,32 +173,30 @@ const pagination = ref({
 
 const filter = reactive({
   cedula: "",
+  usuario: "",
+  rol: "",
   nombre: "",
   apellido: "",
-  direccion: "",
-  telefono: "",
-  correo: "",
-  edad: "",
-  sexo: "",
 });
 
-const lectores = ref([]);
+const usuarios = ref([]);
 const isloading = ref(false);
 
 // Q-Table columns
 const columns = [
   {
-    name: "N",
-    label: "Número",
-    field: "N",
+    name: "usuario",
+    label: "Usuario",
+    field: "usuario",
     align: "left",
   },
   {
     name: "cedula",
-    label: "Cedula",
+    label: "Cédula",
     field: "cedula",
     align: "left",
   },
+
   {
     name: "nombre",
     label: "Nombre",
@@ -200,30 +210,20 @@ const columns = [
     align: "left",
   },
   {
-    name: "telefono",
-    label: "Teléfono",
-    field: "telefono",
+    name: "rol",
+    label: "Rol",
+    field: (row) => {
+      switch (row.rol) {
+        case "admin":
+          return "Administrador";
+        case "librarian":
+          return "Bibliotecario";
+        default:
+          return "--";
+      }
+    },
     align: "left",
   },
-  {
-    name: "correo",
-    label: "Correo",
-    field: "correo",
-    align: "left",
-  },
-  {
-    name: "edad",
-    label: "Edad",
-    field: "edad",
-    align: "left",
-  },
-  {
-    name: "sexo",
-    label: "Sexo",
-    field: "sexo",
-    align: "left",
-  },
-
   {
     name: "actions",
     label: "Acciones",
@@ -231,10 +231,10 @@ const columns = [
   },
 ];
 
-const deleteReader = (reader) => {
+const deleteUser = (user) => {
   $q.dialog({
-    title: "Eliminar lector",
-    message: `¿Estás seguro de que deseas eliminar este lector? (${reader.nombre} ${reader.apellido})`,
+    title: "Eliminar país",
+    message: `¿Estás seguro de que deseas eliminar este usuario? (${user.usuario})`,
     cancel: true,
     persistent: true,
   }).onOk(async () => {
@@ -243,14 +243,14 @@ const deleteReader = (reader) => {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          N: reader.N,
+          cedula: user.cedula,
           session_user_name: localStorage.getItem("usuario"),
           session_user_role: localStorage.getItem("rol"),
         }),
       };
 
       // API URL
-      const url = process.env.API_URL + `lectores.php`;
+      const url = process.env.API_URL + `auth/auth.php`;
 
       console.log(requestOptions.body);
       const response = await fetch(url, requestOptions);
@@ -268,11 +268,11 @@ const deleteReader = (reader) => {
       $q.notify({
         color: "positive",
         position: "top",
-        message: "Lector eliminado correctamente",
+        message: data.success,
         icon: "mdi-check",
       });
 
-      fetchLectores();
+      fetchUsuarios();
     } catch (error) {
       $q.notify({
         color: "negative",
@@ -284,7 +284,7 @@ const deleteReader = (reader) => {
   });
 };
 
-const fetchLectores = async (page = 1) => {
+const fetchUsuarios = async (page = 1) => {
   try {
     const requestOptions = {
       method: "GET",
@@ -293,7 +293,7 @@ const fetchLectores = async (page = 1) => {
     // API URL
     let url =
       process.env.API_URL +
-      `lectores.php?page=${page}&session_user_name=${localStorage.getItem(
+      `auth/auth.php?page=${page}&session_user_name=${localStorage.getItem(
         "usuario"
       )}&session_user_role=${localStorage.getItem("rol")}`;
 
@@ -317,7 +317,8 @@ const fetchLectores = async (page = 1) => {
     const response = await fetch(url, requestOptions);
     const data = await response.json();
 
-    lectores.value = data.data ? data.data : [];
+    usuarios.value = data.data ? data.data : [];
+    console.log(data);
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total
@@ -343,32 +344,34 @@ const fetchLectores = async (page = 1) => {
 };
 
 const handleRequest = (props) => {
-  fetchLectores(props.pagination.page);
+  fetchUsuarios(props.pagination.page);
 };
 
 const clearFilters = () => {
+  filter.usuario = "";
   filter.cedula = "";
+  filter.rol = "";
   filter.nombre = "";
   filter.apellido = "";
 };
 
-const createReader = async () => {
+const createUser = async () => {
   $q.dialog({
-    component: ReaderForm,
-    componentProps: { creatingFromLoan: false, isEditForm: false },
-  }).onOk(async (payload) => {
-    fetchLectores();
+    component: UserForm,
+    componentProps: { isEditForm: false },
+  }).onOk(async () => {
+    await fetchUsuarios();
   });
 };
 
-const editReader = async (reader) => {
+const editUser = async (user) => {
   $q.dialog({
-    component: ReaderForm,
-    componentProps: { isEditForm: true, cedula: reader.cedula },
-  }).onOk(async (payload) => {
-    await fetchLectores();
+    component: UserForm,
+    componentProps: { isEditForm: true, cedula: user.cedula },
+  }).onOk(async () => {
+    await fetchUsuarios();
   });
 };
 
-fetchLectores();
+fetchUsuarios();
 </script>
