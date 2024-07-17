@@ -319,7 +319,6 @@ const submitForm = async () => {
     });
   }
 };
-
 const createReader = async () => {
   $q.dialog({
     component: ReaderForm,

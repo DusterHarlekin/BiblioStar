@@ -144,6 +144,18 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/lectores",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      { path: "", component: () => import("pages/readers/ReaderList.vue") },
+      {
+        path: "lector/:id",
+        component: () => import("pages/readers/ReaderView.vue"),
+      },
+    ],
+  },
 
   // Always leave this as last one,
   // but you can also remove it

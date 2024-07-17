@@ -7,14 +7,14 @@
           flat
           color="primary"
           padding="none"
-          to="/cotas"
+          to="/lectores"
           size="lg"
           class="q-mr-sm"
         />
       </div>
-      <q-icon name="mdi-bookmark" size="md" color="grey-9" />
+      <q-icon name="mdi-account-box-outline" size="md" color="grey-9" />
       <div class="text-h5 text-weight-medium font-title text-grey-9">
-        Cota "{{ currentQuote.cota }}"
+        Lector "{{ currentReader.nombre }} {{ currentReader.apellido }}"
       </div>
     </div>
 
@@ -24,48 +24,59 @@
           <q-list>
             <q-item>
               <q-item-section>
-                <q-item-label caption>Cota completa</q-item-label>
-                <q-item-label>{{ currentQuote.cota_completa }}</q-item-label>
+                <q-item-label caption>Cédula</q-item-label>
+                <q-item-label>{{ currentReader.cedula }}</q-item-label>
               </q-item-section>
             </q-item>
 
             <q-item>
               <q-item-section>
-                <q-item-label caption>Código ISBN</q-item-label>
-                <q-item-label>{{ currentQuote.cod_isbn }}</q-item-label>
+                <q-item-label caption>Nombre</q-item-label>
+                <q-item-label>{{ currentReader.nombre }}</q-item-label>
               </q-item-section>
             </q-item>
 
             <q-item>
               <q-item-section>
-                <q-item-label caption>Cutter</q-item-label>
-                <q-item-label>{{ currentQuote.cutter }}</q-item-label>
+                <q-item-label caption>Apellido</q-item-label>
+                <q-item-label>{{ currentReader.apellido }}</q-item-label>
               </q-item-section>
             </q-item>
 
             <q-item>
               <q-item-section>
-                <q-item-label caption>Volumen</q-item-label>
-                <q-item-label>{{ currentQuote.volumen }}</q-item-label>
+                <q-item-label caption>Dirección</q-item-label>
+                <q-item-label>{{ currentReader.direccion }}</q-item-label>
               </q-item-section>
             </q-item>
 
             <q-item>
               <q-item-section>
-                <q-item-label caption>Ejemplares</q-item-label>
-                <q-item-label>{{ currentQuote.ejemplar }}</q-item-label>
+                <q-item-label caption>Teléfono</q-item-label>
+                <q-item-label>{{ currentReader.telefono }}</q-item-label>
               </q-item-section>
             </q-item>
 
             <q-item>
               <q-item-section>
-                <q-item-label caption>Fecha de ingreso</q-item-label>
-                <q-item-label>{{ currentQuote.fecha_ing }}</q-item-label>
+                <q-item-label caption>Correo</q-item-label>
+                <q-item-label>{{ currentReader.correo }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label caption>Edad</q-item-label>
+                <q-item-label>{{ currentReader.edad }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label caption>Sexo</q-item-label>
+                <q-item-label>{{ currentReader.sexo }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-12"></div>
       </div>
     </q-card>
   </q-page>
@@ -78,20 +89,21 @@ import { useRoute } from "vue-router";
 
 const $route = useRoute();
 
-const quoteId = $route.params.id;
-const currentQuote = ref({
+const readerId = $route.params.id;
+const currentReader = ref({
   N: "",
-  cota: "",
-  cod_isbn: "",
-  cutter: "",
-  cota_completa: "",
-  volumen: "",
-  ejemplar: "",
-  fecha_ing: "",
+  cedula: "",
+  nombre: "",
+  apellido: "",
+  direccion: "",
+  telefono: "",
+  correo: "",
+  edad: "",
+  sexo: "",
 });
 
 // Fetch ship from backend
-const fetchQuote = async () => {
+const fetchReader = async () => {
   const requestOptions = {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -100,7 +112,7 @@ const fetchQuote = async () => {
   // API URL
   const url =
     process.env.API_URL +
-    `cotas.php?N=${quoteId}&session_user_name=${localStorage.getItem(
+    `lectores.php?N=${readerId}&session_user_name=${localStorage.getItem(
       "usuario"
     )}&session_user_role=${localStorage.getItem("rol")}`;
 
@@ -115,7 +127,7 @@ const fetchQuote = async () => {
     throw new Error(data.error);
   }
 
-  currentQuote.value = clearSpaces(data[0]);
+  currentReader.value = clearSpaces(data[0]);
 };
 
 const clearSpaces = (obj) => {
@@ -127,5 +139,5 @@ const clearSpaces = (obj) => {
   return obj;
 };
 
-fetchQuote();
+fetchReader();
 </script>

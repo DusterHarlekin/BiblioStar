@@ -9,14 +9,26 @@
           <div class="text-h4 text-weight-medium font-title">Préstamos</div>
         </div>
       </div>
-      <div class="col-auto">
-        <q-btn
-          label="Nuevo prestamo"
-          icon="mdi-plus-circle"
-          color="secondary"
-          text-color="white"
-          to="/prestamos/nuevo"
-        />
+      <div class="col-md-auto q-gutter-md flex justify-evenly">
+        <div>
+          <q-btn
+            label="Ver Lectores"
+            icon="mdi-eye"
+            color="primary"
+            text-color="primary"
+            outline
+            to="/lectores"
+          />
+        </div>
+        <div>
+          <q-btn
+            label="Nuevo prestamo"
+            icon="mdi-plus-circle"
+            color="secondary"
+            text-color="white"
+            to="/prestamos/nuevo"
+          />
+        </div>
       </div>
     </div>
 
