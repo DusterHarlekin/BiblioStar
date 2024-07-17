@@ -5,14 +5,16 @@ include "utils/security.php";
 
 $conexion_bd = connect();
 
-//Prueba consulta de información general
+//Consulta de información general
+
+
+//Selección de id (ROGER)   
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
+    $data = json_decode(json_encode($_GET));
+    if (isAuthorized($data, $conexion_bd)) {
 
-    //Selección de id (ROGER)
-    if (isset($_GET["N"])) {
 
-
-        $sql_info = mysqli_query($conexion_bd, "SELECT * FROM informacion_general WHERE N ='" . $_GET["N"] . "'");
+        $sql_info = mysqli_query($conexion_bd, "SELECT * FROM informacion_general");
 
         if (mysqli_num_rows($sql_info) > 0) {
 
@@ -24,32 +26,46 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
         }
 
         exit();
+    } else {
+
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
+
+        exit();
     }
 }
+
 
 //PUT EDITAR
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
     $data = json_decode(file_get_contents("php://input"));
 
-    if (trim($data->N) == "") {
-        echo json_encode(["error" => "El campo clave no puede esta vacío"]);
+    if (isAuthorized($data, $conexion_bd)) {
+
+        if (trim($data->N) == "") {
+            echo json_encode(["error" => "El campo clave no puede esta vacío"]);
+        } else {
+
+            //Limpieza de datos a almacenar MODIFICADOS
+            $data->nombre_organizacion = secureData($data->nombre_organizacion);
+            $data->RIF = secureData($data->RIF);
+            $data->direccion = secureData($data->direccion);
+
+
+            mysqli_query($conexion_bd, "UPDATE informacion_general SET nombre_organizacion ='" . $data->nombre_organizacion . "', RIF ='" . $data->RIF . "', direccion ='" . $data->direccion . "' WHERE N ='" . $data->N . "'");
+            echo json_encode([
+                "success" => "datos actualizados",
+                "N" => $data->N,
+                "nombre_organizacion" => $data->nombre_organizacion,
+                "RIF" => $data->RIF,
+                "direccion" => $data->direccion
+            ]);
+        }
+        exit();
     } else {
 
-        //Limpieza de datos a almacenar MODIFICADOS
-        $data->nombre_organizacion = secureData($data->nombre_organizacion);
-        $data->RIF = secureData($data->RIF);
-        $data->direccion = secureData($data->direccion);
+        echo json_encode(["error" => "No estás autorizado", "code" => 401]);
 
-
-        mysqli_query($conexion_bd, "UPDATE informacion_general SET nombre_organizacion ='" . $data->nombre_organizacion . "', RIF ='" . $data->RIF . "', direccion ='" . $data->direccion . "' WHERE N ='" . $data->N . "'");
-        echo json_encode([
-            "success" => "datos actualizados",
-            "N" => $data->N,
-            "nombre_organizacion" => $data->nombre_organizacion,
-            "RIF" => $data->RIF,
-            "direccion" => $data->direccion
-        ]);
+        exit();
     }
-    exit();
 }

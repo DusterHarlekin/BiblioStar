@@ -1,8 +1,8 @@
 {
-  "name": "library-client",
+  "name": "bibliostar-client",
   "version": "0.0.1",
-  "description": "Library frontEnd",
-  "productName": "library",
+  "description": "BiblioStar frontEnd",
+  "productName": "BiblioStar",
   "author": "Roger Guedez <guedez66@gmail.com>",
   "private": true,
   "scripts": {

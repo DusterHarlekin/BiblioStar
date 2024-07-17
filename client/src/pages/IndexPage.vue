@@ -12,13 +12,13 @@
     </div>
 
     <div
-      class="row q-mb-lg justify-center content-end items-center q-col-gutter-lg text-white"
+      class="row q-mb-lg justify-center content-end items-center q-col-gutter-xl text-white"
     >
       <div class="col-lg-4 col-md-6 col-xs-12">
-        <q-card class="q-py-xl bg-primary">
+        <q-card class="q-py-lg bg-primary">
           <q-card-section class="row items-center">
             <q-icon name="mdi-account-clock" class="q-mr-md text-h3" />
-            <div class="text-weight-light font-title" style="font-size: 2.7rem">
+            <div class="text-weight-light font-title" style="font-size: 2.5rem">
               Préstamos
             </div>
           </q-card-section>
@@ -30,10 +30,10 @@
         </q-card>
       </div>
       <div class="col-lg-4 col-md-6 col-xs-12">
-        <q-card class="q-py-xl bg-secondary">
+        <q-card class="q-py-lg bg-secondary">
           <q-card-section class="row items-center">
             <q-icon name="mdi-book" class="q-mr-md text-h3" />
-            <div class="text-weight-light font-title" style="font-size: 2.7rem">
+            <div class="text-weight-light font-title" style="font-size: 2.5rem">
               Libros
             </div>
           </q-card-section>
@@ -45,10 +45,10 @@
         </q-card>
       </div>
       <div class="col-lg-4 col-md-6 col-xs-12">
-        <q-card class="q-py-xl bg-primary">
+        <q-card class="q-py-lg bg-primary">
           <q-card-section class="row items-center">
             <q-icon name="mdi-home-search" class="q-mr-md text-h3" />
-            <div class="text-weight-light font-title" style="font-size: 2.7rem">
+            <div class="text-weight-light font-title" style="font-size: 2.5rem">
               Salas
             </div>
           </q-card-section>
@@ -66,7 +66,7 @@
         <div class="row q-gutter-sm items-center q-mb-sm">
           <q-icon name="mdi-account-clock" size="lg" color="primary" />
           <div class="text-h4 text-weight-medium font-title">
-            Libros prestados
+            Préstamos activos
           </div>
         </div>
         <!-- TABLA -->

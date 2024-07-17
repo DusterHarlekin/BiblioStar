@@ -157,6 +157,21 @@ const routes = [
     ],
   },
   {
+    path: "/reportes",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: "",
+        component: () => import("pages/reports/MainPage.vue"),
+      },
+      {
+        path: "prestamos",
+        component: () => import("pages/reports/LoansReport.vue"),
+      },
+    ],
+  },
+  {
     path: "/configuracion",
     component: () => import("layouts/MainLayout.vue"),
     meta: { requiresAuth: true },
