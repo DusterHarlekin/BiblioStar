@@ -12,7 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     //REGISTER
 
     if (isset($data->request) && $data->request == 'Register') {
+
         if (isAuthorized($data, $conexion_bd)) {
+
             validateFields($data);
 
             try {
@@ -27,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
             exit();
         } else {
+            echo json_encode(["error" => "No estás autorizado", "code" => 401]);
             exit();
         }
     }
@@ -75,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     $data = json_decode(json_encode($_GET));
-    if (isAuthorized($data, $conexion_bd, true, true)) {
+    if (isAuthorized($data, $conexion_bd)) {
 
 
         //Selección de id (ROGER)
