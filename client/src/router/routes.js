@@ -139,7 +139,7 @@ const routes = [
         component: () => import("pages/loans/LoanForm.vue"),
       },
       {
-        path: "libro/:id",
+        path: "prestamo/:id",
         component: () => import("pages/loans/LoanView.vue"),
       },
     ],

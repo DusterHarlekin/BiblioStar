@@ -48,10 +48,7 @@
         <q-card class="q-py-xl bg-primary">
           <q-card-section class="row items-center">
             <q-icon name="mdi-home-search" class="q-mr-md text-h3" />
-            <div
-              class="text-h4 text-weight-light font-title"
-              style="font-size: 2.7rem"
-            >
+            <div class="text-weight-light font-title" style="font-size: 2.7rem">
               Salas
             </div>
           </q-card-section>
@@ -73,20 +70,33 @@
           </div>
         </div>
         <!-- TABLA -->
-        <div class="row q-gutter-sm items-center q-mb-sm">
-          <q-table
-            flat
-            :dense="$q.screen.lt.lg"
-            bordered
-            v-model:pagination="pagination"
-            :rows="prestamos"
-            :columns="columns"
-            :loading="isloading"
-            row-key="cod_isbn"
-            :rows-per-page-options="[]"
-            @request="handleRequest"
-          ></q-table>
-        </div>
+
+        <q-table
+          flat
+          :dense="$q.screen.lt.lg"
+          bordered
+          v-model:pagination="pagination"
+          :rows="prestamos"
+          :columns="columns"
+          :loading="isloading"
+          row-key="cod_isbn"
+          :rows-per-page-options="[]"
+          @request="handleRequest"
+        >
+          <template #body-cell-actions="props">
+            <q-td :props="props">
+              <q-btn
+                flat
+                round
+                icon="mdi-eye"
+                color="positive"
+                :to="`/prestamos/prestamo/${props.row.cod_isbn}`"
+              >
+                <q-tooltip>Ver</q-tooltip>
+              </q-btn>
+            </q-td>
+          </template>
+        </q-table>
       </div>
     </div>
   </q-page>
@@ -112,21 +122,31 @@ const isloading = ref(false);
 const columns = [
   {
     name: "cedula",
-    label: "Cédula",
+    label: "Cédula del lector",
     field: "cedula",
     align: "left",
   },
   {
-    name: "lector",
-    label: "Lector",
-    field: "",
+    name: "cod_isbn",
+    label: "Libro",
+    field: (row) => `${row.cod_isbn} - ${row.titulo}`,
     align: "left",
   },
   {
-    name: "titulo",
-    label: "Título",
-    field: (row) =>
-      row.descripcion && row.descripcion.trim() != "" ? row.titulo : "--",
+    name: "fecha_s",
+    label: "Fecha de salida",
+    field: (row) => `${row.fecha_s} ${row.hora_s}`,
+    align: "left",
+  },
+  {
+    name: "fecha_e",
+    label: "Fecha de entrega",
+    field: (row) => `${row.fecha_e} ${row.hora_e}`,
+    align: "left",
+  },
+  {
+    name: "actions",
+    label: "Acciones",
     align: "left",
   },
 ];
