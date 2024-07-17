@@ -7,5 +7,5 @@ export default function useLoansReport() {
   });
 
   doc.text("Hello world!", 1, 10);
-  doc.save("two-by-four.pdf");
+  doc.output("dataurlnewwindow", { filename: "two-by-four.pdf" });
 }
