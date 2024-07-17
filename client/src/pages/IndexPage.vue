@@ -24,7 +24,7 @@
           </q-card-section>
           <q-card-section class="row">
             <div class="text-weight-light font-title" style="font-size: 5.5rem">
-              25
+              {{ numPrestamos }}
             </div>
           </q-card-section>
         </q-card>
@@ -39,7 +39,7 @@
           </q-card-section>
           <q-card-section class="row">
             <div class="text-weight-light font-title" style="font-size: 5.5rem">
-              39500
+              {{ numLibros }}
             </div>
           </q-card-section>
         </q-card>
@@ -54,7 +54,7 @@
           </q-card-section>
           <q-card-section class="row">
             <div class="text-weight-light font-title" style="font-size: 5.5rem">
-              10
+              {{ numSalas }}
             </div>
           </q-card-section>
         </q-card>
