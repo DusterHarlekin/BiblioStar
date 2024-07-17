@@ -31,6 +31,7 @@
             icon="mdi-file-pdf-box"
             color="secondary"
             text-color="white"
+            @click="generatePDF()"
           />
         </div>
       </div>
@@ -193,6 +194,7 @@
 import { reactive, ref } from "vue";
 import { useAuthStore } from "src/stores/auth/auth";
 import { useQuasar } from "quasar";
+import loansReport from "src/composables/reports/useLoansReport";
 
 const $q = useQuasar();
 const authStore = useAuthStore();
@@ -348,6 +350,10 @@ const makeRequest = async (props) => {
       icon: "mdi-alert",
     });
   }
+};
+
+const generatePDF = () => {
+  loansReport();
 };
 
 const clearFilters = () => {
