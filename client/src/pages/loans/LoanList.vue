@@ -174,7 +174,7 @@
       :dense="$q.screen.lt.lg"
       bordered
       v-model:pagination="pagination"
-      :rows="libros"
+      :rows="prestamos"
       :columns="columns"
       :filter="filter"
       :loading="isloading"
@@ -243,8 +243,7 @@ const filter = reactive({
   date: "",
 });
 
-const salas = ref([]);
-const libros = ref([]);
+const prestamos = ref([]);
 const isloading = ref(false);
 
 // Q-Table columns
@@ -375,6 +374,12 @@ const fetchPrestamos = async (page = 1) => {
     //CONTROL DE FECHA
     if (filter.date) {
       params.set("dateQuery", dateType.value);
+      params.delete("titulo");
+      params.delete("cod_isbn");
+      params.delete("cedula");
+      params.set("titulo", filter.titulo);
+      params.set("cod_isbn", filter.cod_isbn);
+      params.set("cedula", filter.cedula);
     } else {
       params.delete("date");
     }
@@ -397,7 +402,7 @@ const fetchPrestamos = async (page = 1) => {
     const response = await fetch(url, requestOptions);
     const data = await response.json();
 
-    libros.value = data.data ? data.data : [];
+    prestamos.value = data.data ? data.data : [];
     console.log(data);
 
     //ACTUALIZO VALORES DE PAGINACIÓN

@@ -51,7 +51,7 @@
                           { label: 'Fecha de entrega', value: 'fecha_e' },
                         ]"
                         label="Tipo de fecha"
-                        @update:model-value="fetchPrestamos"
+                        @update:model-value="makeRequest(tableRef)"
                       />
                     </div>
                     <q-btn
@@ -184,12 +184,10 @@
 
 <script setup>
 import { reactive, ref } from "vue";
-import { useAuthStore } from "src/stores/auth/auth";
 import { useQuasar } from "quasar";
 import loansReport from "src/composables/reports/useLoansReport";
 
 const $q = useQuasar();
-const authStore = useAuthStore();
 
 const tableRef = ref(null);
 
@@ -275,9 +273,16 @@ const fetchPrestamos = async (page = 1) => {
     //CONTROL DE FECHA
     if (filter.date) {
       params.set("dateQuery", dateType.value);
+      params.delete("titulo");
+      params.delete("cod_isbn");
+      params.delete("cedula");
+      params.set("titulo", filter.titulo);
+      params.set("cod_isbn", filter.cod_isbn);
+      params.set("cedula", filter.cedula);
     } else {
-      params.date = "empty";
+      params.delete("date");
     }
+    console.log(filter);
 
     let keysForDel = [];
     params.forEach((value, key) => {
@@ -339,7 +344,7 @@ const fetchPrestamos = async (page = 1) => {
 };
 
 const makeRequest = async (props) => {
-  if (filter.date || (filter.date.from && filter.date.to)) {
+  if (filter.date || (filter.date?.from && filter.date?.to)) {
     await fetchPrestamos(-1);
     await fetchPrestamos(props.pagination.page);
   } else {
@@ -353,7 +358,16 @@ const makeRequest = async (props) => {
 };
 
 const generatePDF = (collection) => {
-  loansReport(collection, filter, dateType.value);
+  if (filter.date || (filter.date.from && filter.date.to)) {
+    loansReport(collection, filter, dateType.value);
+  } else {
+    $q.notify({
+      color: "negative",
+      position: "top",
+      message: "Por favor seleccione un rango de fechas",
+      icon: "mdi-alert",
+    });
+  }
 };
 
 const clearFilters = () => {
