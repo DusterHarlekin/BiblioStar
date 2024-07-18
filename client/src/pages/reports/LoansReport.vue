@@ -18,20 +18,11 @@
       <div class="col-md-auto q-gutter-md flex justify-evenly">
         <div>
           <q-btn
-            label="Consultar reporte"
-            icon="mdi-file-search-outline"
-            color="primary"
-            outline
-            @click="makeRequest(tableRef)"
-          />
-        </div>
-        <div>
-          <q-btn
             label="Generar PDF"
             icon="mdi-file-pdf-box"
             color="secondary"
             text-color="white"
-            @click="generatePDF()"
+            @click="generatePDF(prestamosReport)"
           />
         </div>
       </div>
@@ -179,12 +170,13 @@
       :dense="$q.screen.lt.lg"
       bordered
       v-model:pagination="pagination"
-      :rows="libros"
+      :rows="prestamos"
       :columns="columns"
       :filter="filter"
       :loading="isloading"
       row-key="N"
       :rows-per-page-options="[]"
+      @request="makeRequest"
     >
     </q-table>
   </q-page>
@@ -217,9 +209,9 @@ const filter = reactive({
   date: "",
 });
 
-const salas = ref([]);
-const libros = ref([]);
+const prestamos = ref([]);
 const isloading = ref(false);
+const prestamosReport = ref([]);
 
 // Q-Table columns
 const columns = [
@@ -313,20 +305,27 @@ const fetchPrestamos = async (page = 1) => {
     const response = await fetch(url, requestOptions);
     const data = await response.json();
 
-    libros.value = data.data ? data.data : [];
+    if (page == -1) {
+      prestamosReport.value = data.data ? data.data : [];
+    } else {
+      prestamos.value = data.data ? data.data : [];
+    }
+
     console.log(data);
 
-    //ACTUALIZO VALORES DE PAGINACIÓN
-    pagination.value.rowsNumber = data.pagination?.total
-      ? data.pagination.total
-      : 0;
+    if (page != -1) {
+      //ACTUALIZO VALORES DE PAGINACIÓN
+      pagination.value.rowsNumber = data.pagination?.total
+        ? data.pagination.total
+        : 0;
 
-    pagination.value.page = data.pagination?.currentPage
-      ? data.pagination.currentPage
-      : 1;
-    pagination.value.rowsPerPage = data.pagination?.perPage
-      ? data.pagination.perPage
-      : 10;
+      pagination.value.page = data.pagination?.currentPage
+        ? data.pagination.currentPage
+        : 1;
+      pagination.value.rowsPerPage = data.pagination?.perPage
+        ? data.pagination.perPage
+        : 10;
+    }
   } catch (error) {
     $q.notify({
       color: "negative",
@@ -341,6 +340,7 @@ const fetchPrestamos = async (page = 1) => {
 
 const makeRequest = async (props) => {
   if (filter.date || (filter.date.from && filter.date.to)) {
+    await fetchPrestamos(-1);
     await fetchPrestamos(props.pagination.page);
   } else {
     $q.notify({
@@ -352,8 +352,8 @@ const makeRequest = async (props) => {
   }
 };
 
-const generatePDF = () => {
-  loansReport();
+const generatePDF = (collection) => {
+  loansReport(collection, filter, dateType.value);
 };
 
 const clearFilters = () => {

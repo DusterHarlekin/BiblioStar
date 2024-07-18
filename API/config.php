@@ -11,7 +11,7 @@ $conexion_bd = connect();
 //Selección de id (ROGER)   
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     $data = json_decode(json_encode($_GET));
-    if (isAuthorized($data, $conexion_bd)) {
+    if (isAuthorized($data, $conexion_bd, true)) {
 
 
         $sql_info = mysqli_query($conexion_bd, "SELECT * FROM informacion_general");

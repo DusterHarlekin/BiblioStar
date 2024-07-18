@@ -19,8 +19,13 @@ function paginar($sqlReq, $getArray, $table, $id = "N")
     }
 
     //VOLVER A ARMAR LA QUERY
+    if ($page != -1) {
+        $query = filtrarBusqueda($getArray, $table, "ORDER By $id DESC LIMIT $start,$registros");
+    } else {
+        $query = filtrarBusqueda($getArray, $table, "ORDER By $id DESC");
+    }
 
-    $query = filtrarBusqueda($getArray, $table, "ORDER By $id DESC LIMIT $start,$registros");
+
 
 
     $data["pagination"] = [
