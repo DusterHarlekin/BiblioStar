@@ -283,7 +283,6 @@ const submitForm = async () => {
     state.record.cod_isbn = state.record.cod_isbn.value
       ? state.record.cod_isbn.value
       : state.record.cod_isbn;
-    console.log(state.record.cod_isbn);
 
     const requestOptions = {
       method: isEditForm ? "PUT" : "POST",
