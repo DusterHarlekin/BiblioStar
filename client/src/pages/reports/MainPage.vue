@@ -12,8 +12,8 @@
     </div>
 
     <div class="row q-mb-lg content-end items-center q-col-gutter-xl">
-      <div class="col-4">
-        <q-card class="col-4">
+      <div class="col-12 col-md-6 col-lg-4">
+        <q-card class="col-12">
           <q-card-section class="bg-primary row items-center text-white">
             <q-icon
               name="mdi-invoice-text-clock-outline"

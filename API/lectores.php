@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 
 
             mysqli_query($conexion_bd, "UPDATE `lect_prestamos` SET `cedula` = '$data->cedula', `nombre` = '$data->nombre', `apellido`= '$data->apellido', `direccion` = '$data->direccion', `telefono` = '$data->telefono', `correo` = '$data->correo', `edad` = '$data->edad', `sexo` = '$data->sexo' WHERE `N` = '$data->N'");
+
             echo json_encode([
                 "success" => "El lector se ha editado exitosamente",
                 "cedula" => $data->cedula,
@@ -111,7 +112,17 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         if (trim($data->cedula) == "") {
             echo json_encode(["error" => "Los campos no pueden estar vacíos"]);
         } else {
-            mysqli_query($conexion_bd, "INSERT INTO `lect_prestamos`(`cedula`, `nombre`, `apellido`, `direccion`, `telefono`, `correo`, `edad`, `sexo`) VALUES ('$data->cedula','$data->nombre','$data->apellido','$data->direccion','$data->telefono','$data->correo','$data->edad','$data->sexo')");
+            try {
+                mysqli_query($conexion_bd, "INSERT INTO `lect_prestamos`(`cedula`, `nombre`, `apellido`, `direccion`, `telefono`, `correo`, `edad`, `sexo`) VALUES ('$data->cedula','$data->nombre','$data->apellido','$data->direccion','$data->telefono','$data->correo','$data->edad','$data->sexo')");
+            } catch (Exception $e) {
+                if (mysqli_errno($conexion_bd) == 1062) {
+                    echo json_encode(["error" => "No se pueden registrar lectores con la misma cédula"]);
+                    exit();
+                } else {
+                    echo json_encode(["error" => $e->getMessage()]);
+                }
+            }
+
             echo json_encode([
                 "success" => "El lector se ha registrado exitosamente",
                 "cedula" => $data->cedula,

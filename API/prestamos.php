@@ -128,8 +128,16 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
 
             $data->fecha_e = date('d/m/Y', $data->fecha_e);
-
-            mysqli_query($conexion_bd, "INSERT INTO `lib_prestamos`(`cod_isbn`, `titulo`, `cedula`, `observacion`, `fecha_s`, `fecha_e`, `hora_s`, `hora_e`) VALUES ('$data->cod_isbn','$data->titulo','$data->cedula','$data->observacion','$data->fecha_s','$data->fecha_e','$data->hora_s','$data->hora_e')");
+            try {
+                mysqli_query($conexion_bd, "INSERT INTO `lib_prestamos`(`cod_isbn`, `titulo`, `cedula`, `observacion`, `fecha_s`, `fecha_e`, `hora_s`, `hora_e`) VALUES ('$data->cod_isbn','$data->titulo','$data->cedula','$data->observacion','$data->fecha_s','$data->fecha_e','$data->hora_s','$data->hora_e')");
+            } catch (Exception $e) {
+                if (mysqli_errno($conexion_bd) == 1062) {
+                    echo json_encode(["error" => "Un libro con el mismo ISBN ya ha sido prestado"]);
+                    exit();
+                } else {
+                    echo json_encode(["error" => $e->getMessage()]);
+                }
+            }
 
             echo json_encode(["success" => "El préstamo se ha registrado exitosamente"]);
         }
