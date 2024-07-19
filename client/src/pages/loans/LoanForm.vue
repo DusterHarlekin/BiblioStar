@@ -240,7 +240,6 @@ const syncChanges = async () => {
         }&session_user_name=${localStorage.getItem(
           "usuario"
         )}&session_user_role=${localStorage.getItem("rol")}`;
-      console.log(url);
       const response = await fetch(url, requestOptions);
 
       if (!response.ok) {
@@ -274,7 +273,6 @@ const syncChanges = async () => {
 
 const assignTitle = async (event) => {
   state.record.titulo = event.titulo;
-  console.log(state.record.titulo);
 };
 const submitForm = async () => {
   try {
@@ -283,8 +281,6 @@ const submitForm = async () => {
       : "NINGUNA";
 
     state.record.cod_isbn = state.record.cod_isbn.value;
-
-    console.log(state.record);
 
     const requestOptions = {
       method: isEditForm ? "PUT" : "POST",

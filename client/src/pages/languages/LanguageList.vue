@@ -195,7 +195,6 @@ const deleteLang = (lang) => {
       // API URL
       const url = process.env.API_URL + `idiomas.php`;
 
-      console.log(requestOptions.body);
       const response = await fetch(url, requestOptions);
 
       if (!response.ok) {

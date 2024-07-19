@@ -282,12 +282,10 @@ const fetchPrestamos = async (page = 1) => {
     } else {
       params.delete("date");
     }
-    console.log(filter);
 
     let keysForDel = [];
     params.forEach((value, key) => {
       if (value == null || value.trim() == "") {
-        console.log(key, value);
         keysForDel.push(key);
       }
     });
@@ -305,7 +303,6 @@ const fetchPrestamos = async (page = 1) => {
     if (params.toString() != "") {
       url += `&${params.toString()}`;
     }
-    console.log(url);
     isloading.value = true;
     const response = await fetch(url, requestOptions);
     const data = await response.json();
@@ -315,8 +312,6 @@ const fetchPrestamos = async (page = 1) => {
     } else {
       prestamos.value = data.data ? data.data : [];
     }
-
-    console.log(data);
 
     if (page != -1) {
       //ACTUALIZO VALORES DE PAGINACIÓN

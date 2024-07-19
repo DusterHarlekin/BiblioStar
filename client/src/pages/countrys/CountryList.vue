@@ -190,7 +190,6 @@ const deleteCountry = (country) => {
       // API URL
       const url = process.env.API_URL + `paises.php`;
 
-      console.log(requestOptions.body);
       const response = await fetch(url, requestOptions);
 
       if (!response.ok) {
@@ -256,7 +255,6 @@ const fetchPaises = async (page = 1) => {
     const data = await response.json();
 
     paises.value = data.data ? data.data : [];
-    console.log(data);
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total

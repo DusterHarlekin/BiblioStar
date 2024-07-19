@@ -358,7 +358,6 @@ const deleteBook = (book) => {
       }
 
       const data = await response.json();
-      console.log(data);
 
       if (data.error) {
         throw new Error(data.error);
@@ -398,16 +397,23 @@ const fetchLibros = async (page = 1) => {
 
     let params = new URLSearchParams(filter);
 
-    let keysForDel = [];
-    params.forEach((value, key) => {
-      if (value == null || value.trim() == "") {
-        console.log(key, value);
-        keysForDel.push(key);
-      }
-    });
     //CONTROL DE FECHA
     if (filter.date) {
       params.set("dateQuery", "fecha_ing");
+      params.delete("titulo");
+      params.delete("cod_isbn");
+      params.delete("autor");
+      params.delete("editorial");
+      params.delete("cota_completa");
+      params.delete("cod_sala");
+      params.delete("anio");
+      params.set("titulo", filter.titulo);
+      params.set("cod_isbn", filter.cod_isbn);
+      params.set("autor", filter.autor);
+      params.set("editorial", filter.editorial);
+      params.set("cota_completa", filter.cota_completa);
+      params.set("cod_sala", filter.cod_sala);
+      params.set("anio", filter.anio);
     } else {
       params.delete("date");
     }
@@ -417,6 +423,14 @@ const fetchLibros = async (page = 1) => {
       params.set("date_to", filter.date.to);
       params.delete("date");
     }
+
+    let keysForDel = [];
+    params.forEach((value, key) => {
+      if (value == null || value.trim() == "") {
+        keysForDel.push(key);
+      }
+    });
+
     //ELIMINAR KEYS VACIOS
     keysForDel.forEach((key) => {
       params.delete(key);
@@ -425,13 +439,12 @@ const fetchLibros = async (page = 1) => {
     if (params.toString() != "") {
       url += `&${params.toString()}`;
     }
-    console.log(url);
+
     isloading.value = true;
     const response = await fetch(url, requestOptions);
     const data = await response.json();
 
     libros.value = data.data ? data.data : [];
-    console.log(data);
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total
@@ -478,7 +491,8 @@ const fetchSalas = async () => {
       throw new Error(response.statusText);
     }
     const data = await response.json();
-
+    salas.value = [];
+    salas.value.push({ label: "Todas", value: "" });
     for (const sala of data.data) {
       salas.value.push({ label: sala.cod_sala, value: sala.cod_sala });
     }

@@ -211,7 +211,6 @@ const deleteCity = (city) => {
       // API URL
       const url = process.env.API_URL + `ciudades.php`;
 
-      console.log(requestOptions.body);
       const response = await fetch(url, requestOptions);
 
       if (!response.ok) {
@@ -271,8 +270,6 @@ const fetchCiudades = async (page = 1) => {
     if (params.toString() != "") {
       url += `&${params.toString()}`;
     }
-
-    console.log(url);
 
     isloading.value = true;
     const response = await fetch(url, requestOptions);

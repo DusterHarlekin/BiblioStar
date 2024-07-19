@@ -10,17 +10,23 @@ export default async function useLoansReport(loans, filters, dateType) {
 
   const centeredX = doc.internal.pageSize.width / 2;
 
-  console.log(filters.date);
-  console.log(dateType);
-
   // BODY
   doc.setFontSize(15);
   doc.text("Reporte de préstamos", centeredX, 42, { align: "center" });
   doc.setFontSize(8);
-  doc.text(`Cédula: ${filters.cedula}`, 10, 52, { align: "left", maxWidth: 85});
-  doc.text(`Código ISBN: ${filters.cod_isbn}`, 97, 52, { align: "left", maxWidth: 85});
-  doc.text(`Título: ${filters.titulo}`, 184, 52, { align: "left", maxWidth: 120 });
-  
+  doc.text(`Cédula: ${filters.cedula}`, 10, 52, {
+    align: "left",
+    maxWidth: 85,
+  });
+  doc.text(`Código ISBN: ${filters.cod_isbn}`, 97, 52, {
+    align: "left",
+    maxWidth: 85,
+  });
+  doc.text(`Título: ${filters.titulo}`, 184, 52, {
+    align: "left",
+    maxWidth: 120,
+  });
+
   // Define the table columns and rows
   const columns = [
     "Cédula",
@@ -44,7 +50,6 @@ export default async function useLoansReport(loans, filters, dateType) {
   });
 
   await buildHeader(doc, filters, dateType);
-  console.log(loans);
 
   // FOOTER
   let today = new Date().toLocaleString().replace("/", "-");
@@ -73,7 +78,6 @@ const requestConfig = async () => {
       throw new Error(response.statusText);
     }
     const data = await response.json();
-    console.log(data[0]);
     return data[0];
   } catch (error) {
     console.log(error);
@@ -102,24 +106,58 @@ const buildHeader = async (doc, filters, dateType) => {
     doc.text(libInfo.RIF, 50, 23);
     doc.text(libInfo.direccion, 58, 28);
     doc.setFontSize(10);
-    doc.text(`Fecha de reporte: ${new Date().toLocaleString()}`, doc.internal.pageSize.width - 10, 18, {align: 'right'});
+    doc.text(
+      `Fecha de reporte: ${new Date().toLocaleString()}`,
+      doc.internal.pageSize.width - 10,
+      18,
+      { align: "right" }
+    );
 
     if (dateType === "fecha_s") {
       if (filters.date.from && filters.date.to) {
-        doc.text(`Fecha de salida (desde): ${filters.date.from}`, doc.internal.pageSize.width - 10, 23, {align: 'right'}); 
-        doc.text(`Fecha de salida (hasta): ${filters.date.to}`, doc.internal.pageSize.width - 10, 28, {align: 'right'}); 
-      }else{
-        doc.text(`Fecha de salida: ${filters.date}`, doc.internal.pageSize.width - 10, 23, {align: 'right'}); 
+        doc.text(
+          `Fecha de salida (desde): ${filters.date.from}`,
+          doc.internal.pageSize.width - 10,
+          23,
+          { align: "right" }
+        );
+        doc.text(
+          `Fecha de salida (hasta): ${filters.date.to}`,
+          doc.internal.pageSize.width - 10,
+          28,
+          { align: "right" }
+        );
+      } else {
+        doc.text(
+          `Fecha de salida: ${filters.date}`,
+          doc.internal.pageSize.width - 10,
+          23,
+          { align: "right" }
+        );
       }
     } else if (dateType === "fecha_e") {
       if (filters.date.from && filters.date.to) {
-        doc.text(`Fecha de entrega (desde): ${filters.date.from}`, doc.internal.pageSize.width - 10, 23, {align: 'right'}); 
-        doc.text(`Fecha de entrega (hasta): ${filters.date.to}`, doc.internal.pageSize.width - 10, 28, {align: 'right'}); 
-      }else{
-        doc.text(`Fecha de entrega: ${filters.date}`, doc.internal.pageSize.width - 10, 23, {align: 'right'}); 
+        doc.text(
+          `Fecha de entrega (desde): ${filters.date.from}`,
+          doc.internal.pageSize.width - 10,
+          23,
+          { align: "right" }
+        );
+        doc.text(
+          `Fecha de entrega (hasta): ${filters.date.to}`,
+          doc.internal.pageSize.width - 10,
+          28,
+          { align: "right" }
+        );
+      } else {
+        doc.text(
+          `Fecha de entrega: ${filters.date}`,
+          doc.internal.pageSize.width - 10,
+          23,
+          { align: "right" }
+        );
       }
     }
-   
 
     doc.setFontSize(10);
     doc.text(

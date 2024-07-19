@@ -110,7 +110,6 @@ const syncChanges = async () => {
       if (data.error) {
         throw new Error(data.error);
       }
-      console.log(data[0]);
       state.record = data[0];
 
       state.record.session_user_name = localStorage.getItem("usuario");

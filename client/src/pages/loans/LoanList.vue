@@ -324,7 +324,6 @@ const deleteLoan = (loan) => {
       }
 
       const data = await response.json();
-      console.log(data);
 
       if (data.error) {
         throw new Error(data.error);
@@ -367,7 +366,6 @@ const fetchPrestamos = async (page = 1) => {
     let keysForDel = [];
     params.forEach((value, key) => {
       if (value == null || value.trim() == "") {
-        console.log(key, value);
         keysForDel.push(key);
       }
     });
@@ -397,13 +395,12 @@ const fetchPrestamos = async (page = 1) => {
     if (params.toString() != "") {
       url += `&${params.toString()}`;
     }
-    console.log(url);
+
     isloading.value = true;
     const response = await fetch(url, requestOptions);
     const data = await response.json();
 
     prestamos.value = data.data ? data.data : [];
-    console.log(data);
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total

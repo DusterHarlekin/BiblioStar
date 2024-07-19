@@ -197,7 +197,6 @@ const deleteRoom = (room) => {
       // API URL
       const url = process.env.API_URL + `salas.php`;
 
-      console.log(requestOptions.body);
       const response = await fetch(url, requestOptions);
 
       if (!response.ok) {

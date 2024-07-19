@@ -587,7 +587,6 @@ const syncChanges = async () => {
 };
 
 const submitForm = async () => {
-  console.log(state.record.fecha_ing);
   try {
     if (isNewQuote.value) {
       state.record.cota = state.cota;

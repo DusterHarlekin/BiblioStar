@@ -357,6 +357,33 @@
                 </q-menu>
               </q-item-section>
             </q-item>
+
+            <q-item
+              to="/ayuda/acerca-de"
+              clickable
+              v-ripple
+              v-if="
+                session_user_role === 'admin' ||
+                session_user_role === 'librarian'
+              "
+            >
+              <q-item-section avatar>
+                <q-icon name="mdi-information" />
+                <q-tooltip
+                  v-if="drawerMiniState"
+                  anchor="center right"
+                  self="center left"
+                  :offset="[22, 10]"
+                  class="text-caption bg-primary shadow-1"
+                >
+                  Acerca de
+                </q-tooltip>
+              </q-item-section>
+
+              <q-item-section style="font-size: 1.5em">
+                Acerca de</q-item-section
+              >
+            </q-item>
           </div>
         </q-list>
 

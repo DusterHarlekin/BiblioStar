@@ -252,7 +252,6 @@ const deleteUser = (user) => {
       // API URL
       const url = process.env.API_URL + `auth/auth.php`;
 
-      console.log(requestOptions.body);
       const response = await fetch(url, requestOptions);
 
       if (!response.ok) {
@@ -318,7 +317,6 @@ const fetchUsuarios = async (page = 1) => {
     const data = await response.json();
 
     usuarios.value = data.data ? data.data : [];
-    console.log(data);
 
     //ACTUALIZO VALORES DE PAGINACIÓN
     pagination.value.rowsNumber = data.pagination?.total

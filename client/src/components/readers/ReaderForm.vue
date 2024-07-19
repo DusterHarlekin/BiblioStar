@@ -153,8 +153,6 @@ const syncChanges = async () => {
 
 const submitForm = async () => {
   try {
-    console.log(state.record);
-
     const requestOptions = {
       method: props.isEditForm ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },

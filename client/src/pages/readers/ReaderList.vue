@@ -252,7 +252,6 @@ const deleteReader = (reader) => {
       // API URL
       const url = process.env.API_URL + `lectores.php`;
 
-      console.log(requestOptions.body);
       const response = await fetch(url, requestOptions);
 
       if (!response.ok) {

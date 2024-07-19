@@ -186,6 +186,17 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/ayuda",
+    component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: "acerca-de",
+        component: () => import("pages/help/AboutInfo.vue"),
+      },
+    ],
+  },
 
   // Always leave this as last one,
   // but you can also remove it

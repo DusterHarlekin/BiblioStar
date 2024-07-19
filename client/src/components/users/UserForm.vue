@@ -169,8 +169,6 @@ const submitForm = async () => {
       body: JSON.stringify(state.record),
     };
 
-    console.log(state.record);
-
     const response = await fetch(
       process.env.API_URL + "auth/auth.php",
       requestOptions
@@ -178,7 +176,7 @@ const submitForm = async () => {
     if (!response.ok) {
       throw new Error(response.statusText);
     }
-    console.log(response);
+
     const data = await response.json();
     if (data.error) {
       throw new Error(data.error);
